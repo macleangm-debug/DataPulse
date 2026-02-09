@@ -88,6 +88,7 @@ function App() {
     <NotificationProvider>
       <div className={theme === 'dark' ? 'dark' : ''}>
         <BrowserRouter>
+        <OnboardingProvider>
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={
