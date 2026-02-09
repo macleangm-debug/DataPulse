@@ -311,7 +311,7 @@ async def send_push_notification(
         )
         
         # Update last_used timestamp
-        db.push_subscriptions.update_one(
+        await db.push_subscriptions.update_one(
             {"endpoint_hash": subscription.get("endpoint_hash")},
             {"$set": {"last_used": datetime.now(timezone.utc).isoformat()}}
         )
@@ -322,7 +322,7 @@ async def send_push_notification(
         # Handle subscription expiry
         if e.response and e.response.status_code in [404, 410]:
             # Subscription expired, mark as inactive
-            db.push_subscriptions.update_one(
+            await db.push_subscriptions.update_one(
                 {"endpoint_hash": subscription.get("endpoint_hash")},
                 {"$set": {"is_active": False}}
             )
@@ -373,7 +373,7 @@ async def send_notification(
     db = request.app.state.db
     
     # Get VAPID keys
-    vapid_keys = get_or_create_vapid_keys(db)
+    vapid_keys = await get_or_create_vapid_keys(db)
     
     # Build query for subscriptions
     query = {"is_active": True}
@@ -391,7 +391,9 @@ async def send_notification(
     # Filter by preferences
     query[f"preferences.{category}"] = {"$ne": False}
     
-    subscriptions = list(db.push_subscriptions.find(query))
+    subscriptions = []
+    async for sub in db.push_subscriptions.find(query):
+        subscriptions.append(sub)
     
     if not subscriptions:
         return {
