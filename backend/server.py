@@ -90,6 +90,7 @@ from routes.dashboard_builder_routes import router as dashboard_builder_router
 from routes.audit_routes import router as audit_router
 from routes.job_routes import router as job_router
 from routes.push_notification_routes import router as push_router
+from routes.public_api_routes import router as public_api_router, set_database as set_public_api_db
 
 # Include all route modules
 api_router.include_router(auth_router)
