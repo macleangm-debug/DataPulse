@@ -267,18 +267,38 @@ export function OfflineIndicator({ className = '' }) {
 
 /**
  * Push Notifications Manager Component
- * Handles push notification subscription and preferences
+ * Handles push notification subscription and preferences with backend VAPID keys
  */
 export function PushNotificationsManager() {
   const [permission, setPermission] = useState(typeof Notification !== 'undefined' ? Notification.permission : 'default');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [testSending, setTestSending] = useState(false);
   const [preferences, setPreferences] = useState({
-    syncComplete: true,
-    newSubmissions: true,
-    qualityAlerts: true,
-    systemUpdates: false
+    sync: true,
+    quality: true,
+    submissions: true,
+    team: true,
+    devices: true,
+    ai: true,
+    backcheck: true,
+    system: false
   });
+
+  // Get user info from localStorage or auth store
+  const getUserInfo = () => {
+    try {
+      const authData = localStorage.getItem('auth');
+      if (authData) {
+        const parsed = JSON.parse(authData);
+        return {
+          userId: parsed.state?.user?.id || 'anonymous',
+          orgId: parsed.state?.selectedOrg?.id || 'default'
+        };
+      }
+    } catch (e) {}
+    return { userId: 'anonymous', orgId: 'default' };
+  };
 
   useEffect(() => {
     checkSubscription();
@@ -304,9 +324,24 @@ export function PushNotificationsManager() {
     }
   };
 
-  const savePreferences = (newPrefs) => {
+  const savePreferences = async (newPrefs) => {
     setPreferences(newPrefs);
     localStorage.setItem('push_notification_preferences', JSON.stringify(newPrefs));
+    
+    // Also update on backend if subscribed
+    if (isSubscribed) {
+      try {
+        const { userId } = getUserInfo();
+        const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+        await fetch(`${API_URL}/api/push/subscriptions/${userId}/preferences`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newPrefs)
+        });
+      } catch (e) {
+        console.error('Failed to sync preferences:', e);
+      }
+    }
   };
 
   const requestPermission = async () => {
@@ -328,16 +363,40 @@ export function PushNotificationsManager() {
   const subscribeToPush = async () => {
     if ('serviceWorker' in navigator && 'PushManager' in window) {
       try {
+        const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+        
+        // Get VAPID public key from backend
+        const keyResponse = await fetch(`${API_URL}/api/push/vapid-public-key`);
+        const { public_key } = await keyResponse.json();
+        
         const registration = await navigator.serviceWorker.ready;
         
         const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(
-            'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U'
-          )
+          applicationServerKey: urlBase64ToUint8Array(public_key)
         });
 
-        console.log('Push subscription:', subscription);
+        // Register subscription with backend
+        const { userId, orgId } = getUserInfo();
+        
+        const p256dhKey = subscription.getKey('p256dh');
+        const authKey = subscription.getKey('auth');
+        
+        await fetch(`${API_URL}/api/push/subscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            endpoint: subscription.endpoint,
+            keys: {
+              p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(p256dhKey))),
+              auth: btoa(String.fromCharCode.apply(null, new Uint8Array(authKey)))
+            },
+            user_id: userId,
+            org_id: orgId,
+            preferences: preferences
+          })
+        });
+
         setIsSubscribed(true);
         showTestNotification();
       } catch (error) {
@@ -353,7 +412,16 @@ export function PushNotificationsManager() {
       const subscription = await registration.pushManager.getSubscription();
       
       if (subscription) {
+        // Unsubscribe from browser
         await subscription.unsubscribe();
+        
+        // Remove from backend
+        const { userId } = getUserInfo();
+        const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+        await fetch(`${API_URL}/api/push/unsubscribe?endpoint=${encodeURIComponent(subscription.endpoint)}&user_id=${userId}`, {
+          method: 'DELETE'
+        });
+        
         setIsSubscribed(false);
       }
     } catch (error) {
@@ -368,6 +436,28 @@ export function PushNotificationsManager() {
       new Notification('DataPulse Notifications Enabled', {
         body: 'You will receive updates about sync status and quality alerts.',
         icon: '/icons/icon-192x192.png',
+        badge: '/icons/icon-72x72.png',
+        tag: 'test-notification'
+      });
+    }
+  };
+  
+  const sendServerTestNotification = async () => {
+    setTestSending(true);
+    try {
+      const { userId } = getUserInfo();
+      const API_URL = process.env.REACT_APP_BACKEND_URL || '';
+      const response = await fetch(`${API_URL}/api/push/test?user_id=${userId}`, {
+        method: 'POST'
+      });
+      const data = await response.json();
+      console.log('Server test notification result:', data);
+    } catch (error) {
+      console.error('Server test notification failed:', error);
+    } finally {
+      setTestSending(false);
+    }
+  };
         badge: '/icons/icon-72x72.png',
         tag: 'test-notification'
       });
