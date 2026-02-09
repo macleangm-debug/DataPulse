@@ -104,6 +104,14 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 ## Changelog
 
 ### Feb 9, 2026
+- **Public REST API for External Integrations (NEW)**:
+  - API Key authentication with read/write/admin permissions
+  - Versioned API at `/api/v1/`
+  - Endpoints: Forms, Submissions, Projects, Export, Statistics
+  - Webhook system for real-time events (submission.created, quality.alert, etc.)
+  - API key management (create, list, revoke)
+  - API Documentation page at /api-docs
+  - Health check endpoint at /api/v1/health
 - **Command Palette (⌘K) (NEW)**:
   - Universal search with ⌘K / Ctrl+K keyboard shortcut
   - Navigation commands (Dashboard, Projects, Forms, Submissions, Analysis, etc.)
