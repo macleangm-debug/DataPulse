@@ -524,39 +524,83 @@ export function PushNotificationsManager() {
 
         {permission === 'granted' && (
           <div className="space-y-4">
-            <h4 className="text-sm font-medium">Notification Types</h4>
+            <h4 className="text-sm font-medium">Notification Categories</h4>
             
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium">Sync Complete</p>
-                  <p className="text-xs text-muted-foreground">When offline data syncs successfully</p>
+                  <p className="text-sm font-medium">Sync Status</p>
+                  <p className="text-xs text-muted-foreground">Sync complete, failed, or conflicts</p>
                 </div>
                 <Switch 
-                  checked={preferences.syncComplete}
-                  onCheckedChange={(checked) => savePreferences({...preferences, syncComplete: checked})}
-                />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">New Submissions</p>
-                  <p className="text-xs text-muted-foreground">When team members submit data</p>
-                </div>
-                <Switch 
-                  checked={preferences.newSubmissions}
-                  onCheckedChange={(checked) => savePreferences({...preferences, newSubmissions: checked})}
+                  checked={preferences.sync}
+                  onCheckedChange={(checked) => savePreferences({...preferences, sync: checked})}
                 />
               </div>
               
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium">Quality Alerts</p>
-                  <p className="text-xs text-muted-foreground">AI-detected quality issues</p>
+                  <p className="text-xs text-muted-foreground">Speeding, GPS anomalies, straight-lining</p>
                 </div>
                 <Switch 
-                  checked={preferences.qualityAlerts}
-                  onCheckedChange={(checked) => savePreferences({...preferences, qualityAlerts: checked})}
+                  checked={preferences.quality}
+                  onCheckedChange={(checked) => savePreferences({...preferences, quality: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium">Submissions</p>
+                  <p className="text-xs text-muted-foreground">New submissions, approvals, rejections</p>
+                </div>
+                <Switch 
+                  checked={preferences.submissions}
+                  onCheckedChange={(checked) => savePreferences({...preferences, submissions: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium">Team Activity</p>
+                  <p className="text-xs text-muted-foreground">New members, role changes</p>
+                </div>
+                <Switch 
+                  checked={preferences.team}
+                  onCheckedChange={(checked) => savePreferences({...preferences, team: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium">Devices</p>
+                  <p className="text-xs text-muted-foreground">Device registration, offline status</p>
+                </div>
+                <Switch 
+                  checked={preferences.devices}
+                  onCheckedChange={(checked) => savePreferences({...preferences, devices: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium">AI & Analysis</p>
+                  <p className="text-xs text-muted-foreground">AI analysis complete, suggestions</p>
+                </div>
+                <Switch 
+                  checked={preferences.ai}
+                  onCheckedChange={(checked) => savePreferences({...preferences, ai: checked})}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium">Back-checks</p>
+                  <p className="text-xs text-muted-foreground">Assigned, completed, discrepancies</p>
+                </div>
+                <Switch 
+                  checked={preferences.backcheck}
+                  onCheckedChange={(checked) => savePreferences({...preferences, backcheck: checked})}
                 />
               </div>
               
@@ -566,16 +610,24 @@ export function PushNotificationsManager() {
                   <p className="text-xs text-muted-foreground">App updates and maintenance</p>
                 </div>
                 <Switch 
-                  checked={preferences.systemUpdates}
-                  onCheckedChange={(checked) => savePreferences({...preferences, systemUpdates: checked})}
+                  checked={preferences.system}
+                  onCheckedChange={(checked) => savePreferences({...preferences, system: checked})}
                 />
               </div>
             </div>
             
-            <Button variant="outline" size="sm" onClick={showTestNotification}>
-              <Bell className="w-4 h-4 mr-2" />
-              Send Test Notification
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={showTestNotification}>
+                <Bell className="w-4 h-4 mr-2" />
+                Local Test
+              </Button>
+              {isSubscribed && (
+                <Button variant="outline" size="sm" onClick={sendServerTestNotification} disabled={testSending}>
+                  <Bell className="w-4 h-4 mr-2" />
+                  {testSending ? 'Sending...' : 'Server Test'}
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </CardContent>
