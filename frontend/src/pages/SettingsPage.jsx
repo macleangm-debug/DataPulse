@@ -371,6 +371,17 @@ export function SettingsPage() {
                     {saving ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </div>
+
+                <Separator />
+
+                {/* Onboarding Section */}
+                <div className="space-y-3">
+                  <Label>Product Tour</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Take a guided tour of DataPulse features and learn how to make the most of the platform.
+                  </p>
+                  <OnboardingReplayButton />
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
