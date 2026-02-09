@@ -108,10 +108,10 @@ class QualityAlertTrigger(BaseModel):
 
 # ============ VAPID Key Management ============
 
-def get_or_create_vapid_keys(db):
+async def get_or_create_vapid_keys(db):
     """Get existing VAPID keys or create new ones"""
     # Check if keys exist in database
-    keys_doc = db.settings.find_one({"type": "vapid_keys"})
+    keys_doc = await db.settings.find_one({"type": "vapid_keys"})
     
     if keys_doc:
         return {
@@ -142,7 +142,7 @@ def get_or_create_vapid_keys(db):
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
-    db.settings.insert_one(keys_doc)
+    await db.settings.insert_one(keys_doc)
     
     return {
         "public_key": public_key_b64,
@@ -156,7 +156,7 @@ async def get_vapid_public_key(request: Request):
     """Get the VAPID public key for push subscription"""
     db = request.app.state.db
     
-    vapid_keys = get_or_create_vapid_keys(db)
+    vapid_keys = await get_or_create_vapid_keys(db)
     
     return {
         "public_key": vapid_keys["public_key"]
