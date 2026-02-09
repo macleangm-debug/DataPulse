@@ -73,6 +73,7 @@ import { DashboardLayout } from '../layouts/DashboardLayout';
 import { useAuthStore, useOrgStore, useUIStore } from '../store';
 import { toast } from 'sonner';
 import { PWASettingsPanel } from '../components/PWAComponents';
+import { OnboardingReplayButton } from '../components/OnboardingWizard';
 
 export function SettingsPage() {
   const { user, logout } = useAuthStore();
