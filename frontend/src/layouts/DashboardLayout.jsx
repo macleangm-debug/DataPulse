@@ -483,7 +483,7 @@ export function DashboardLayout({ children }) {
               {/* Notifications */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="relative p-2.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+                  <button className="relative p-2.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors" data-tour="notifications">
                     <Bell className="w-5 h-5" />
                     <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-primary rounded-full ring-2 ring-card" />
                   </button>
