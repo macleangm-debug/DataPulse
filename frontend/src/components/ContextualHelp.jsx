@@ -448,11 +448,10 @@ export function ProTipBanner() {
 
 // Help Toggle Button (for header)
 export function HelpToggleButton() {
-  let helpContext;
-  try {
-    helpContext = useHelp();
-  } catch (e) {
-    // Context not available, render disabled button
+  const context = useContext(HelpContext);
+  
+  // If context is not available, render disabled button
+  if (!context) {
     return (
       <button className="p-2 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors" disabled>
         <HelpCircle className="w-5 h-5" />
@@ -460,7 +459,7 @@ export function HelpToggleButton() {
     );
   }
   
-  const { helpEnabled, setShowHelpPanel } = helpContext;
+  const { helpEnabled, setShowHelpPanel } = context;
 
   return (
     <TooltipProvider>
