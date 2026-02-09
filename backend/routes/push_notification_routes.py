@@ -657,7 +657,7 @@ async def notify_straightlining(
     pattern_details: Dict
 ):
     """Helper function to send straight-lining notification"""
-    vapid_keys = get_or_create_vapid_keys(db)
+    vapid_keys = await get_or_create_vapid_keys(db)
     
     payload = {
         "title": "Straight-lining Pattern Detected",
@@ -677,11 +677,13 @@ async def notify_straightlining(
         }
     }
     
-    subscriptions = list(db.push_subscriptions.find({
+    subscriptions = []
+    async for sub in db.push_subscriptions.find({
         "org_id": org_id,
         "is_active": True,
         "preferences.quality": {"$ne": False}
-    }))
+    }):
+        subscriptions.append(sub)
     
     sent_count = 0
     for sub in subscriptions:
@@ -701,12 +703,14 @@ async def send_test_notification(
     """Send a test notification to verify push is working"""
     db = request.app.state.db
     
-    vapid_keys = get_or_create_vapid_keys(db)
+    vapid_keys = await get_or_create_vapid_keys(db)
     
-    subscriptions = list(db.push_subscriptions.find({
+    subscriptions = []
+    async for sub in db.push_subscriptions.find({
         "user_id": user_id,
         "is_active": True
-    }))
+    }):
+        subscriptions.append(sub)
     
     if not subscriptions:
         raise HTTPException(status_code=404, detail="No active subscriptions found")
