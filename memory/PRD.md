@@ -103,6 +103,20 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 ## Changelog
 
 ### Feb 9, 2026
+- **Command Palette (⌘K) (NEW)**:
+  - Universal search with ⌘K / Ctrl+K keyboard shortcut
+  - Navigation commands (Dashboard, Projects, Forms, Submissions, Analysis, etc.)
+  - Quick actions (Create New Form, Create New Project, Import/Export Data)
+  - Additional shortcuts: ⌘N (New Form), ⌘P (Projects), ⌘D (Dashboard), ⌘, (Settings)
+  - Keyboard navigation (↑↓ Navigate, ↵ Select, ESC Close)
+  - Recent commands history saved to localStorage
+- **Mobile-Responsive Sidebar (ENHANCED)**:
+  - Full-height slide-out drawer with smooth animations
+  - Organization selector dropdown for quick switching
+  - Quick action buttons (New Form, New Project) at top
+  - Expandable navigation groups with animated transitions
+  - User profile section with Settings and Sign out buttons
+  - Mobile search button in header to open Command Palette
 - **Contextual Help System (NEW)**:
   - Toggle-able help mode with indicators on UI elements
   - Help (?) button in header to access Help Center panel
