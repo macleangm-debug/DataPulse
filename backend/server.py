@@ -142,6 +142,10 @@ api_router.include_router(audit_router)
 api_router.include_router(rbac_router)
 api_router.include_router(push_router)
 
+# Public API for external integrations (versioned: /api/v1/...)
+api_router.include_router(public_api_router)
+set_public_api_db(db)
+
 
 # Health check endpoint
 @api_router.get("/")
