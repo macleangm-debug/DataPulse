@@ -35,7 +35,7 @@ import { DeviceManagementPage } from './pages/DeviceManagementPage';
 import { DataAnalysisPage } from './pages/DataAnalysisPage';
 import { PWAInstallPrompt, NetworkStatus, SyncStatusToast, OfflineModePage } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
-import { NotificationCenter } from './components/NotificationCenter';
+import { NotificationCenter, NotificationProvider } from './components/NotificationCenter';
 import '@/App.css';
 
 // Register service worker
