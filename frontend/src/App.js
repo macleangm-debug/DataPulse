@@ -295,6 +295,10 @@ function App() {
         
         {/* Offline Sync Status */}
         <NetworkStatusBanner />
+        
+        {/* Help System */}
+        <HelpPanel />
+        <ProTipBanner />
         </OnboardingProvider>
       </BrowserRouter>
       
@@ -310,6 +314,7 @@ function App() {
         }}
       />
     </div>
+    </HelpProvider>
     </NotificationProvider>
   );
 }
