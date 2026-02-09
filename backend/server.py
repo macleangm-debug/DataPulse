@@ -139,6 +139,7 @@ api_router.include_router(advanced_models_router)
 api_router.include_router(dashboard_builder_router)
 api_router.include_router(audit_router)
 api_router.include_router(rbac_router)
+api_router.include_router(push_router)
 
 
 # Health check endpoint
