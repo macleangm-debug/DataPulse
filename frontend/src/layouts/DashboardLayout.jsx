@@ -440,20 +440,40 @@ export function DashboardLayout({ children }) {
               </DropdownMenu>
             )}
 
-            {/* Search - Centered */}
-            <div className="flex-1 max-w-lg mx-auto" data-tour="search-bar">
-              <div className="relative group">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                <input
-                  type="text"
-                  placeholder="Search forms, projects, submissions..."
-                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-muted/50 border border-border/50 rounded-xl focus:bg-background focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground"
-                />
-                <kbd className="hidden sm:inline-flex absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 text-[10px] font-medium text-muted-foreground bg-background border border-border rounded">
-                  ⌘K
-                </kbd>
-              </div>
+            {/* Search - Centered - Opens Command Palette */}
+            <div className="flex-1 max-w-lg mx-auto hidden sm:block" data-tour="search-bar">
+              <button
+                onClick={() => {
+                  // Dispatch keyboard event to open command palette
+                  const event = new KeyboardEvent('keydown', {
+                    key: 'k',
+                    metaKey: true,
+                    bubbles: true
+                  });
+                  window.dispatchEvent(event);
+                }}
+                className="w-full relative group"
+              >
+                <div className="flex items-center gap-2 px-4 py-2.5 text-sm bg-muted/50 border border-border/50 rounded-xl hover:bg-muted hover:border-border transition-all cursor-pointer">
+                  <Search className="w-4 h-4 text-muted-foreground" />
+                  <span className="flex-1 text-left text-muted-foreground">Search forms, projects, submissions...</span>
+                  <kbd className="px-2 py-0.5 text-[10px] font-medium text-muted-foreground bg-background border border-border rounded">
+                    ⌘K
+                  </kbd>
+                </div>
+              </button>
             </div>
+
+            {/* Mobile Search Button */}
+            <button
+              onClick={() => {
+                const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
+                window.dispatchEvent(event);
+              }}
+              className="sm:hidden p-2 rounded-lg hover:bg-muted text-muted-foreground"
+            >
+              <Search className="w-5 h-5" />
+            </button>
 
             {/* Right side actions */}
             <div className="flex items-center gap-1.5">
