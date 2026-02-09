@@ -36,6 +36,23 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - Storage management UI
 - PWA Settings panel in Settings > App tab
 
+### 4. Push Notification System (Added Feb 9, 2026)
+- Backend VAPID key management with auto-generation
+- Push subscription management per user/org
+- Quality alert notifications (speeding, GPS, straight-lining, duplicates)
+- Notification preferences stored in MongoDB
+- Server-sent push notifications via pywebpush
+
+### API Endpoints - Push Notifications
+- `GET /api/push/vapid-public-key` - Get VAPID public key
+- `POST /api/push/subscribe` - Subscribe to push
+- `DELETE /api/push/unsubscribe` - Unsubscribe
+- `POST /api/push/send` - Send notification
+- `POST /api/push/trigger/quality-alert` - Trigger quality alert
+- `POST /api/push/test` - Test notification
+- `GET /api/push/history/{org_id}` - Notification history
+- `GET /api/push/alerts/{org_id}` - Quality alerts list
+
 ## Architecture
 
 ### Backend
