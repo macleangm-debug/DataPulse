@@ -90,6 +90,7 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - `components/PWAComponents.jsx` - PWA features
 - `components/NotificationCenter.jsx` - Notification system
 - `components/OnboardingWizard.jsx` - Interactive onboarding tour
+- `components/ContextualHelp.jsx` - Help system with tooltips and panel
 - `components/OfflineSync.jsx` - Sync UI
 - `pages/SettingsPage.jsx` - Settings with App tab
 - `layouts/DashboardLayout.jsx` - Main layout with data-tour attributes
