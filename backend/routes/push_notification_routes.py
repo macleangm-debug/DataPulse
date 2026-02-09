@@ -126,7 +126,6 @@ def get_or_create_vapid_keys(db):
     
     # Get the keys in the correct format
     private_key = vapid.private_key
-    public_key = vapid.public_key
     
     # Convert to base64url format
     private_key_b64 = vapid.private_pem().decode('utf-8') if hasattr(vapid, 'private_pem') else str(private_key)
