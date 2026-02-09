@@ -34,6 +34,7 @@ import { CustomDashboard } from '../components/CustomDashboard';
 import { useOrgStore } from '../store';
 import { dashboardAPI, orgAPI } from '../lib/api';
 import { formatRelativeTime, getQualityColor } from '../lib/utils';
+import { HelpTooltip, HelpIcon } from '../components/ContextualHelp';
 
 const StatCard = ({ title, value, icon: Icon, trend, description, onClick }) => (
   <motion.div
