@@ -416,7 +416,7 @@ async def trigger_webhooks(org_id: str, event: str, payload: dict):
                             }
                         }
                     )
-        except Exception as e:
+        except Exception:
             # Log error and increment failure count
             await db.webhooks.update_one(
                 {"_id": webhook["_id"]},
