@@ -283,7 +283,7 @@ export function SettingsPage() {
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7 lg:w-[700px]">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 lg:w-[800px]">
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="appearance">Appearance</TabsTrigger>
             <TabsTrigger value="notifications">Alerts</TabsTrigger>
@@ -291,6 +291,7 @@ export function SettingsPage() {
             <TabsTrigger value="privacy">Privacy</TabsTrigger>
             <TabsTrigger value="organization">Org</TabsTrigger>
             <TabsTrigger value="api">API</TabsTrigger>
+            <TabsTrigger value="app">App</TabsTrigger>
           </TabsList>
 
           {/* Profile Tab */}
