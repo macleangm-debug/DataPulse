@@ -433,7 +433,7 @@ async def send_notification(
             failed_count += 1
     
     # Log notification
-    db.notification_logs.insert_one({
+    await db.notification_logs.insert_one({
         "notification_type": notification.notification_type.value,
         "title": notification.title,
         "body": notification.body,
@@ -463,7 +463,7 @@ async def trigger_quality_alert(
     db = request.app.state.db
     
     # Get VAPID keys
-    vapid_keys = get_or_create_vapid_keys(db)
+    vapid_keys = await get_or_create_vapid_keys(db)
     
     # Build notification based on alert type
     title_map = {
@@ -498,7 +498,9 @@ async def trigger_quality_alert(
             {"org_id": alert.org_id}  # All org members
         ]
     
-    subscriptions = list(db.push_subscriptions.find(query))
+    subscriptions = []
+    async for sub in db.push_subscriptions.find(query):
+        subscriptions.append(sub)
     
     payload = {
         "title": title.strip(),
@@ -529,7 +531,7 @@ async def trigger_quality_alert(
             sent_count += 1
     
     # Store alert in database
-    db.quality_alerts.insert_one({
+    await db.quality_alerts.insert_one({
         "org_id": alert.org_id,
         "submission_id": alert.submission_id,
         "enumerator_id": alert.enumerator_id,
