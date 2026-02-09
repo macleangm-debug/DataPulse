@@ -565,10 +565,10 @@ async def notify_speeding(
     threshold_type: str = "warning"
 ):
     """Helper function to send speeding notification"""
-    vapid_keys = get_or_create_vapid_keys(db)
+    vapid_keys = await get_or_create_vapid_keys(db)
     
     severity = "high" if threshold_type == "critical" else "medium"
-    percent = round((completion_time / expected_time) * 100)
+    percent = round((completion_time / expected_time) * 100) if expected_time > 0 else 0
     
     payload = {
         "title": f"Interview Speeding ({percent}% of expected time)",
@@ -589,11 +589,13 @@ async def notify_speeding(
         }
     }
     
-    subscriptions = list(db.push_subscriptions.find({
+    subscriptions = []
+    async for sub in db.push_subscriptions.find({
         "org_id": org_id,
         "is_active": True,
         "preferences.quality": {"$ne": False}
-    }))
+    }):
+        subscriptions.append(sub)
     
     sent_count = 0
     for sub in subscriptions:
@@ -611,7 +613,7 @@ async def notify_gps_anomaly(
     anomaly_details: Dict
 ):
     """Helper function to send GPS anomaly notification"""
-    vapid_keys = get_or_create_vapid_keys(db)
+    vapid_keys = await get_or_create_vapid_keys(db)
     
     payload = {
         "title": "GPS Anomaly Detected",
@@ -631,11 +633,13 @@ async def notify_gps_anomaly(
         }
     }
     
-    subscriptions = list(db.push_subscriptions.find({
+    subscriptions = []
+    async for sub in db.push_subscriptions.find({
         "org_id": org_id,
         "is_active": True,
         "preferences.quality": {"$ne": False}
-    }))
+    }):
+        subscriptions.append(sub)
     
     sent_count = 0
     for sub in subscriptions:
