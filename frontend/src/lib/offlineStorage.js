@@ -281,6 +281,25 @@ class OfflineStorage {
 
   // ============ Utilities ============
 
+  async getCachedForms() {
+    try {
+      return await this.getAllForms();
+    } catch (error) {
+      console.error('Error getting cached forms:', error);
+      return [];
+    }
+  }
+
+  async getPendingCount() {
+    try {
+      const pending = await this.getPendingSubmissions();
+      return pending?.length || 0;
+    } catch (error) {
+      console.error('Error getting pending count:', error);
+      return 0;
+    }
+  }
+
   async clearAll() {
     await this.ensureReady();
     const stores = [STORES.FORMS, STORES.SUBMISSIONS, STORES.MEDIA, STORES.SYNC_QUEUE];
