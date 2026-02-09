@@ -1,0 +1,208 @@
+{
+  "identity": {
+    "persona": "E1 - The Anti-AI Designer",
+    "mission": "Redesign DataPulse with a Canva-inspired aesthetic, focusing on clarity, violet tones, and a rail-based navigation system.",
+    "principles": [
+      "Fusion over Imitation: Mix SaaS utility with Creative Tool aesthetics.",
+      "Emotion First: The dashboard should feel 'creative' and 'capable', not just 'admin'.",
+      "Content is King: Data is the hero; navigation is the supporting actor.",
+      "Zoom In: High focus on active tasks.",
+      "Negative Space: Generous padding to reduce cognitive load.",
+      "Contrast: Sharp text on soft backgrounds."
+    ]
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Plus Jakarta Sans, sans-serif",
+      "body": "Inter, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "weights": {
+      "heading": "700",
+      "subheading": "600",
+      "body": "400",
+      "bold": "600"
+    },
+    "sizes": {
+      "h1": "text-4xl tracking-tight",
+      "h2": "text-2xl tracking-tight",
+      "h3": "text-xl font-semibold",
+      "body": "text-sm leading-relaxed",
+      "small": "text-xs text-muted-foreground"
+    }
+  },
+  "colors": {
+    "theme": "light",
+    "primary": {
+      "DEFAULT": "#7c3aed",
+      "hover": "#6d28d9",
+      "foreground": "#ffffff",
+      "50": "#f5f3ff",
+      "100": "#ede9fe",
+      "200": "#ddd6fe",
+      "300": "#c4b5fd",
+      "400": "#a78bfa",
+      "500": "#8b5cf6",
+      "600": "#7c3aed",
+      "700": "#6d28d9",
+      "800": "#5b21b6",
+      "900": "#4c1d95"
+    },
+    "background": {
+      "page": "#f8fafc",
+      "card": "#ffffff",
+      "panel": "#ffffff",
+      "rail": "#ffffff"
+    },
+    "text": {
+      "primary": "#1e293b",
+      "secondary": "#64748b",
+      "muted": "#94a3b8"
+    },
+    "border": {
+      "default": "#e2e8f0",
+      "active": "#7c3aed"
+    },
+    "status": {
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6"
+    }
+  },
+  "layout": {
+    "spacing_scale": "relaxed",
+    "grid_system": "bento",
+    "border_radius": "rounded-xl",
+    "navigation": {
+      "pattern": "Rail + Expandable Panel",
+      "rail_width": "72px",
+      "panel_width": "260px",
+      "behavior": "Rail is fixed. Panel slides out or persists based on user preference/screen size."
+    }
+  },
+  "navigation_structure": {
+    "groups": [
+      {
+        "id": "home",
+        "label": "Home",
+        "icon": "House",
+        "path": "/dashboard",
+        "items": []
+      },
+      {
+        "id": "projects",
+        "label": "Projects",
+        "icon": "Folder",
+        "items": [
+          { "label": "All Projects", "path": "/projects" },
+          { "label": "Forms", "path": "/forms" },
+          { "label": "Templates", "path": "/templates" },
+          { "label": "Submissions", "path": "/submissions" }
+        ]
+      },
+      {
+        "id": "data",
+        "label": "Data",
+        "icon": "Database",
+        "items": [
+          { "label": "Cases", "path": "/cases" },
+          { "label": "Datasets", "path": "/datasets" },
+          { "label": "Exports", "path": "/exports" }
+        ]
+      },
+      {
+        "id": "field_ops",
+        "label": "Field Ops",
+        "icon": "MapPin",
+        "items": [
+          { "label": "CATI", "path": "/cati" },
+          { "label": "Back-check", "path": "/back-check" },
+          { "label": "Token Surveys", "path": "/token-surveys" },
+          { "label": "Preload", "path": "/preload" },
+          { "label": "Devices", "path": "/devices" }
+        ]
+      },
+      {
+        "id": "quality",
+        "label": "Quality & AI",
+        "icon": "Sparkles",
+        "items": [
+          { "label": "Quality AI", "path": "/quality-ai" },
+          { "label": "Simulation", "path": "/simulation" },
+          { "label": "Analytics", "path": "/analytics" }
+        ]
+      },
+      {
+        "id": "apps",
+        "label": "Apps",
+        "icon": "LayoutGrid",
+        "items": [
+          { "label": "Plugins", "path": "/plugins" },
+          { "label": "Workflows", "path": "/workflows" }
+        ]
+      },
+      {
+        "id": "settings",
+        "label": "Settings",
+        "icon": "Settings",
+        "items": [
+          { "label": "Team", "path": "/team" },
+          { "label": "Roles", "path": "/roles" },
+          { "label": "Translations", "path": "/translations" },
+          { "label": "Security", "path": "/security" },
+          { "label": "Global Settings", "path": "/settings" },
+          { "label": "Super Admin", "path": "/super-admin" }
+        ]
+      }
+    ]
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-violet-600 text-white hover:bg-violet-700 rounded-lg font-medium shadow-sm transition-all active:scale-95",
+      "secondary": "bg-violet-50 text-violet-700 hover:bg-violet-100 rounded-lg font-medium transition-all",
+      "ghost": "hover:bg-slate-100 text-slate-600 hover:text-slate-900 rounded-lg transition-all"
+    },
+    "cards": {
+      "default": "bg-white border border-slate-100 rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-shadow duration-300",
+      "interactive": "cursor-pointer hover:border-violet-200 hover:ring-2 hover:ring-violet-50 transition-all"
+    },
+    "inputs": {
+      "default": "border-slate-200 focus:border-violet-500 focus:ring-violet-500/20 rounded-lg"
+    },
+    "rail_item": {
+      "default": "w-10 h-10 flex items-center justify-center rounded-lg text-slate-500 hover:bg-violet-50 hover:text-violet-600 transition-colors",
+      "active": "bg-violet-100 text-violet-700 shadow-none"
+    }
+  },
+  "assets": {
+    "images": {
+      "dashboard_hero_bg": "https://images.unsplash.com/photo-1680055195868-2b12621ac283?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBhYnN0cmFjdCUyMHZpb2xldCUyMDNkJTIwc2hhcGVzJTIwbWluaW1hbHxlbnwwfHx8fDE3NzA0MTU2OTV8MA&ixlib=rb-4.1.0&q=85",
+      "project_placeholder_1": "https://images.unsplash.com/photo-1680055196833-c2965de0caec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBhYnN0cmFjdCUyMHZpb2xldCUyMDNkJTIwc2hhcGVzJTIwbWluaW1hbHxlbnwwfHx8fDE3NzA0MTU2OTV8MA&ixlib=rb-4.1.0&q=85",
+      "project_placeholder_2": "https://images.unsplash.com/photo-1754738381739-5efb94a4525b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBhYnN0cmFjdCUyMHZpb2xldCUyMDNkJTIwc2hhcGVzJTIwbWluaW1hbHxlbnwwfHx8fDE3NzA0MTU2OTV8MA&ixlib=rb-4.1.0&q=85"
+    },
+    "icons": {
+      "library": "lucide-react",
+      "style": "stroke-width-2"
+    }
+  },
+  "instructions_to_main_agent": [
+    "1. IMPLEMENTATION ORDER: Layout Shell (Rail+Panel) -> Dashboard Home -> Sub-pages.",
+    "2. RAIL LOGIC: The Rail is the source of truth. It controls the 'active context'.",
+    "3. PANEL LOGIC: The Panel displays the 'children' of the active context. It should be collapsible.",
+    "4. BREADCRUMBS: Critical for navigation depth. Place them at the top of the main content area.",
+    "5. HEADER: Keep it minimal. Global Search, Notification, Profile only.",
+    "6. COLOR: Use 'violet-600' for primary actions. Do not use generic blue.",
+    "7. SPACING: Use generous padding (p-6, p-8) in the main content area.",
+    "8. SHADOWS: Use soft, colored shadows (shadow-violet-500/5) for depth."
+  ],
+  "UNIVERSAL_GUIDELINES": [
+    "Avoid generic 'on distribution' outputs.",
+    "Dark colors look good independently, avoid dark gradients.",
+    "Use glass-morphism effects with backdrop filters.",
+    "Do not apply 'transition: all'.",
+    "Do not center align the app container.",
+    "Use sonner for toasts.",
+    "Use named exports for components, default for pages."
+  ]
+}
