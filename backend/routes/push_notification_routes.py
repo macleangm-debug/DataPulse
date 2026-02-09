@@ -177,14 +177,14 @@ async def subscribe_to_push(
     endpoint_hash = hashlib.sha256(subscription.endpoint.encode()).hexdigest()
     
     # Check if subscription already exists
-    existing = db.push_subscriptions.find_one({
+    existing = await db.push_subscriptions.find_one({
         "endpoint_hash": endpoint_hash,
         "user_id": subscription.user_id
     })
     
     if existing:
         # Update existing subscription
-        db.push_subscriptions.update_one(
+        await db.push_subscriptions.update_one(
             {"_id": existing["_id"]},
             {
                 "$set": {
@@ -220,7 +220,7 @@ async def subscribe_to_push(
         "is_active": True
     }
     
-    result = db.push_subscriptions.insert_one(sub_doc)
+    result = await db.push_subscriptions.insert_one(sub_doc)
     
     return {
         "message": "Subscribed successfully",
