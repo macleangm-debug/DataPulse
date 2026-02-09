@@ -743,9 +743,15 @@ async def run_ai_deep_analysis(db, submission_id: str, data: dict, org_id: str):
 async def create_quality_alert(
     db, org_id: str, submission_id: str, 
     alert_type: AlertType, severity: AlertSeverity, 
-    details: dict
+    details: dict,
+    enumerator_id: str = None
 ):
-    """Create a quality alert"""
+    """Create a quality alert and send push notification"""
+    from routes.push_notification_routes import (
+        notify_speeding, notify_gps_anomaly, notify_straightlining,
+        get_or_create_vapid_keys, send_push_notification
+    )
+    
     alert = {
         "id": f"alert_{submission_id}_{alert_type}_{int(datetime.now(timezone.utc).timestamp())}",
         "org_id": org_id,
@@ -753,11 +759,70 @@ async def create_quality_alert(
         "alert_type": alert_type,
         "severity": severity,
         "details": details,
+        "enumerator_id": enumerator_id,
         "status": "open",
         "created_at": datetime.now(timezone.utc)
     }
     
     await db.quality_alerts.insert_one(alert)
+    
+    # Send push notification based on alert type
+    try:
+        if alert_type == AlertType.SPEEDING:
+            await notify_speeding(
+                db, org_id, submission_id, enumerator_id,
+                completion_time=details.get("completion_time", 0),
+                expected_time=details.get("median_time", 0),
+                threshold_type="critical" if severity == AlertSeverity.CRITICAL else "warning"
+            )
+        elif alert_type == AlertType.GPS_ANOMALY:
+            await notify_gps_anomaly(
+                db, org_id, submission_id, enumerator_id,
+                anomaly_details=details
+            )
+        elif alert_type == AlertType.STRAIGHT_LINING:
+            await notify_straightlining(
+                db, org_id, submission_id, enumerator_id,
+                pattern_details=details
+            )
+        else:
+            # Generic quality alert notification
+            vapid_keys = get_or_create_vapid_keys(db)
+            
+            title_map = {
+                AlertType.DUPLICATE: "Duplicate Entry Detected",
+                AlertType.CONTENT_QUALITY: "Content Quality Issue",
+            }
+            
+            payload = {
+                "title": title_map.get(alert_type, "Quality Alert"),
+                "body": details.get("message", f"Submission {submission_id} requires review"),
+                "icon": "/icons/icon-192x192.png",
+                "badge": "/icons/icon-72x72.png",
+                "tag": f"quality-{submission_id}",
+                "requireInteraction": severity in [AlertSeverity.CRITICAL, AlertSeverity.HIGH],
+                "data": {
+                    "type": alert_type,
+                    "category": "quality",
+                    "submission_id": submission_id,
+                    "severity": severity,
+                    "timestamp": datetime.now(timezone.utc).isoformat()
+                }
+            }
+            
+            subscriptions = list(db.push_subscriptions.find({
+                "org_id": org_id,
+                "is_active": True,
+                "preferences.quality": {"$ne": False}
+            }))
+            
+            for sub in subscriptions:
+                await send_push_notification(db, sub, payload, vapid_keys)
+                
+    except Exception as e:
+        # Don't fail alert creation if push fails
+        print(f"Push notification error: {e}")
+    
     return alert
 
 
