@@ -247,6 +247,7 @@ export function DashboardLayout({ children }) {
           <button
             onClick={() => navigate('/forms/new')}
             className="w-14 h-14 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 mb-4 flex flex-col items-center justify-center gap-0.5 transition-colors"
+            data-tour="create-btn"
           >
             <Plus className="w-5 h-5" />
             <span className="text-[9px] font-medium">Create</span>
