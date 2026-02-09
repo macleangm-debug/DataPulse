@@ -541,7 +541,7 @@ export function HelpPanel() {
                     helpEnabled ? "text-amber-500" : "text-muted-foreground"
                   )} />
                   <div>
-                    <p className="text-sm font-medium">Contextual Help</p>
+                    <p className="text-sm font-medium text-foreground">Contextual Help</p>
                     <p className="text-xs text-muted-foreground">Show help indicators on UI elements</p>
                   </div>
                 </div>
