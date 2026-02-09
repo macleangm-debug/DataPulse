@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, X, Smartphone, Wifi, WifiOff, Cloud, CloudOff, RefreshCw } from 'lucide-react';
+import { 
+  Download, X, Smartphone, Wifi, WifiOff, Cloud, CloudOff, RefreshCw,
+  Bell, BellOff, CheckCircle, AlertTriangle, Database, HardDrive,
+  Share2, Shield, Zap, Settings, ChevronRight, Info
+} from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Switch } from './ui/switch';
+import { Progress } from './ui/progress';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { offlineStorage, syncManager } from '../lib/offlineStorage';
 
 // PWA Install Prompt Component
