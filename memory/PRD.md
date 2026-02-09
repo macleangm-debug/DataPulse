@@ -101,6 +101,14 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 ## Changelog
 
 ### Feb 9, 2026
+- **Onboarding Wizard (NEW)**:
+  - Interactive product tour with 10 steps for new users
+  - Welcome modal highlighting key features (Offline, Analytics, AI Quality, Security)
+  - Interactive tooltips for navigation rail, org selector, search, notifications
+  - Feature spotlights for Offline Data Collection, Professional Data Analysis, AI Quality Monitoring
+  - Completion screen with actionable next steps (Create Project, Build Form, Invite Team, Import Data)
+  - "Replay Onboarding Tour" button in Settings > Profile tab
+  - Triggers automatically on first login, remembers completion via localStorage
 - **Header UI Redesign (Verified)**:
   - Moved Organization Selector from sidebar to top-left of header bar
   - Centered search bar with keyboard shortcut hint (⌘K)
