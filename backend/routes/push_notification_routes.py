@@ -757,10 +757,12 @@ async def get_notification_history(
     if notification_type:
         query["notification_type"] = notification_type
     
-    logs = list(db.notification_logs.find(
+    logs = []
+    async for log in db.notification_logs.find(
         query,
         {"_id": 0}
-    ).sort("sent_at", -1).limit(limit))
+    ).sort("sent_at", -1).limit(limit):
+        logs.append(log)
     
     return {"logs": logs, "count": len(logs)}
 
@@ -779,10 +781,12 @@ async def get_quality_alerts(
     if status:
         query["status"] = status
     
-    alerts = list(db.quality_alerts.find(
+    alerts = []
+    async for alert in db.quality_alerts.find(
         query,
         {"_id": 0}
-    ).sort("created_at", -1).limit(limit))
+    ).sort("created_at", -1).limit(limit):
+        alerts.append(alert)
     
     return {"alerts": alerts, "count": len(alerts)}
 
@@ -801,7 +805,7 @@ async def update_alert_status(
     if status not in ["pending", "reviewed", "dismissed"]:
         raise HTTPException(status_code=400, detail="Invalid status")
     
-    result = db.quality_alerts.update_one(
+    result = await db.quality_alerts.update_one(
         {"org_id": org_id, "submission_id": submission_id},
         {
             "$set": {
