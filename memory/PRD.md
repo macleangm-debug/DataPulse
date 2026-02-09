@@ -101,6 +101,13 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 ## Changelog
 
 ### Feb 9, 2026
+- **Header UI Redesign (Verified)**:
+  - Moved Organization Selector from sidebar to top-left of header bar
+  - Centered search bar with keyboard shortcut hint (⌘K)
+  - User profile with avatar and role on top-right
+  - New button dropdown for quick form/project creation
+  - Notification bell with badge indicator
+  - All dropdowns verified working without clipping
 - Enhanced PWA components with new features:
   - PushNotificationsManager - Enable/disable notifications with preferences
   - OfflineModePage - Full-screen offline experience
@@ -109,6 +116,7 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - Created NotificationCenter with 25+ notification types in 8 categories
 - Added "App" tab to Settings page for PWA management
 - Added helper methods to offlineStorage.js (getCachedForms, getPendingCount)
+- Push notification backend with VAPID keys and subscription management
 
 ### Feb 7-8, 2026
 - Completed Data Analysis Module (100%)
