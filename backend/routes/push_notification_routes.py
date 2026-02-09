@@ -126,20 +126,21 @@ async def get_or_create_vapid_keys(db):
     vapid = Vapid()
     vapid.generate_keys()
     
-    # Get the keys in the correct format
-    private_key = vapid.private_key
+    # Get private key as PEM
+    private_key_pem = vapid.private_pem().decode('utf-8')
     
-    # Convert to base64url format
-    private_key_b64 = vapid.private_pem().decode('utf-8') if hasattr(vapid, 'private_pem') else str(private_key)
-    
-    # Get public key in applicationServerKey format
-    public_key_b64 = vapid.public_key_urlsafe_base64()
+    # Get public key in applicationServerKey format (base64url encoded)
+    pub_key_raw = vapid.public_key.public_bytes(
+        encoding=Encoding.X962,
+        format=PublicFormat.UncompressedPoint
+    )
+    public_key_b64 = base64.urlsafe_b64encode(pub_key_raw).decode('utf-8').rstrip('=')
     
     # Store in database
     keys_doc = {
         "type": "vapid_keys",
         "public_key": public_key_b64,
-        "private_key": private_key_b64,
+        "private_key": private_key_pem,
         "subject": "mailto:notifications@datapulse.io",
         "created_at": datetime.now(timezone.utc).isoformat()
     }
@@ -148,7 +149,7 @@ async def get_or_create_vapid_keys(db):
     
     return {
         "public_key": public_key_b64,
-        "private_key": private_key_b64,
+        "private_key": private_key_pem,
         "subject": "mailto:notifications@datapulse.io"
     }
 
