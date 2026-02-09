@@ -72,6 +72,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { useAuthStore, useOrgStore, useUIStore } from '../store';
 import { toast } from 'sonner';
+import { PWASettingsPanel } from '../components/PWAComponents';
 
 export function SettingsPage() {
   const { user, logout } = useAuthStore();
