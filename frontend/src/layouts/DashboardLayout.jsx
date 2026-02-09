@@ -588,15 +588,16 @@ export function DashboardLayout({ children }) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setMobileMenuOpen(false)}
-                className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
               />
               <motion.aside
                 initial={{ x: -300 }}
                 animate={{ x: 0 }}
                 exit={{ x: -300 }}
-                transition={{ type: 'spring', damping: 25 }}
-                className="fixed left-0 top-0 bottom-0 w-[280px] bg-card z-50 lg:hidden overflow-y-auto"
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                className="fixed left-0 top-0 bottom-0 w-[300px] bg-card border-r border-border z-50 lg:hidden flex flex-col"
               >
+                {/* Mobile Header */}
                 <div className="p-4 border-b border-border flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
@@ -604,18 +605,67 @@ export function DashboardLayout({ children }) {
                     </div>
                     <span className="font-semibold text-foreground">DataPulse</span>
                   </div>
-                  <button onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-lg hover:bg-muted">
+                  <button 
+                    onClick={() => setMobileMenuOpen(false)} 
+                    className="p-2 rounded-lg hover:bg-muted transition-colors"
+                  >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <nav className="p-3">
+                {/* Mobile Organization Selector */}
+                {organizations?.length > 0 && (
+                  <div className="p-3 border-b border-border">
+                    <p className="text-xs text-muted-foreground mb-2 px-1">Organization</p>
+                    <select
+                      value={currentOrg?.id || ''}
+                      onChange={(e) => {
+                        const org = organizations.find(o => o.id === e.target.value);
+                        if (org) setCurrentOrg(org);
+                      }}
+                      className="w-full px-3 py-2 text-sm bg-muted border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    >
+                      {organizations.map(org => (
+                        <option key={org.id} value={org.id}>{org.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* Mobile Quick Actions */}
+                <div className="p-3 border-b border-border">
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => {
+                        navigate('/forms/new');
+                        setMobileMenuOpen(false);
+                      }}
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl bg-primary/10 hover:bg-primary/20 transition-colors"
+                    >
+                      <Plus className="w-5 h-5 text-primary" />
+                      <span className="text-xs font-medium text-primary">New Form</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/projects/new');
+                        setMobileMenuOpen(false);
+                      }}
+                      className="flex flex-col items-center gap-1 p-3 rounded-xl bg-muted hover:bg-muted/80 transition-colors"
+                    >
+                      <Folder className="w-5 h-5 text-muted-foreground" />
+                      <span className="text-xs font-medium text-muted-foreground">New Project</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Mobile Navigation */}
+                <nav className="flex-1 overflow-y-auto p-3">
                   {NAVIGATION.map((group) => {
                     const Icon = group.icon;
                     const isActive = activeGroup === group.id;
                     
                     return (
-                      <div key={group.id} className="mb-4">
+                      <div key={group.id} className="mb-2">
                         <button
                           onClick={() => {
                             if (group.path) {
@@ -626,60 +676,91 @@ export function DashboardLayout({ children }) {
                             }
                           }}
                           className={cn(
-                            "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium",
+                            "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors",
                             isActive ? "bg-primary/10 text-primary" : "text-foreground hover:bg-muted"
                           )}
                         >
                           <Icon className="w-5 h-5" />
-                          {group.label}
+                          <span className="flex-1 text-left">{group.label}</span>
+                          {group.items?.length > 0 && (
+                            <ChevronRight className={cn(
+                              "w-4 h-4 transition-transform",
+                              isActive && "rotate-90"
+                            )} />
+                          )}
                         </button>
                         
-                        {isActive && group.items?.length > 0 && (
-                          <div className="mt-1 ml-4 pl-4 border-l border-border space-y-1">
-                            {group.items.map((item) => (
-                              <Link
-                                key={item.path}
-                                to={item.path}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className={cn(
-                                  "block px-3 py-2 rounded-lg text-sm",
-                                  location.pathname === item.path
-                                    ? "bg-primary/10 text-primary"
-                                    : "text-muted-foreground hover:bg-muted"
-                                )}
-                              >
-                                {item.label}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
+                        <AnimatePresence>
+                          {isActive && group.items?.length > 0 && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="mt-1 ml-4 pl-4 border-l-2 border-border space-y-1">
+                                {group.items.map((item) => (
+                                  <Link
+                                    key={item.path}
+                                    to={item.path}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={cn(
+                                      "block px-3 py-2 rounded-lg text-sm transition-colors",
+                                      location.pathname === item.path
+                                        ? "bg-primary/10 text-primary font-medium"
+                                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                    )}
+                                  >
+                                    {item.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     );
                   })}
                 </nav>
 
-                {/* Mobile User */}
-                <div className="p-4 border-t border-border mt-auto">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Avatar>
+                {/* Mobile User Footer */}
+                <div className="p-4 border-t border-border bg-muted/30">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Avatar className="w-10 h-10">
                       <AvatarImage src={user?.avatar} />
-                      <AvatarFallback className="bg-primary/10 text-primary">
+                      <AvatarFallback className="bg-primary/10 text-primary font-medium">
                         {user?.name?.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
-                    <div>
-                      <p className="font-medium text-sm">{user?.name}</p>
-                      <p className="text-xs text-muted-foreground">{user?.email}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{user?.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                     </div>
                   </div>
-                  <Button
-                    onClick={handleLogout}
-                    variant="outline"
-                    className="w-full"
-                  >
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Sign out
-                  </Button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        navigate('/settings');
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full text-xs"
+                    >
+                      <Settings className="w-3.5 h-3.5 mr-1.5" />
+                      Settings
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleLogout}
+                      className="w-full text-xs text-destructive hover:text-destructive"
+                    >
+                      <LogOut className="w-3.5 h-3.5 mr-1.5" />
+                      Sign out
+                    </Button>
+                  </div>
                 </div>
               </motion.aside>
             </>
