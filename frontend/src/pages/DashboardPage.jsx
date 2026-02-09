@@ -401,19 +401,19 @@ export function DashboardPage() {
               <CardTitle className="text-slate-900">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200" onClick={() => navigate('/projects/new')}>
+              <Button variant="outline" className="w-full justify-start text-slate-700 hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200" onClick={() => navigate('/projects/new')}>
                 <FolderKanban className="w-4 h-4 mr-2" />
                 New Project
               </Button>
-              <Button variant="outline" className="w-full justify-start hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200" onClick={() => navigate('/forms/new')}>
+              <Button variant="outline" className="w-full justify-start text-slate-700 hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200" onClick={() => navigate('/forms/new')}>
                 <FileText className="w-4 h-4 mr-2" />
                 New Form
               </Button>
-              <Button variant="outline" className="w-full justify-start hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200" onClick={() => navigate('/team')}>
+              <Button variant="outline" className="w-full justify-start text-slate-700 hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200" onClick={() => navigate('/team')}>
                 <Users className="w-4 h-4 mr-2" />
                 Manage Team
               </Button>
-              <Button variant="outline" className="w-full justify-start hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200" onClick={() => navigate('/exports')}>
+              <Button variant="outline" className="w-full justify-start text-slate-700 hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200" onClick={() => navigate('/exports')}>
                 <Activity className="w-4 h-4 mr-2" />
                 Export Data
               </Button>
