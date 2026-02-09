@@ -22,6 +22,8 @@ from dotenv import load_dotenv
 # Web Push imports
 from pywebpush import webpush, WebPushException
 from py_vapid import Vapid
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+import base64
 
 load_dotenv()
 
