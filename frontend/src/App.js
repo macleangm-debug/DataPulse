@@ -36,6 +36,7 @@ import { DataAnalysisPage } from './pages/DataAnalysisPage';
 import { PWAInstallPrompt, NetworkStatus, SyncStatusToast, OfflineModePage } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import { NotificationCenter, NotificationProvider } from './components/NotificationCenter';
+import { OnboardingProvider } from './components/OnboardingWizard';
 import '@/App.css';
 
 // Register service worker
