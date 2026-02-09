@@ -239,7 +239,7 @@ async def unsubscribe_from_push(
     
     endpoint_hash = hashlib.sha256(endpoint.encode()).hexdigest()
     
-    result = db.push_subscriptions.delete_one({
+    result = await db.push_subscriptions.delete_one({
         "endpoint_hash": endpoint_hash,
         "user_id": user_id
     })
@@ -258,10 +258,12 @@ async def get_user_subscriptions(
     """Get all push subscriptions for a user"""
     db = request.app.state.db
     
-    subscriptions = list(db.push_subscriptions.find(
+    subscriptions = []
+    async for sub in db.push_subscriptions.find(
         {"user_id": user_id, "is_active": True},
-        {"_id": 0, "endpoint": 0, "keys": 0}  # Don't expose sensitive data
-    ))
+        {"_id": 0, "endpoint": 0, "keys": 0}
+    ):
+        subscriptions.append(sub)
     
     return {"subscriptions": subscriptions, "count": len(subscriptions)}
 
@@ -275,7 +277,7 @@ async def update_notification_preferences(
     """Update notification preferences for a user"""
     db = request.app.state.db
     
-    result = db.push_subscriptions.update_many(
+    result = await db.push_subscriptions.update_many(
         {"user_id": user_id},
         {"$set": {"preferences": preferences}}
     )
