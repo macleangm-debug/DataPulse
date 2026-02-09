@@ -293,6 +293,7 @@ function App() {
         
         {/* Offline Sync Status */}
         <NetworkStatusBanner />
+        </OnboardingProvider>
       </BrowserRouter>
       
       <Toaster 
