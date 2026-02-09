@@ -37,6 +37,7 @@ import { PWAInstallPrompt, NetworkStatus, SyncStatusToast, OfflineModePage } fro
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import { NotificationCenter, NotificationProvider } from './components/NotificationCenter';
 import { OnboardingProvider } from './components/OnboardingWizard';
+import { HelpProvider, HelpPanel, ProTipBanner } from './components/ContextualHelp';
 import '@/App.css';
 
 // Register service worker
