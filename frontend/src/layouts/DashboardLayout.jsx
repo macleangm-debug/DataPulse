@@ -457,6 +457,9 @@ export function DashboardLayout({ children }) {
 
             {/* Right side actions */}
             <div className="flex items-center gap-1.5">
+              {/* Help Toggle */}
+              <HelpToggleButton />
+
               {/* Quick Create Button */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
