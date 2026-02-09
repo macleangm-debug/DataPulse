@@ -392,7 +392,7 @@ export function DashboardLayout({ children }) {
             {organizations?.length > 0 && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors border border-border/50">
+                  <button className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors border border-border/50" data-tour="org-selector">
                     <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-semibold text-xs shadow-sm">
                       {currentOrg?.name?.charAt(0) || 'O'}
                     </div>
