@@ -61,6 +61,7 @@ import {
 import { useAuthStore, useOrgStore, useUIStore } from '../store';
 import { cn } from '../lib/utils';
 import { OfflineStatusIndicator } from '../components/OfflineStatus';
+import { HelpToggleButton } from '../components/ContextualHelp';
 
 // Navigation structure - grouped for Canva-style rail
 const NAVIGATION = [
