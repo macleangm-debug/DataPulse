@@ -1240,6 +1240,11 @@ export function SettingsPage() {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* App/PWA Settings Tab */}
+          <TabsContent value="app">
+            <PWASettingsPanel />
+          </TabsContent>
         </Tabs>
       </div>
     </DashboardLayout>
