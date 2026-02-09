@@ -155,41 +155,106 @@ async function syncOfflineSubmissions() {
   });
 }
 
-// Handle push notifications (for future use)
+// Handle push notifications
 self.addEventListener('push', (event) => {
+  console.log('[SW] Push notification received');
+  
   if (event.data) {
     const data = event.data.json();
+    
     const options = {
-      body: data.body,
-      icon: '/icons/icon-192x192.png',
-      badge: '/icons/icon-72x72.png',
+      body: data.body || 'You have a new notification',
+      icon: data.icon || '/icons/icon-192x192.png',
+      badge: data.badge || '/icons/icon-72x72.png',
       vibrate: [100, 50, 100],
-      data: data.data
+      tag: data.tag || 'datapulse-notification',
+      requireInteraction: data.requireInteraction || false,
+      data: {
+        ...data.data,
+        url: data.data?.action_url || '/',
+        timestamp: new Date().toISOString()
+      },
+      actions: data.actions || []
     };
     
     event.waitUntil(
-      self.registration.showNotification(data.title, options)
+      self.registration.showNotification(data.title || 'DataPulse', options)
     );
   }
 });
 
 // Handle notification clicks
 self.addEventListener('notificationclick', (event) => {
+  console.log('[SW] Notification clicked:', event.action);
+  
   event.notification.close();
   
+  const notificationData = event.notification.data || {};
+  let targetUrl = '/';
+  
+  // Handle specific actions
+  if (event.action === 'review') {
+    targetUrl = notificationData.action_url || `/quality/review/${notificationData.submission_id}`;
+  } else if (event.action === 'dismiss') {
+    // Just close the notification
+    return;
+  } else if (notificationData.url) {
+    targetUrl = notificationData.url;
+  } else if (notificationData.action_url) {
+    targetUrl = notificationData.action_url;
+  }
+  
+  // Handle different notification categories
+  switch (notificationData.category) {
+    case 'quality':
+      targetUrl = notificationData.action_url || `/quality/review/${notificationData.submission_id}`;
+      break;
+    case 'submissions':
+      targetUrl = `/submissions/${notificationData.submission_id}`;
+      break;
+    case 'backcheck':
+      targetUrl = '/backcheck';
+      break;
+    case 'devices':
+      targetUrl = '/devices';
+      break;
+    case 'team':
+      targetUrl = '/settings?tab=organization';
+      break;
+    default:
+      // Use the provided URL or default to home
+      break;
+  }
+  
   event.waitUntil(
-    self.clients.matchAll({ type: 'window' }).then((clientList) => {
-      // Focus existing window or open new one
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Check if any client is already at the target URL
       for (const client of clientList) {
-        if (client.url === '/' && 'focus' in client) {
+        const clientUrl = new URL(client.url);
+        if (clientUrl.pathname === targetUrl && 'focus' in client) {
           return client.focus();
         }
       }
+      
+      // Focus existing window and navigate, or open new one
+      for (const client of clientList) {
+        if ('focus' in client && 'navigate' in client) {
+          return client.focus().then(() => client.navigate(targetUrl));
+        }
+      }
+      
+      // Open new window if no existing window found
       if (self.clients.openWindow) {
-        return self.clients.openWindow('/');
+        return self.clients.openWindow(targetUrl);
       }
     })
   );
+});
+
+// Handle notification close (for analytics)
+self.addEventListener('notificationclose', (event) => {
+  console.log('[SW] Notification closed without interaction');
+  // Could send analytics here if needed
 });
 
 console.log('[SW] Service worker loaded');
