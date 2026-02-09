@@ -282,6 +282,11 @@ function App() {
         
         {/* PWA Components */}
         <PWAInstallPrompt />
+        <SyncStatusToast />
+        <OfflineModePage />
+        
+        {/* Notification Center */}
+        <NotificationCenter />
         
         {/* Offline Sync Status */}
         <NetworkStatusBanner />
