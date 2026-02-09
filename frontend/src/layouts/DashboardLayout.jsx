@@ -137,6 +137,7 @@ const NAVIGATION = [
       { label: 'Roles', path: '/rbac', icon: Shield },
       { label: 'Translations', path: '/translations', icon: Languages },
       { label: 'API Security', path: '/security', icon: Key },
+      { label: 'API Docs', path: '/api-docs', icon: Code },
       { label: 'Settings', path: '/settings', icon: Settings },
       { label: 'Super Admin', path: '/admin', icon: Crown }
     ]
