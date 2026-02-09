@@ -154,11 +154,14 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - ✅ Wire up backend quality alerts to trigger frontend notifications
 - ✅ Real push notification server with VAPID keys
 - ✅ Header UI redesign with organization selector in top bar
+- ✅ Onboarding wizard for new users
+- ✅ Contextual help system for user retention
 
 ### P1 (Next Sprint)
-- Mobile device testing for PWA
+- Mobile device testing for PWA and onboarding
 - Audio notification file
 - Enhanced conflict resolution UI
+- Add more contextual help topics throughout the app
 
 ### P2 (Future)
 - Native mobile app wrapper (if needed)
