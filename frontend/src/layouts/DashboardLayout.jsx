@@ -360,48 +360,6 @@ export function DashboardLayout({ children }) {
                     );
                   })}
                 </nav>
-
-                {/* Organization Selector */}
-                {organizations?.length > 0 && (
-                  <div className="p-3 border-t border-border">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-muted hover:bg-muted/80 transition-colors text-left">
-                          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-medium text-xs">
-                            {currentOrg?.name?.charAt(0) || 'O'}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-foreground truncate">
-                              {currentOrg?.name || 'Select Org'}
-                            </p>
-                          </div>
-                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="w-56">
-                        {organizations.map((org) => (
-                          <DropdownMenuItem
-                            key={org.id}
-                            onClick={() => setCurrentOrg(org)}
-                            className={cn(
-                              currentOrg?.id === org.id && "bg-primary/10"
-                            )}
-                          >
-                            <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center text-primary text-xs mr-2">
-                              {org.name?.charAt(0)}
-                            </div>
-                            {org.name}
-                          </DropdownMenuItem>
-                        ))}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => navigate('/organizations/new')}>
-                          <Plus className="w-4 h-4 mr-2" />
-                          Create Organization
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                )}
               </div>
             </motion.aside>
           )}
