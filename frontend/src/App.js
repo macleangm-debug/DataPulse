@@ -305,6 +305,7 @@ function App() {
         }}
       />
     </div>
+    </NotificationProvider>
   );
 }
 
