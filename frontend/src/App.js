@@ -84,8 +84,9 @@ function App() {
   }, []);
 
   return (
-    <div className={theme === 'dark' ? 'dark' : ''}>
-      <BrowserRouter>
+    <NotificationProvider>
+      <div className={theme === 'dark' ? 'dark' : ''}>
+        <BrowserRouter>
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={
