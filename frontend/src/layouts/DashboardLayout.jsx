@@ -409,8 +409,8 @@ export function DashboardLayout({ children }) {
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0">
-          {/* Top Header */}
-          <header className="h-14 bg-card border-b border-border flex items-center px-4 lg:px-6 gap-4">
+          {/* Top Header - Redesigned */}
+          <header className="h-16 bg-card border-b border-border flex items-center px-4 lg:px-6 gap-4">
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(true)}
@@ -429,29 +429,162 @@ export function DashboardLayout({ children }) {
               </button>
             )}
 
-            {/* Search */}
-            <div className="flex-1 max-w-md">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            {/* Organization Selector - Moved to Top */}
+            {organizations?.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors border border-border/50">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-semibold text-xs shadow-sm">
+                      {currentOrg?.name?.charAt(0) || 'O'}
+                    </div>
+                    <div className="flex flex-col items-start">
+                      <span className="text-xs text-muted-foreground leading-none">Organization</span>
+                      <span className="text-sm font-medium text-foreground leading-tight max-w-[120px] truncate">
+                        {currentOrg?.name || 'Select'}
+                      </span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground rotate-90" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-64">
+                  <div className="px-3 py-2 border-b border-border">
+                    <p className="text-xs font-medium text-muted-foreground">Switch Organization</p>
+                  </div>
+                  {organizations.map((org) => (
+                    <DropdownMenuItem
+                      key={org.id}
+                      onClick={() => setCurrentOrg(org)}
+                      className={cn(
+                        "flex items-center gap-3 py-2.5",
+                        currentOrg?.id === org.id && "bg-primary/10"
+                      )}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/80 to-primary/40 flex items-center justify-center text-primary-foreground text-sm font-medium">
+                        {org.name?.charAt(0)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{org.name}</p>
+                        <p className="text-xs text-muted-foreground">{org.role || 'Member'}</p>
+                      </div>
+                      {currentOrg?.id === org.id && (
+                        <div className="w-2 h-2 rounded-full bg-primary" />
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/organizations/new')} className="text-primary">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create New Organization
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
+            {/* Search - Centered */}
+            <div className="flex-1 max-w-lg mx-auto">
+              <div className="relative group">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                 <input
                   type="text"
-                  placeholder="Search..."
-                  className="w-full pl-9 pr-4 py-2 text-sm bg-muted border-0 rounded-lg focus:bg-background focus:ring-2 focus:ring-ring transition-all text-foreground placeholder:text-muted-foreground"
+                  placeholder="Search forms, projects, submissions..."
+                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-muted/50 border border-border/50 rounded-xl focus:bg-background focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground"
                 />
+                <kbd className="hidden sm:inline-flex absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 text-[10px] font-medium text-muted-foreground bg-background border border-border rounded">
+                  ⌘K
+                </kbd>
               </div>
             </div>
 
             {/* Right side actions */}
-            <div className="flex items-center gap-2">
-              <button className="p-2 rounded-lg hover:bg-muted text-muted-foreground relative">
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
-              </button>
+            <div className="flex items-center gap-1.5">
+              {/* Quick Create Button */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" className="hidden sm:flex gap-1.5 h-9 px-3 rounded-lg shadow-sm">
+                    <Plus className="w-4 h-4" />
+                    <span className="text-sm">New</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => navigate('/forms/new')}>
+                    <FileText className="w-4 h-4 mr-2" />
+                    New Form
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/projects/new')}>
+                    <Folder className="w-4 h-4 mr-2" />
+                    New Project
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/cases/import')}>
+                    <Database className="w-4 h-4 mr-2" />
+                    Import Data
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-              {/* Desktop Profile */}
-              <div className="hidden lg:flex items-center gap-2 pl-2 border-l border-border">
-                <span className="text-sm text-muted-foreground">{user?.name}</span>
-              </div>
+              {/* Notifications */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="relative p-2.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+                    <Bell className="w-5 h-5" />
+                    <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-primary rounded-full ring-2 ring-card" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-80">
+                  <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+                    <p className="font-semibold text-sm">Notifications</p>
+                    <button className="text-xs text-primary hover:underline">Mark all read</button>
+                  </div>
+                  <div className="py-3 px-4 text-center text-sm text-muted-foreground">
+                    <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    No new notifications
+                  </div>
+                  <div className="border-t border-border p-2">
+                    <Button variant="ghost" size="sm" className="w-full text-xs" onClick={() => navigate('/settings?tab=notifications')}>
+                      Notification Settings
+                    </Button>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* User Profile */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-muted transition-colors">
+                    <Avatar className="w-8 h-8 ring-2 ring-border">
+                      <AvatarImage src={user?.avatar} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-xs font-medium">
+                        {user?.name?.charAt(0) || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="hidden md:flex flex-col items-start">
+                      <span className="text-sm font-medium text-foreground leading-tight">{user?.name}</span>
+                      <span className="text-[10px] text-muted-foreground leading-tight">{currentOrg?.role || 'Member'}</span>
+                    </div>
+                    <ChevronRight className="hidden md:block w-4 h-4 text-muted-foreground rotate-90" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <div className="px-3 py-3 border-b border-border">
+                    <p className="font-medium text-sm">{user?.name}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email}</p>
+                  </div>
+                  <div className="py-1">
+                    <DropdownMenuItem onClick={() => navigate('/settings')}>
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/settings?tab=appearance')}>
+                      <LayoutGrid className="w-4 h-4 mr-2" />
+                      Appearance
+                    </DropdownMenuItem>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </header>
 
