@@ -87,6 +87,7 @@ function App() {
 
   return (
     <NotificationProvider>
+      <HelpProvider>
       <div className={theme === 'dark' ? 'dark' : ''}>
         <BrowserRouter>
         <OnboardingProvider>
