@@ -38,6 +38,7 @@ import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import { NotificationCenter, NotificationProvider } from './components/NotificationCenter';
 import { OnboardingProvider } from './components/OnboardingWizard';
 import { HelpProvider, HelpPanel, ProTipBanner } from './components/ContextualHelp';
+import { CommandPalette } from './components/CommandPalette';
 import '@/App.css';
 
 // Register service worker
