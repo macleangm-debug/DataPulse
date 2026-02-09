@@ -102,6 +102,14 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 ## Changelog
 
 ### Feb 9, 2026
+- **Contextual Help System (NEW)**:
+  - Toggle-able help mode with indicators on UI elements
+  - Help (?) button in header to access Help Center panel
+  - Slide-out Help Center with categorized help topics (Navigation, Features, Builder, Analysis, Team)
+  - 20+ help topics with descriptions and quick tips
+  - Rotating Pro Tips banner at bottom of screen (10 tips, rotates every 30 seconds)
+  - Keyboard shortcuts reference
+  - Help preference saved to localStorage
 - **Onboarding Wizard (NEW)**:
   - Interactive product tour with 10 steps for new users
   - Welcome modal highlighting key features (Offline, Analytics, AI Quality, Security)
