@@ -1,149 +1,170 @@
-<analysis>**original_problem_statement**:
-The user requested the implementation of a comprehensive Qualitative Analysis module. The scope evolved to include three main phases and several enhancements:
-- **Phase 1 (Core MVP):** Data Ingestion, Manual Coding UX, Codebook Management, Basic Retrieval.
-- **Phase 2 (Advanced Analysis & Governance):** AI-Assisted Transcription, PII Controls, Advanced Queries, Multi-Coder Collaboration, Audit Trails.
-- **Phase 3 (AI-Native Features & Reporting):** AI Coding Suggestions, Auto-Code Source, AI Theme Synthesis, Report Generation.
-- **Additional Enhancements:** REFI-QDA Export, Publication Visuals, and initial backend setup for Real-time Collaboration.
-- **Visualization:** A D3.js force-directed graph for visualizing theme-code networks.
-- **Bug Fix:** Resolve a persistent onboarding modal that was blocking UI interaction.
-- **Data Seeding:** Create a comprehensive set of test data to validate all features.
+<analysis>**original_problem_statement:**
+The user initially reported an issue where only one of five qualitative projects was visible on the dashboard. After this was fixed, the user requested a detailed feature comparison between the current application, DataPulse, and a competitor, SurveyCTO. Based on the comparison, the user requested to implement the missing features in DataPulse to achieve feature parity with SurveyCTO. The agent proposed a phased implementation plan, which the user approved. The user has since been directing the agent to proceed with the implementation of these new features.
 
 **User's preferred language**: English
 
 **what currently exists?**
-A full-stack application with a Python/Flask backend and a React frontend. The entire Qualitative Analysis module, as specified in the problem statement, has been implemented. This includes all backend APIs (core features, AI integrations, collaboration, export) and the corresponding frontend components (project management, coding workspace, visualizations). A D3.js component for theme network visualization is integrated. The persistent onboarding modal bug has been fixed. A comprehensive test dataset has been created in the database.
+The initial data visibility issue, caused by an incorrect  in the test database, has been resolved. All five test projects are now correctly displayed on the qualitative analysis page. The core features, including the D3.js Theme Network visualization, have been verified as working through both manual screenshot verification and a full end-to-end test suite.
+
+Following the user's request, the agent has implemented the backend infrastructure and initial frontend placeholder pages for several new features to match SurveyCTO's capabilities. This includes:
+- XLSForm Import/Export
+- Audio Audits
+- Review Workflows
+- Scheduled Exports
+
+The backend routes are functional, and the corresponding frontend pages are rendered and accessible from the sidebar navigation. Authentication token handling has been fixed for these new pages.
 
 **Last working item**:
-- **Last item agent was working**: The agent was trying to resolve an issue where the newly created comprehensive test data was not appearing in the frontend UI. The root cause was identified as a mismatch between the  used to create the test data (acme-research) and the  of the logged-in user that the frontend uses for API calls (ACME Research). The agent's last action was navigating to the qualitative analysis page, which appeared empty, confirming the data visibility issue persists.
-- **Status**: IN PROGRESS
-- **Agent Testing Done**: N
-- **Which testing method agent to use?**: The agent should first write and execute a script (e.g., using  shell) to update the  of all seeded test data in the database. Afterward, use the screenshot tool on the qualitative analysis page and the visualization dialog to confirm the data is now visible and rendered correctly.
-- **User Testing Done**: N
+- **Last item agent was working:** The agent was beginning the implementation of the Barcode/QR Scanner and Signature Capture features. The backend REST API endpoint to support these new form field types has been created, and the agent was about to start creating the frontend components.
+- **Status:** IN PROGRESS
+- **Agent Testing Done:** N
+- **Which testing method agent to use?** Frontend testing agent should be used to test the new form builder components after they are created and integrated.
+- **User Testing Done:** N
 
 **All Pending/In progress Issue list**:
-- **Issue 1 (P0)**: Test data not visible in the UI due to  mismatch.
-
-**Issues Detail**:
-- **Issue 1**:
-    - **Description**: The comprehensive test dataset (projects, sources, codes, themes) created by the agent is not visible in the frontend. This is because the data was seeded with : acme-research, while the frontend queries are filtered by the logged-in user's , which is ACME Research. This prevents visual verification of the implemented features, especially the D3.js network graph.
-    - **Attempted fixes**: The agent correctly diagnosed the problem by inspecting the user's session data from the  endpoint and realizing the discrepancy.
-    - **Next debug checklist**:
-        1. Connect to the MongoDB database.
-        2. Write and execute a script to update the  field from acme-research to the correct user organization ID for all documents in the relevant collections: , , , , .
-        3. Navigate to the  page.
-        4. Take a screenshot to verify the test project is listed.
-        5. Click into the project and open the Visuals -> Theme Network dialog.
-        6. Take another screenshot to confirm the D3.js graph renders with nodes and edges.
-    - **Why fix this issue and what will be achieved with the fix?**: Fixing this will make the seeded data appear in the UI, allowing for a complete end-to-end verification of all the features developed in this session, particularly the complex visualizations.
-    - **Status**: IN PROGRESS
-    - **Is recurring issue?**: N
-    - **Should Test frontend/backend/both after fix?**: Frontend
+There are no outstanding bugs or issues. The current work is focused on new feature development.
 
 **In progress Task List**:
-There are no partially completed tasks. The last task of seeding data was completed, but it led to the pending issue above.
+- **Task 1: Implement Barcode/QR Scanner and Signature Capture (P1)**
+    - **Where to resume:** The backend route is ready. The next step is to create the frontend components.
+      1. Create a  component, potentially using a library like .
+      2. Create a  component, potentially using .
+      3. Integrate these components into the form builder UI, allowing users to add these new field types to their surveys.
+    - **What will be achieved with this?** Adds two high-value data collection field types, bringing DataPulse closer to 95% feature parity with SurveyCTO.
+    - **Status:** IN PROGRESS
+    - **Should Test frontend/backend/both after fix?** Frontend
+    - **Blocked on something:** No
 
 **Upcoming and Future Tasks**
-All user-requested tasks have been completed. The following are potential future enhancements identified by the agent but not yet started:
-- **Future Task (P2)**: Mixed Methods Support: Implement functionality to link qualitative themes with quantitative variables from other parts of the application.
-- **Future Task (P2)**: Enhance Real-time Collaboration: The backend WebSocket routes are in place (), but the frontend needs to be updated to use WebSockets for a live multi-user experience.
-- **Future Task (P3)**: Improve Publication Visuals: The framework exists, but more advanced visualizations like interactive framework matrices or quote card generators could be added.
+
+**Upcoming Tasks:**
+- **Task 1 (P0): Build out Review & Correction Workflows Frontend.** The placeholder page () needs to be implemented to fetch submissions from the queue, allow reviewers to view/comment, and change submission status.
+- **Task 2 (P0): Build out Audio Audit System Frontend.** The placeholder page () needs to be implemented to list, play back, and manage audio recordings associated with submissions.
+- **Task 3 (P1): Implement Form Groups/Folders Frontend.** The backend routes exist. A frontend UI is needed on the forms page to allow users to create/manage folders and organize their forms.
+- **Task 4 (P1): Implement Advanced Form Constraints.** The form builder needs to be enhanced to support regex and cross-field validation rules. This requires both backend logic and frontend UI updates.
+- **Task 5 (P1): Implement Sensor Metadata Collection.** Capture device metadata (e.g., battery level, accelerometer data) during survey submission.
+
+**Future Tasks:**
+- **Task 1 (P2):** Enhance Server Datasets with real-time updates and versioning.
+- **Task 2 (P2):** Add support for advanced nested repeat groups and cascading selects in forms.
+- **Task 3 (P2):** Implement an export option to choose between data labels and values.
+- **Task 4 (P2):** Create dedicated form widgets for Likert scales and ranking questions.
 
 **Completed work in this session**
-- **Qualitative Analysis Module (MVP - Phase 3)**: Fully implemented backend routes (, , etc.) and frontend pages (, ) for the entire feature set.
-- **Navigation Integration**: Added links for the new module to the main sidebar () and command palette ().
-- **AI Feature Integration**: Integrated transcription, PII detection, coding suggestions, and theme synthesis using the  library.
-- **Advanced Features**: Implemented multi-coder collaboration, audit trails, advanced queries, and REFI-QDA export.
-- **D3.js Visualization**: Added a force-directed graph for theme-code network analysis ().
-- **Onboarding Bug Fix**: Resolved the persistent onboarding modal by adding proper close/skip handlers ( and related components).
-- **Test Data Seeding**: Created a comprehensive dataset in the database to test all features.
+- **Data Visibility Bug (DONE):** Fixed incorrect  in MongoDB, making all qualitative projects visible.
+- **D3.js Visualization (DONE):** Verified that the Theme Network graph renders correctly.
+- **E2E Testing (DONE):** Ran a full suite of backend and frontend tests, which passed 100%.
+- **SurveyCTO Parity Analysis (DONE):** Provided a detailed comparison and a phased implementation plan.
+- **Backend Feature Implementation (DONE):**
+  - Created routes for XLSForm Import/Export, Audio Audits, Review Workflows, Scheduled Exports, and Form Groups.
+  - Added Barcode/Signature to the form field types endpoint.
+- **Frontend Feature Implementation (DONE):**
+  - Created placeholder pages for XLSForm, Audio Audit, Review Workflow, and Scheduled Exports.
+  - Integrated new pages into  routing and the  navigation.
+  - Fixed authentication and UI bugs on the new pages.
+- **User-Requested Screenshots (DONE):** Captured and displayed numerous screenshots of the application's UI, including various dashboards, analytics pages, and visualizations.
 
 **Earlier issues found/mentioned but not fixed**
-None. All issues raised during the session were addressed.
+- None.
 
 **Known issue recurrence from previous fork**
-- **Issue recurrence in previous fork**: Not an issue, but the initial handoff summary was outdated. It claimed the qualitative module didn't exist, but the agent found that the core model and route files were already present, which accelerated development.
-- **Recurrence count**: 1
-- **Status**: RESOLVED
+- None.
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **Backend**: Python (Flask), MongoDB for the database, Pydantic for data models.
-- **Frontend**: React, Material-UI (MUI) for the component library, D3.js for data visualization.
-- **AI Integration**: Leverages the  library to connect with OpenAI services (Whisper, GPT) for various AI-assisted features.
-- **Architecture**: A decoupled frontend-backend architecture with a RESTful API.
+- **Backend:** Python (Flask), MongoDB (pymongo)
+- **Frontend:** React.js, Material-UI, D3.js, Chart.js
+- **Architecture:** REST API serving a Single Page Application (SPA).
+- **Authentication:** Token-based authentication via Authorization headers.
+- **Libraries:**  and  for Excel/XLSForm processing,  for AWS S3,  for webhooks.
 
 **key DB schema**
-- : 
-- : 
-- : 
-- : 
-- : 
+The application uses MongoDB. Key collections include:
+- ****: 
+- ****: 
+- ****: 
+- ****: 
+- ****: 
+- ****: 
 
 **changes in tech stack**
-- **Added**:  to backend .
-- **Added**:  and  to frontend .
+The following Python libraries were added to  to support new features:
+- 
+- 
+- 
+- 
 
 **All files of reference**
-- **Created**:
-  - , , , , , : To modularize backend logic.
-  - : For reusable network visualization.
-- **Updated**:
-  - : To register all new API blueprints.
-  - : Significantly updated to include UI for AI tools, visualizations, and the D3 graph.
-  - : To fix the persistent modal bug.
-  -  and : To integrate the new module into the app's routing and navigation.
+*New/Updated Files:*
+- : Handles XLSForm import/export logic.
+- : Manages audio audit recordings.
+- : Manages submission review queues.
+- : Manages scheduled data exports.
+- : Manages form folders/groups.
+- : Registered all new API route blueprints.
+- : UI for XLSForm import/export.
+- : UI for scheduled exports.
+- : UI for review workflows.
+- : UI for audio audits.
+- : Added routes for all new pages.
+- : Added navigation links for new features.
 
 **Areas that need refactoring**:
-- The  component has grown very large. It manages state and logic for data fetching, coding, multiple AI features, and visualizations. It should be refactored into smaller, more focused components and custom hooks to improve maintainability.
+- **Frontend Authentication:** Auth logic is being added manually to each new page. This should be centralized into a custom hook or an API service wrapper (e.g., Axios interceptor) to automatically apply the auth token to all outgoing API requests and reduce code duplication.
 
 **key api endpoints**
--  (GET, POST): Manage qualitative projects.
--  (GET): Retrieve data for the D3 network visualization.
--  (POST): Transcribe audio files.
--  (POST): Get AI-powered code suggestions.
--  (GET): Export project data in REFI-QDA format.
+- : To import a survey from an XLSForm file.
+- : To export a survey definition to an XLSForm file.
+- : To get the list of submissions pending review.
+- : To create a new scheduled data export.
+- : To get the list of available field types for the form builder.
 
 **Critical Info for New Agent**
-- Your primary and immediate task is to fix the test data visibility issue. The entire feature set is implemented but cannot be visually verified until the  of the seeded data in the database is corrected to match the logged-in user's organization.
-- Once the  is fixed, the UI should populate with a rich dataset, and the D3.js network visualization should render with nodes and edges.
-- All functional requirements from the user have been met. Do not start new features until you have confirmed the existing implementation is fully visible and working end-to-end.
+- The main objective is to implement features to reach parity with SurveyCTO. The user has approved a phased plan, and you should continue following it. The highest priority is completing the Barcode/Signature feature, followed by building out the functionality of the placeholder pages (Review Workflow, Audio Audit).
+- Be mindful of authentication when creating new frontend components that make API calls. The auth token must be included in the request headers. Consider refactoring this for a more robust solution.
+- The user appreciates visual updates. Use the screenshot tool to show progress on UI elements as they are built.
 
 **documents and test reports created in this job**
-- 
-- 
+-  (updated)
 - 
 - 
 
 **Last 10 User Messages and any pending HUMAN messages**
-1. : Request to add a D3 graph. (Completed)
-2. : Request to fix a bug and add test data. (Completed, but data is not visible)
-3. : Request for a progress update. (Completed)
-4. : Instruction to implement additional features. (Completed)
-5. : Confirmation to implement 4 enhancement features. (Completed)
-6. : Approval of the agent's plan. (Completed)
-7. : Initial high-level request. (Completed)
+1. : Approved implementation of Barcode/Signature features. (In Progress)
+2. : Asked for a status update on feature parity. (Completed)
+3. : Approved the overall plan to add SurveyCTO features. (In Progress)
+4. : Provided input on feature priorities. (Completed)
+5. : Requested a feature comparison. (Completed)
+6. : Requested more screenshots. (Completed)
+7. : Requested a screenshot of the D3 visualization. (Completed)
+8. : Approved the initial bug fix plan. (Completed)
 
 **Project Health Check:**
-- **Broken**: The visibility of test data in the UI is broken due to an  mismatch between the data and the user session. The underlying features are functional but cannot be visually verified.
-- **Mocked**: No features are mocked.
+- **Broken:** None. The core application is stable.
+- **Mocked:** The frontend pages for the new SurveyCTO parity features (, , ) are currently UI placeholders and require implementation of their core logic.
 
 **3rd Party Integrations**
-- **OpenAI GPT & Whisper**: Used for AI-assisted transcription, coding suggestions, and theme synthesis. — uses Emergent LLM Key.
-- **D3.js (v7.9.0)**: A frontend JavaScript library for data visualization.
+- **MongoDB:** Primary database for all application data.
+- **OpenAI GPT:** Used for AI features like transcription and qualitative analysis. Uses Emergent LLM Key.
+- **D3.js:** Frontend library for data visualizations, specifically the Theme Network graph.
+- **pandas / openpyxl:** Backend libraries for processing XLSForm (Excel) files.
+- **boto3:** Backend library for AWS S3 integration, planned for scheduled exports.
+- **httpx:** Backend library for making HTTP requests, planned for webhook functionality.
 
 **Testing status**
-- **Testing agent used after significant changes**: YES
-- **Troubleshoot agent used after agent stuck in loop**: NO
-- **Test files created**:
+- **Testing agent used after significant changes:** YES, after the initial  bug fix.
+- **Troubleshoot agent used after agent stuck in loop:** NO
+- **Test files created:**
   - 
   - 
-  - 
-- **Known regressions**: None
+- **Known regressions:** None.
 
 **Credentials to test flow:**
-Standard application login is sufficient. The application will handle user authentication and organization context.
+Use the standard test credentials previously used by the agent:
+- **Username:** 
+- **Password:** 
 
 **What agent forgot to execute**
-The agent correctly diagnosed the  mismatch preventing test data from appearing in the UI but did not execute the final corrective step. The agent needs to run a database script to update the  on all the test data it created to match the active user's .</analysis>
+- The agent has created backend routes for **Form Groups/Folders** but has not yet created the corresponding frontend UI. This is tracked as an upcoming task and was not forgotten but rather deferred as part of the phased plan.</analysis>
