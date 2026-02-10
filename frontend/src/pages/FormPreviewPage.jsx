@@ -44,7 +44,7 @@ import { GpsCapture } from '../components/GpsCapture';
 import { AudioRecorder } from '../components/AudioRecorder';
 import { VideoRecorder } from '../components/VideoRecorder';
 import { BarcodeCapture } from '../components/BarcodeCapture';
-import { SignatureCapture } from '../components/SignatureCapture';
+import { SignatureCaptureInline } from '../components/SignatureCapture';
 import { formAPI } from '../lib/api';
 import { toast } from 'sonner';
 
