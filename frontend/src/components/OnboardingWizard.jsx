@@ -511,6 +511,17 @@ const TooltipStep = ({ step, onNext, onPrev, onSkip, currentStep, totalSteps }) 
   const [targetEl, setTargetEl] = useState(null);
   const [position, setPosition] = useState({});
   
+  // Handle escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        onSkip();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onSkip]);
+  
   useEffect(() => {
     // Find target element
     const findTarget = () => {
@@ -546,7 +557,7 @@ const TooltipStep = ({ step, onNext, onPrev, onSkip, currentStep, totalSteps }) 
   
   return (
     <>
-      <SpotlightOverlay target={targetEl} onClick={() => {}} />
+      <SpotlightOverlay target={targetEl} onClick={onSkip} />
       
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
