@@ -280,6 +280,19 @@ function App() {
               <APIDocsPage />
             </ProtectedRoute>
           } />
+          
+          {/* Qualitative Analysis Routes */}
+          <Route path="/qualitative" element={
+            <ProtectedRoute>
+              <QualitativeAnalysisPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/qualitative/:projectId" element={
+            <ProtectedRoute>
+              <QualitativeWorkspacePage />
+            </ProtectedRoute>
+          } />
+          
           {/* Public CAWI Survey Routes */}
           <Route path="/survey/:formId" element={<CAWISurveyPage />} />
           <Route path="/survey/complete" element={<SurveyCompletePage />} />
