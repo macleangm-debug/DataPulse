@@ -620,6 +620,36 @@ export default function QualitativeWorkspacePage() {
           </div>
           
           <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Sparkles className="w-4 h-4 text-purple-500" />
+                  AI Tools
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => setShowTranscribe(true)}>
+                  <Mic className="w-4 h-4 mr-2" />
+                  Transcribe Audio
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={autoCodeSource} disabled={!selectedSource || aiLoading}>
+                  <Wand2 className="w-4 h-4 mr-2" />
+                  Auto-Code Source
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={detectPii} disabled={!selectedSource || aiLoading}>
+                  <Shield className="w-4 h-4 mr-2" />
+                  Detect PII
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={synthesizeThemes} disabled={aiLoading}>
+                  <Brain className="w-4 h-4 mr-2" />
+                  Synthesize Themes
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => generateReport('markdown')} disabled={aiLoading}>
+                  <FileBarChart className="w-4 h-4 mr-2" />
+                  Generate Report
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button variant="outline" size="sm" onClick={() => setShowAddSource(true)}>
               <Upload className="w-4 h-4 mr-2" />
               Add Source
