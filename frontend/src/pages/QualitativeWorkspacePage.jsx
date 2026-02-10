@@ -90,6 +90,17 @@ export default function QualitativeWorkspacePage() {
   const [codeSelectorPosition, setCodeSelectorPosition] = useState({ x: 0, y: 0 });
   const [recentCodes, setRecentCodes] = useState([]);
   
+  // AI Features state
+  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [showAiPanel, setShowAiPanel] = useState(false);
+  const [piiFindings, setPiiFindings] = useState([]);
+  const [themes, setThemes] = useState([]);
+  const [showTranscribe, setShowTranscribe] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
+  const [showReport, setShowReport] = useState(false);
+  const [reportContent, setReportContent] = useState(null);
+  
   // Dialogs
   const [showAddSource, setShowAddSource] = useState(false);
   const [showAddCode, setShowAddCode] = useState(false);
@@ -97,6 +108,7 @@ export default function QualitativeWorkspacePage() {
   const [newCode, setNewCode] = useState({ name: '', definition: '', color: '#3B82F6', parent_id: null });
   
   const contentRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   // Load project data
   useEffect(() => {
