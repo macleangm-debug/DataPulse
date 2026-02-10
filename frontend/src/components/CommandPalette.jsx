@@ -42,6 +42,7 @@ const COMMANDS = [
       { id: 'forms', label: 'Go to Forms', icon: FileText, path: '/forms', keywords: ['surveys', 'questionnaires'] },
       { id: 'submissions', label: 'Go to Submissions', icon: ClipboardList, path: '/submissions', keywords: ['responses', 'data'] },
       { id: 'analysis', label: 'Go to Data Analysis', icon: BarChart3, path: '/analysis', keywords: ['statistics', 'charts'] },
+      { id: 'qualitative', label: 'Go to Qualitative Analysis', icon: BookOpen, path: '/qualitative', keywords: ['coding', 'transcripts', 'themes'] },
       { id: 'quality-ai', label: 'Go to Quality AI', icon: Brain, path: '/quality-ai', keywords: ['monitoring', 'alerts'] },
       { id: 'team', label: 'Go to Team', icon: Users, path: '/team', keywords: ['members', 'users'] },
       { id: 'settings', label: 'Go to Settings', icon: Settings, path: '/settings', keywords: ['preferences', 'config'] },
