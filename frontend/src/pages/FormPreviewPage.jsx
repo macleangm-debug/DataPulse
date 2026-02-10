@@ -253,7 +253,7 @@ const FieldRenderer = ({ field, value, onChange, language, errors }) => {
 
       case 'signature':
         return (
-          <SignatureCapture
+          <SignatureCaptureInline
             value={value}
             onChange={(signatureData) => onChange(field.id, signatureData)}
             label={label}
