@@ -1468,88 +1468,17 @@ function FrameworkMatrix({ projectId, orgId }) {
 }
 
 function ThemeNetwork({ projectId, orgId }) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${API_URL}/api/qualitative/visuals/theme-network/${projectId}?org_id=${orgId}`
-        );
-        if (response.ok) {
-          const result = await response.json();
-          setData(result);
-        }
-      } catch (error) {
-        console.error('Failed to fetch network:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [projectId, orgId]);
-  
-  if (loading) return <div className="flex justify-center p-8"><Loader2 className="w-6 h-6 animate-spin" /></div>;
-  if (!data?.nodes?.length) return <div className="text-center text-muted-foreground p-8">No network data available</div>;
-  
-  // Simple visualization using CSS
+  // Use the D3.js force-directed graph component
   return (
     <div className="space-y-4">
-      <div className="text-sm text-muted-foreground">
-        {data.node_count} nodes, {data.edge_count} connections
+      <ThemeNetworkGraph 
+        projectId={projectId} 
+        orgId={orgId} 
+        height={450}
+      />
+      <div className="text-xs text-muted-foreground text-center">
+        Drag nodes to rearrange • Scroll to zoom • Click nodes for details
       </div>
-      
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-purple-500" />
-            Themes
-          </h4>
-          <div className="space-y-1">
-            {data.nodes?.filter(n => n.type === 'theme').map((node, idx) => (
-              <div key={idx} className="text-sm p-2 bg-purple-50 rounded border border-purple-100">
-                {node.label}
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        <div>
-          <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
-            Codes
-          </h4>
-          <div className="space-y-1">
-            {data.nodes?.filter(n => n.type === 'code').map((node, idx) => (
-              <div key={idx} className="text-sm p-2 rounded border" style={{ backgroundColor: `${node.color}10`, borderColor: `${node.color}30` }}>
-                <span style={{ color: node.color }}>{node.label}</span>
-                <span className="text-muted-foreground ml-2">({node.size - 5} codings)</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      {data.edges?.length > 0 && (
-        <div>
-          <h4 className="font-medium text-sm mb-2">Code Co-occurrences</h4>
-          <div className="space-y-1">
-            {data.edges?.filter(e => e.type === 'co_occurrence').slice(0, 10).map((edge, idx) => {
-              const source = data.nodes?.find(n => n.id === edge.source);
-              const target = data.nodes?.find(n => n.id === edge.target);
-              return (
-                <div key={idx} className="text-xs p-2 bg-slate-50 rounded flex items-center gap-2">
-                  <span className="font-medium">{source?.label}</span>
-                  <span className="text-muted-foreground">↔</span>
-                  <span className="font-medium">{target?.label}</span>
-                  <Badge variant="secondary" className="ml-auto">{edge.weight}×</Badge>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
