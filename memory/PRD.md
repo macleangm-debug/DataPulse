@@ -111,14 +111,30 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - Implemented Form Groups/Folders (hierarchical organization)
 - Added navigation links in sidebar under Data and Field Ops sections
 
+### Feb 10, 2026 - Barcode/QR Scanner & Signature Capture Implementation
+- Implemented Barcode/QR Scanner field type with camera-based scanning and manual entry fallback
+- Implemented Signature Capture field type with canvas-based drawing (touch/mouse support)
+- Backend APIs: /api/advanced-fields/barcode/* and /api/advanced-fields/signature/*
+- Frontend components: BarcodeCapture and SignatureCaptureInline integrated into Form Builder and Form Preview
+- 100% test pass rate (14/14 backend tests, all frontend components working)
+
 ## Backlog / Future Features
 
-### P2 - Nice to Have
-- Barcode/QR Scanner field type
-- Signature Capture field type
+### P1 - High Priority
+- Build out Review & Correction Workflows Frontend (placeholder page exists)
+- Build out Audio Audit System Frontend (placeholder page exists)
+- Implement Form Groups/Folders Frontend UI
 - Advanced Constraints (regex, cross-field validation)
+
+### P2 - Nice to Have
 - Cascading Selects (filtered dropdown chains)
-- Sensor Metadata Collection (accelerometer, device info)### 4. PWA Features
+- Sensor Metadata Collection (accelerometer, device info)
+- Server Datasets with real-time updates and versioning
+- Nested repeat groups and cascading selects in forms
+- Export option to choose between data labels and values
+- Likert scale and ranking question widgets
+
+### 4. PWA Features
 - Service Worker for offline functionality
 - Encrypted local storage (AES-GCM 256-bit)
 - Background sync with conflict resolution
