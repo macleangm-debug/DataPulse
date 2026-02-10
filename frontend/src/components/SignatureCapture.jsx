@@ -281,4 +281,183 @@ export function SignatureDisplay({ imageData, className = '' }) {
   );
 }
 
+/**
+ * Inline Signature Capture Component
+ * For use in form preview/data collection
+ */
+export function SignatureCaptureInline({
+  value,
+  onChange,
+  label = "Signature",
+  required = false,
+  disabled = false,
+  strokeColor = '#000000',
+  strokeWidth = 2
+}) {
+  const canvasRef = useRef(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [pointsCount, setPointsCount] = useState(0);
+  const [hasSignature, setHasSignature] = useState(!!value);
+
+  const backgroundColor = '#ffffff';
+  const canvasWidth = 400;
+  const canvasHeight = 150;
+  const minPoints = 10;
+
+  useEffect(() => {
+    if (canvasRef.current && !value) {
+      initCanvas();
+    }
+  }, []);
+
+  useEffect(() => {
+    // If there's an existing value (base64 image), display it
+    if (value && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.onload = () => {
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+      };
+      img.src = value;
+      setHasSignature(true);
+    }
+  }, [value]);
+
+  const initCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = strokeWidth;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    setPointsCount(0);
+    setHasSignature(false);
+  };
+
+  const getCoordinates = (e) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    if (e.touches && e.touches[0]) {
+      return {
+        x: (e.touches[0].clientX - rect.left) * scaleX,
+        y: (e.touches[0].clientY - rect.top) * scaleY
+      };
+    }
+
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  };
+
+  const startDrawing = (e) => {
+    if (disabled) return;
+    e.preventDefault();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const { x, y } = getCoordinates(e);
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    setIsDrawing(true);
+  };
+
+  const draw = (e) => {
+    if (!isDrawing || disabled) return;
+    e.preventDefault();
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const { x, y } = getCoordinates(e);
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    setPointsCount(prev => prev + 1);
+    setHasSignature(true);
+  };
+
+  const stopDrawing = (e) => {
+    if (e) e.preventDefault();
+    setIsDrawing(false);
+    
+    // Save the signature when drawing stops
+    if (hasSignature && canvasRef.current) {
+      const imageData = canvasRef.current.toDataURL('image/png');
+      onChange(imageData);
+    }
+  };
+
+  const clearSignature = () => {
+    initCanvas();
+    onChange(null);
+  };
+
+  return (
+    <div className="space-y-2" data-testid="signature-capture-inline">
+      <Label>{label}{required && <span className="text-destructive ml-1">*</span>}</Label>
+      
+      <div 
+        className="border-2 border-border rounded-lg overflow-hidden"
+        style={{ backgroundColor }}
+      >
+        <canvas
+          ref={canvasRef}
+          width={canvasWidth}
+          height={canvasHeight}
+          className="w-full cursor-crosshair touch-none"
+          onMouseDown={startDrawing}
+          onMouseMove={draw}
+          onMouseUp={stopDrawing}
+          onMouseLeave={stopDrawing}
+          onTouchStart={startDrawing}
+          onTouchMove={draw}
+          onTouchEnd={stopDrawing}
+        />
+      </div>
+      
+      <div className="flex justify-between items-center">
+        <span className="text-xs text-muted-foreground">
+          {hasSignature ? `${pointsCount} points drawn` : 'Draw your signature above'}
+        </span>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={clearSignature}
+          disabled={disabled || !hasSignature}
+        >
+          <RotateCcw className="w-4 h-4 mr-1" />
+          Clear
+        </Button>
+      </div>
+      
+      {hasSignature && pointsCount < minPoints && (
+        <Alert className="bg-yellow-500/10 border-yellow-500/30">
+          <AlertDescription className="text-yellow-500 text-sm">
+            Please provide a more complete signature ({minPoints - pointsCount} more points needed)
+          </AlertDescription>
+        </Alert>
+      )}
+    </div>
+  );
+}
+
 export default SignatureCapture;
