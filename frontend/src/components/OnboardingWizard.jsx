@@ -256,9 +256,20 @@ const SpotlightOverlay = ({ target, onClick }) => {
 };
 
 // Welcome/Complete Modal
-const WelcomeModal = ({ step, onNext, onComplete, isLast }) => {
+const WelcomeModal = ({ step, onNext, onComplete, isLast, onSkip }) => {
   const navigate = useNavigate();
   const Icon = step.icon;
+  
+  // Handle escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        onSkip();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onSkip]);
   
   return (
     <motion.div
@@ -266,14 +277,25 @@ const WelcomeModal = ({ step, onNext, onComplete, isLast }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={onSkip} // Click backdrop to close
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 20 }}
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden"
+        className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden relative"
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking content
       >
+        {/* Close button */}
+        <button 
+          onClick={onSkip}
+          className="absolute top-4 right-4 z-10 p-1.5 rounded-full bg-background/80 hover:bg-muted transition-colors"
+          title="Skip tour (Esc)"
+        >
+          <X className="w-4 h-4 text-muted-foreground" />
+        </button>
+        
         {/* Header with gradient */}
         <div className="relative bg-gradient-to-br from-primary/20 via-primary/10 to-transparent p-8 text-center">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.1),transparent_50%)]" />
