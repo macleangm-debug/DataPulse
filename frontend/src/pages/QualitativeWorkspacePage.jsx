@@ -1073,6 +1073,165 @@ export default function QualitativeWorkspacePage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* Transcribe Audio Dialog */}
+        <Dialog open={showTranscribe} onOpenChange={setShowTranscribe}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Mic className="w-5 h-5 text-purple-500" />
+                Transcribe Audio
+              </DialogTitle>
+              <DialogDescription>
+                Upload an audio file to transcribe using AI (OpenAI Whisper)
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="py-6">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm"
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files?.[0]) {
+                    handleTranscribe(e.target.files[0]);
+                  }
+                }}
+              />
+              
+              <div 
+                onClick={() => fileInputRef.current?.click()}
+                className={cn(
+                  "border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors",
+                  transcribing ? "border-purple-300 bg-purple-50" : "border-slate-200 hover:border-purple-300 hover:bg-purple-50/50"
+                )}
+              >
+                {transcribing ? (
+                  <div className="flex flex-col items-center gap-3">
+                    <Loader2 className="w-10 h-10 text-purple-500 animate-spin" />
+                    <p className="text-purple-600 font-medium">Transcribing...</p>
+                    <p className="text-sm text-muted-foreground">This may take a few moments</p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center gap-3">
+                    <Mic className="w-10 h-10 text-slate-400" />
+                    <p className="font-medium">Click to upload audio file</p>
+                    <p className="text-sm text-muted-foreground">
+                      Supports: MP3, WAV, M4A, WebM (max 25MB)
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Report Preview Dialog */}
+        <Dialog open={showReport} onOpenChange={setShowReport}>
+          <DialogContent className="max-w-4xl max-h-[80vh]">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <FileBarChart className="w-5 h-5" />
+                Analysis Report
+              </DialogTitle>
+            </DialogHeader>
+            
+            <ScrollArea className="max-h-[60vh]">
+              {typeof reportContent === 'string' ? (
+                <div className="prose prose-sm max-w-none p-4 whitespace-pre-wrap font-mono text-xs bg-slate-50 rounded-lg">
+                  {reportContent}
+                </div>
+              ) : (
+                <pre className="p-4 bg-slate-50 rounded-lg text-xs overflow-auto">
+                  {JSON.stringify(reportContent, null, 2)}
+                </pre>
+              )}
+            </ScrollArea>
+            
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowReport(false)}>
+                Close
+              </Button>
+              <Button onClick={() => {
+                const blob = new Blob([typeof reportContent === 'string' ? reportContent : JSON.stringify(reportContent, null, 2)], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${project?.name || 'report'}_analysis.md`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}>
+                Download
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* PII Findings Panel */}
+        {piiFindings.length > 0 && (
+          <div className="fixed bottom-4 right-4 z-50 bg-card border rounded-xl shadow-xl p-4 w-80">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2 text-amber-600">
+                <AlertTriangle className="w-4 h-4" />
+                <span className="font-medium text-sm">PII Detected ({piiFindings.length})</span>
+              </div>
+              <button onClick={() => setPiiFindings([])} className="text-muted-foreground hover:text-foreground">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            
+            <ScrollArea className="max-h-40 mb-3">
+              <div className="space-y-1">
+                {piiFindings.slice(0, 10).map((f, idx) => (
+                  <div key={idx} className="text-xs p-2 bg-amber-50 rounded border border-amber-100">
+                    <span className="font-medium text-amber-700">{f.type}:</span>{' '}
+                    <span className="text-slate-600">{f.value}</span>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+            
+            <Button size="sm" className="w-full" onClick={anonymizeSource} disabled={aiLoading}>
+              {aiLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Shield className="w-4 h-4 mr-2" />}
+              Anonymize All
+            </Button>
+          </div>
+        )}
+
+        {/* AI Themes Panel */}
+        {themes.length > 0 && (
+          <div className="fixed bottom-4 left-4 z-50 bg-card border rounded-xl shadow-xl p-4 w-96">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2 text-purple-600">
+                <Brain className="w-4 h-4" />
+                <span className="font-medium text-sm">AI-Generated Themes ({themes.length})</span>
+              </div>
+              <button onClick={() => setThemes([])} className="text-muted-foreground hover:text-foreground">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            
+            <ScrollArea className="max-h-60">
+              <div className="space-y-2">
+                {themes.map((theme, idx) => (
+                  <div key={idx} className="p-3 bg-purple-50 rounded-lg border border-purple-100">
+                    <div className="font-medium text-sm text-purple-800">{theme.title}</div>
+                    <p className="text-xs text-slate-600 mt-1">{theme.description}</p>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {theme.related_codes?.map((code, cIdx) => (
+                        <Badge key={cIdx} variant="secondary" className="text-[9px]">{code}</Badge>
+                      ))}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-1">
+                      {theme.evidence_count} supporting excerpts
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );
