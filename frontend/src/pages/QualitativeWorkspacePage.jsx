@@ -252,6 +252,214 @@ export default function QualitativeWorkspacePage() {
     }
   };
 
+  // ==================== AI FEATURES ====================
+  
+  // Get AI coding suggestions for selected text
+  const getAiSuggestions = async () => {
+    if (!selection || !selectedSource) return;
+    
+    setAiLoading(true);
+    setAiSuggestions([]);
+    
+    try {
+      const response = await fetch(
+        `${API_URL}/api/qualitative/ai/suggest-codes?project_id=${projectId}&org_id=${currentOrg.id}&source_id=${selectedSource.id}&excerpt_text=${encodeURIComponent(selection.text)}&start_char=${selection.startChar}&end_char=${selection.endChar}&max_suggestions=5`,
+        { method: 'POST' }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        setAiSuggestions(data.suggestions || []);
+        if (data.suggestions?.length === 0) {
+          toast.info('No matching codes found for this excerpt');
+        }
+      }
+    } catch (error) {
+      console.error('AI suggestions error:', error);
+      toast.error('Failed to get AI suggestions');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  // Auto-code the entire source
+  const autoCodeSource = async () => {
+    if (!selectedSource) {
+      toast.error('Select a source first');
+      return;
+    }
+    
+    setAiLoading(true);
+    
+    try {
+      const response = await fetch(
+        `${API_URL}/api/qualitative/ai/auto-code-source/${selectedSource.id}?org_id=${currentOrg.id}&user_id=${currentOrg.id}&confidence_threshold=medium`,
+        { method: 'POST' }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(`Auto-coded ${data.codings_created} segments`);
+        loadSourceContent(selectedSource.id);
+      }
+    } catch (error) {
+      console.error('Auto-code error:', error);
+      toast.error('Failed to auto-code source');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  // Detect PII in source
+  const detectPii = async () => {
+    if (!selectedSource) {
+      toast.error('Select a source first');
+      return;
+    }
+    
+    setAiLoading(true);
+    setPiiFindings([]);
+    
+    try {
+      const response = await fetch(
+        `${API_URL}/api/qualitative/ai/detect-pii/${selectedSource.id}?org_id=${currentOrg.id}&use_ai=true`,
+        { method: 'POST' }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        setPiiFindings(data.findings || []);
+        if (data.pii_count > 0) {
+          toast.warning(`Found ${data.pii_count} PII instances`);
+        } else {
+          toast.success('No PII detected');
+        }
+      }
+    } catch (error) {
+      console.error('PII detection error:', error);
+      toast.error('Failed to detect PII');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  // Anonymize source
+  const anonymizeSource = async () => {
+    if (!selectedSource) return;
+    
+    setAiLoading(true);
+    
+    try {
+      const response = await fetch(
+        `${API_URL}/api/qualitative/ai/anonymize/${selectedSource.id}?org_id=${currentOrg.id}&user_id=${currentOrg.id}`,
+        { method: 'POST' }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.anonymized) {
+          toast.success(`Anonymized ${data.pii_replaced} PII instances`);
+          loadSourceContent(selectedSource.id);
+          setPiiFindings([]);
+        } else {
+          toast.info(data.message);
+        }
+      }
+    } catch (error) {
+      console.error('Anonymize error:', error);
+      toast.error('Failed to anonymize source');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  // Synthesize themes from coded data
+  const synthesizeThemes = async () => {
+    setAiLoading(true);
+    setThemes([]);
+    
+    try {
+      const response = await fetch(
+        `${API_URL}/api/qualitative/ai/synthesize-themes?project_id=${projectId}&org_id=${currentOrg.id}&user_id=${currentOrg.id}&min_codings=2`,
+        { method: 'POST' }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        setThemes(data.themes || []);
+        if (data.themes_created > 0) {
+          toast.success(`Synthesized ${data.themes_created} draft themes`);
+        } else {
+          toast.info(data.message);
+        }
+      }
+    } catch (error) {
+      console.error('Theme synthesis error:', error);
+      toast.error('Failed to synthesize themes');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  // Transcribe audio file
+  const handleTranscribe = async (file) => {
+    if (!file) return;
+    
+    setTranscribing(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch(
+        `${API_URL}/api/qualitative/ai/transcribe?project_id=${projectId}&org_id=${currentOrg.id}&user_id=${currentOrg.id}&language=en`,
+        {
+          method: 'POST',
+          body: formData
+        }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(`Transcribed: ${data.source_name} (${data.word_count} words)`);
+        setShowTranscribe(false);
+        loadSources();
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Transcription failed');
+      }
+    } catch (error) {
+      console.error('Transcription error:', error);
+      toast.error('Failed to transcribe audio');
+    } finally {
+      setTranscribing(false);
+    }
+  };
+
+  // Generate report
+  const generateReport = async (format = 'markdown') => {
+    setAiLoading(true);
+    
+    try {
+      const response = await fetch(
+        `${API_URL}/api/qualitative/ai/generate-report/${projectId}?org_id=${currentOrg.id}&user_id=${currentOrg.id}&format=${format}`,
+        { method: 'POST' }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        setReportContent(data.content);
+        setShowReport(true);
+        toast.success('Report generated');
+      }
+    } catch (error) {
+      console.error('Report generation error:', error);
+      toast.error('Failed to generate report');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   // Handle text selection for coding
   const handleTextSelection = useCallback(() => {
     const windowSelection = window.getSelection();
