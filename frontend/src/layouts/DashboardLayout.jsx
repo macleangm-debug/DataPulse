@@ -43,7 +43,10 @@ import {
   Crown,
   Plus,
   Code,
-  BookOpen
+  BookOpen,
+  FileSpreadsheet,
+  Mic,
+  Calendar
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
