@@ -57,7 +57,15 @@ import {
   Palette,
   GripVertical,
   Eye,
-  Sparkles
+  Sparkles,
+  Mic,
+  Wand2,
+  Shield,
+  FileBarChart,
+  Users,
+  Brain,
+  Loader2,
+  AlertTriangle
 } from 'lucide-react';
 import { useOrgStore } from '../store';
 import { toast } from 'sonner';
