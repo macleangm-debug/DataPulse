@@ -64,10 +64,17 @@ export default function XLSFormPage() {
     }
   }, [currentOrg?.id]);
 
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('access_token');
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
+  };
+
   const loadProjects = async () => {
     setLoadingProjects(true);
     try {
-      const response = await fetch(`${API_URL}/api/projects?org_id=${currentOrg.id}`);
+      const response = await fetch(`${API_URL}/api/projects?org_id=${currentOrg.id}`, {
+        headers: getAuthHeaders()
+      });
       if (response.ok) {
         const data = await response.json();
         setProjects(data);
@@ -82,7 +89,9 @@ export default function XLSFormPage() {
   const loadForms = async () => {
     setLoadingForms(true);
     try {
-      const response = await fetch(`${API_URL}/api/forms?org_id=${currentOrg.id}`);
+      const response = await fetch(`${API_URL}/api/forms?org_id=${currentOrg.id}`, {
+        headers: getAuthHeaders()
+      });
       if (response.ok) {
         const data = await response.json();
         setForms(data);
