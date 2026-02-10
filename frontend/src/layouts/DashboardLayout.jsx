@@ -108,7 +108,9 @@ const NAVIGATION = [
       { label: 'Back-check', path: '/backcheck', icon: ClipboardCheck },
       { label: 'Token Surveys', path: '/token-surveys', icon: Link2 },
       { label: 'Preload/Writeback', path: '/preload', icon: ArrowLeftRight },
-      { label: 'Devices', path: '/devices', icon: Smartphone }
+      { label: 'Devices', path: '/devices', icon: Smartphone },
+      { label: 'Audio Audit', path: '/audio-audit', icon: Mic },
+      { label: 'Review Workflow', path: '/review-workflow', icon: ClipboardCheck }
     ]
   },
   {
