@@ -59,6 +59,11 @@ import { formatDistanceToNow } from 'date-fns';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('access_token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+};
+
 export default function AudioAuditPage() {
   const { currentOrg } = useOrgStore();
   const [activeTab, setActiveTab] = useState('recordings');
