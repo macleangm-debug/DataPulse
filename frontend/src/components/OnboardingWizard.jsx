@@ -394,9 +394,20 @@ const WelcomeModal = ({ step, onNext, onComplete, isLast, onSkip }) => {
 };
 
 // Feature Spotlight Modal
-const FeatureSpotlight = ({ step, onNext, onPrev, currentStep, totalSteps }) => {
+const FeatureSpotlight = ({ step, onNext, onPrev, onSkip, currentStep, totalSteps }) => {
   const navigate = useNavigate();
   const Icon = step.icon;
+  
+  // Handle escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        onSkip();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onSkip]);
   
   return (
     <motion.div
@@ -404,13 +415,23 @@ const FeatureSpotlight = ({ step, onNext, onPrev, currentStep, totalSteps }) => 
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={onSkip}
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.9, opacity: 0, y: 20 }}
-        className="bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
+        className="bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full overflow-hidden relative"
+        onClick={(e) => e.stopPropagation()}
       >
+        {/* Close button */}
+        <button 
+          onClick={onSkip}
+          className="absolute top-4 right-4 z-10 p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+          title="Skip tour (Esc)"
+        >
+          <X className="w-4 h-4 text-white" />
+        </button>
         {/* Icon header with gradient */}
         <div className={cn("relative p-6 text-center bg-gradient-to-br", step.color)}>
           <motion.div
