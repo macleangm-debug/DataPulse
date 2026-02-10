@@ -162,7 +162,7 @@ export default function AudioAuditPage() {
     try {
       const response = await fetch(`${API_URL}/api/audio-audit/config`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify({
           form_id: selectedForm,
           config: newConfig
@@ -185,7 +185,7 @@ export default function AudioAuditPage() {
     try {
       const response = await fetch(`${API_URL}/api/audio-audit/recordings/${selectedRecording.id}/review`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify({ status, notes, quality_flags: flags })
       });
 
@@ -204,7 +204,6 @@ export default function AudioAuditPage() {
 
   const playRecording = async (recording) => {
     if (playingId === recording.id) {
-      // Stop playing
       if (audioRef) {
         audioRef.pause();
         audioRef.currentTime = 0;
@@ -214,7 +213,9 @@ export default function AudioAuditPage() {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/audio-audit/recordings/${recording.id}/download`);
+      const response = await fetch(`${API_URL}/api/audio-audit/recordings/${recording.id}/download`, {
+        headers: getAuthHeaders()
+      });
       if (!response.ok) throw new Error('Failed to load audio');
 
       const blob = await response.blob();
