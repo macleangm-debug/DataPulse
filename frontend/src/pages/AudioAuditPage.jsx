@@ -99,7 +99,9 @@ export default function AudioAuditPage() {
 
   const loadForms = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/forms?org_id=${currentOrg.id}`);
+      const response = await fetch(`${API_URL}/api/forms?org_id=${currentOrg.id}`, {
+        headers: getAuthHeaders()
+      });
       if (response.ok) {
         const data = await response.json();
         setForms(data);
@@ -116,7 +118,7 @@ export default function AudioAuditPage() {
       if (statusFilter) url += `&status=${statusFilter}`;
       if (typeFilter) url += `&recording_type=${typeFilter}`;
 
-      const response = await fetch(url);
+      const response = await fetch(url, { headers: getAuthHeaders() });
       if (response.ok) {
         const data = await response.json();
         setRecordings(data.recordings || []);
@@ -130,7 +132,9 @@ export default function AudioAuditPage() {
 
   const loadStats = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/audio-audit/stats?org_id=${currentOrg.id}`);
+      const response = await fetch(`${API_URL}/api/audio-audit/stats?org_id=${currentOrg.id}`, {
+        headers: getAuthHeaders()
+      });
       if (response.ok) {
         const data = await response.json();
         setStats(data);
@@ -142,7 +146,9 @@ export default function AudioAuditPage() {
 
   const loadConfig = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/audio-audit/config/${selectedForm}`);
+      const response = await fetch(`${API_URL}/api/audio-audit/config/${selectedForm}`, {
+        headers: getAuthHeaders()
+      });
       if (response.ok) {
         const data = await response.json();
         setConfig(data.config);
