@@ -47,7 +47,52 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - AI Theme Synthesis
 - Report Generation (JSON/Markdown/HTML)
 
-#### Phase 4 - Advanced Features ✅ (NEW)
+#### Phase 4 - Advanced Features ✅
+- Mixed Methods Support
+- REFI-QDA Export for NVivo/ATLAS.ti
+- Real-time Collaboration (WebSocket backend)
+- Publication Visuals (D3.js Theme Network)
+
+### 4. SurveyCTO Parity Features (NEW - Feb 10, 2026) ✅
+
+#### XLSForm Import/Export ✅
+- Import XLSForm Excel files (.xlsx, .xls)
+- Parse survey, choices, and settings sheets
+- Map XLSForm types to DataPulse fields
+- Export DataPulse forms to XLSForm format
+- Compatible with SurveyCTO, ODK Collect, KoboToolbox, Ona
+
+#### Audio Audit System ✅
+- Configure audio recording per form
+- Recording modes: Full, Random Spot Checks, Segments
+- Audio quality settings (low/medium/high)
+- Recording playback and review
+- Flag and mark recordings as reviewed
+- Statistics: total recordings, duration, flagged count
+
+#### Review & Correction Workflows ✅
+- Submission review queue with filtering
+- Claim/release submissions for review
+- Review decisions: Approve, Reject, Request Correction
+- Correction requests with field-level issues
+- Review history and audit trails
+- Queue statistics dashboard
+
+#### Scheduled Exports ✅
+- Create scheduled export jobs
+- Frequency: hourly, daily, weekly, monthly
+- Export formats: CSV, Excel, JSON
+- Destinations: Email, Amazon S3, Webhooks
+- Field configuration (include/exclude fields)
+- Filters (status, date range, quality score)
+- Run history and status tracking
+
+#### Form Groups/Folders ✅
+- Hierarchical form organization
+- Create, update, delete groups
+- Move forms between groups
+- Bulk move operations
+- Archive/unarchive groups
 - **Mixed Methods Support**: Theme-variable linking, joint display, convergence analysis
 - **REFI-QDA Export**: NVivo/ATLAS.ti/MAXQDA interoperability (XML, QDPX)
 - **Real-time Collaboration**: WebSocket-based live coding with presence
