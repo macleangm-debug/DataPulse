@@ -42,7 +42,8 @@ import {
   Key,
   Crown,
   Plus,
-  Code
+  Code,
+  BookOpen
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
