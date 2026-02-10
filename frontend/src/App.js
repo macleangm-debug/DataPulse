@@ -36,6 +36,11 @@ import { DataAnalysisPage } from './pages/DataAnalysisPage';
 import APIDocsPage from './pages/APIDocsPage';
 import QualitativeAnalysisPage from './pages/QualitativeAnalysisPage';
 import QualitativeWorkspacePage from './pages/QualitativeWorkspacePage';
+// SurveyCTO Parity Features
+import XLSFormPage from './pages/XLSFormPage';
+import AudioAuditPage from './pages/AudioAuditPage';
+import ReviewWorkflowPage from './pages/ReviewWorkflowPage';
+import ScheduledExportsPage from './pages/ScheduledExportsPage';
 import { PWAInstallPrompt, NetworkStatus, SyncStatusToast, OfflineModePage } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import { NotificationCenter, NotificationProvider } from './components/NotificationCenter';
