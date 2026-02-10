@@ -154,6 +154,18 @@ set_public_api_db(db)
 api_router.include_router(qualitative_router)
 set_qual_db(db)
 
+# Qualitative AI Features (Phase 2 & 3)
+api_router.include_router(qualitative_ai_router)
+set_qual_ai_db(db)
+
+# Qualitative Collaboration (Phase 2)
+api_router.include_router(qualitative_collab_router)
+set_qual_collab_db(db)
+
+# Qualitative Advanced Queries (Phase 2)
+api_router.include_router(qualitative_query_router)
+set_qual_query_db(db)
+
 
 # Health check endpoint
 @api_router.get("/")
