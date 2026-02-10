@@ -368,7 +368,7 @@ export default function AudioAuditPage() {
                     <SelectValue placeholder="All types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All types</SelectItem>
+                    <SelectItem value="__all__">All types</SelectItem>
                     <SelectItem value="full">Full Recording</SelectItem>
                     <SelectItem value="random_spot">Random Spot Check</SelectItem>
                     <SelectItem value="segment">Segment</SelectItem>
