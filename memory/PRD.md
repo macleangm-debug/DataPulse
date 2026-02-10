@@ -19,9 +19,8 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - Response browsing with pagination and filtering
 - Immutable dataset snapshots
 - Transformation pipelines (8 imputation methods)
-- Basic statistics (frequencies, crosstabs, descriptives)
-- Advanced statistics (t-tests, ANOVA, regression, GLM, mixed models)
-- Survey statistics (complex designs, design effects, replicate weights)
+- Statistics: frequencies, crosstabs, t-tests, ANOVA, regression, GLM, mixed models
+- Survey statistics with complex designs and replicate weights
 - AI Copilot for natural language queries
 - Publication-quality visualizations (10 chart types)
 - Interactive dashboards with drill-down
@@ -30,125 +29,125 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 ### 3. Qualitative Analysis Module (100% Complete - Feb 10, 2026)
 
 #### Phase 1 - Core MVP ✅
-- **Projects**: Create, list, update, delete qualitative research projects
-- **Sources**: Import transcripts, field notes, open-ended responses with metadata
-- **Codebook**: Hierarchical code management with definitions, colors, shortcuts
-- **Coding**: Apply codes to text excerpts with position tracking
-- **Memos**: Analytic, methodological, reflexive, and procedural memos
-- **Themes**: Build themes with supporting and counter evidence
-- **Retrieval**: Query codings by code, text search, co-occurrence analysis
-- **Statistics**: Project-level statistics and code frequency analysis
+- Projects, Sources, Codebook, Coding, Memos, Themes
+- Retrieval: by-code, text search, co-occurrence
+- Project statistics
 
 #### Phase 2 - Advanced Analysis & Governance ✅
-- **AI-Assisted Transcription**: OpenAI Whisper integration with timestamp support
-- **PII Controls**: Pattern + AI-based PII detection, one-click anonymization
-- **Advanced Queries**:
-  - Boolean queries (AND/OR/NOT operators)
-  - Proximity search (codes within N characters)
-  - Matrix coding queries (cross-tabulation by attributes)
-  - Cross-case comparison analysis
-- **Multi-Coder Collaboration**:
-  - Coder assignments with deadlines
-  - Blind coding mode (hide other coders' work)
-  - Coding review workflow (submit, approve, reject)
-- **Audit Trails**: Immutable logs for all coding/codebook changes
-- **Inter-Coder Reliability**: Cohen's Kappa calculation
-- **Code Version History**: Save and restore code versions
+- AI-Assisted Transcription (OpenAI Whisper)
+- PII Detection & Anonymization
+- Advanced Queries (Boolean, Proximity, Matrix)
+- Multi-Coder Collaboration & Blind Coding
+- Audit Trails & Inter-Coder Reliability (Cohen's Kappa)
+- Code Version History
 
 #### Phase 3 - AI-Native Features & Reporting ✅
-- **AI Coding Suggestions**: GPT-5.2 suggests codes for excerpts with confidence levels
-- **Auto-Code Source**: AI automatically codes entire documents
-- **AI Theme Synthesis**: Generate draft themes from coded data
-- **Report Generation**: JSON, Markdown, HTML report formats
-- **Code Frequency Analysis**: Detailed usage statistics and coverage metrics
+- AI Coding Suggestions (GPT-5.2)
+- Auto-Code Source
+- AI Theme Synthesis
+- Report Generation (JSON/Markdown/HTML)
 
-### 4. PWA Features (Enhanced Feb 9, 2026)
+#### Phase 4 - Advanced Features ✅ (NEW)
+- **Mixed Methods Support**: Theme-variable linking, joint display, convergence analysis
+- **REFI-QDA Export**: NVivo/ATLAS.ti/MAXQDA interoperability (XML, QDPX)
+- **Real-time Collaboration**: WebSocket-based live coding with presence
+- **Publication Visuals**: Framework matrices, quote cards, network diagrams
+
+### 4. PWA Features
 - Service Worker for offline functionality
 - Encrypted local storage (AES-GCM 256-bit)
 - Background sync with conflict resolution
-- Push Notifications Manager with 25+ notification types
-- Storage management UI
+- Push Notifications Manager
 
 ### 5. UX Enhancements
-- Onboarding Wizard (driver.js) for new users
-- Contextual Help System with side panel
-- Command Palette (⌘K) for quick navigation
+- Onboarding Wizard (driver.js)
+- Contextual Help System
+- Command Palette (⌘K)
 - Mobile-responsive sidebar
 
 ## Architecture
 
-### Backend
-- Python FastAPI
-- MongoDB database
-- GPT-5.2 integration via Emergent LLM Key for AI features
+### Backend (FastAPI + MongoDB)
+- GPT-5.2 via Emergent LLM Key
 - OpenAI Whisper for transcription
+- WebSocket for real-time features
 
-### Frontend
-- React with TailwindCSS + Shadcn/UI
+### Frontend (React + TailwindCSS + Shadcn/UI)
 - Zustand for state management
 - Recharts for visualizations
-- react-grid-layout for dashboards
 
-### Qualitative Module API Endpoints
+## Complete API Reference
 
-#### Core APIs
-- `GET/POST /api/qualitative/projects` - Project management
-- `GET/POST /api/qualitative/sources` - Source/transcript management
-- `GET/POST /api/qualitative/codes` - Codebook management
-- `GET/POST /api/qualitative/codings` - Code application to excerpts
-- `GET/POST /api/qualitative/memos` - Research memos
-- `GET/POST /api/qualitative/themes` - Theme management
+### Core Qualitative APIs
+```
+GET/POST /api/qualitative/projects
+GET/POST /api/qualitative/sources
+GET/POST /api/qualitative/codes
+GET/POST /api/qualitative/codings
+GET/POST /api/qualitative/memos
+GET/POST /api/qualitative/themes
+```
 
-#### AI APIs (Phase 2 & 3)
-- `POST /api/qualitative/ai/transcribe` - Audio transcription (Whisper)
-- `POST /api/qualitative/ai/suggest-codes` - AI coding suggestions
-- `POST /api/qualitative/ai/auto-code-source/{id}` - Auto-code entire source
-- `POST /api/qualitative/ai/detect-pii/{id}` - Detect PII patterns
-- `POST /api/qualitative/ai/anonymize/{id}` - Anonymize source content
-- `POST /api/qualitative/ai/synthesize-themes` - Generate draft themes
-- `POST /api/qualitative/ai/generate-report/{id}` - Create analysis report
-- `GET /api/qualitative/ai/icr/{id}` - Inter-coder reliability
+### AI APIs
+```
+POST /api/qualitative/ai/transcribe
+POST /api/qualitative/ai/suggest-codes
+POST /api/qualitative/ai/auto-code-source/{id}
+POST /api/qualitative/ai/detect-pii/{id}
+POST /api/qualitative/ai/anonymize/{id}
+POST /api/qualitative/ai/synthesize-themes
+POST /api/qualitative/ai/generate-report/{id}
+GET  /api/qualitative/ai/icr/{id}
+```
 
-#### Collaboration APIs
-- `POST/GET /api/qualitative/collab/assignments` - Coder assignments
-- `GET /api/qualitative/collab/blind-source/{id}` - Blind coding view
-- `POST/GET /api/qualitative/collab/reviews` - Coding reviews
-- `GET /api/qualitative/collab/audit-trail/{id}` - Audit logs
-- `POST/GET /api/qualitative/collab/codes/{id}/versions` - Code history
+### Advanced Query APIs
+```
+POST /api/qualitative/query/boolean
+POST /api/qualitative/query/proximity
+POST /api/qualitative/query/matrix
+POST /api/qualitative/query/cross-case
+GET  /api/qualitative/query/code-frequency/{id}
+```
 
-#### Advanced Query APIs
-- `POST /api/qualitative/query/boolean` - Boolean queries
-- `POST /api/qualitative/query/proximity` - Proximity search
-- `POST /api/qualitative/query/matrix` - Matrix coding
-- `POST /api/qualitative/query/cross-case` - Cross-case comparison
-- `GET /api/qualitative/query/code-frequency/{id}` - Code statistics
+### Mixed Methods APIs
+```
+POST /api/qualitative/mixed/links
+GET  /api/qualitative/mixed/links
+POST /api/qualitative/mixed/joint-display
+POST /api/qualitative/mixed/cross-reference
+GET  /api/qualitative/mixed/convergence/{id}
+```
 
-### MongoDB Collections (Qualitative)
-- `qual_projects` - Qualitative research projects
-- `qual_sources` - Source documents/transcripts
-- `qual_codes` - Codebook codes
-- `qual_codings` - Applied codings
-- `qual_memos` - Research memos
-- `qual_themes` - Themes/findings
-- `qual_assignments` - Coder assignments
-- `qual_reviews` - Coding reviews
-- `qual_audit_logs` - Audit trail
-- `qual_code_versions` - Code version history
+### Export/Import APIs (REFI-QDA)
+```
+GET  /api/qualitative/export/refi-qda/{id}
+GET  /api/qualitative/export/qdpx/{id}
+GET  /api/qualitative/export/codebook/{id}
+GET  /api/qualitative/export/codings/{id}
+POST /api/qualitative/export/import-codebook/{id}
+```
 
-## Key Files Reference
+### Real-time Collaboration APIs
+```
+WS   /api/qualitative/realtime/ws/{project_id}
+GET  /api/qualitative/realtime/presence/{id}
+GET  /api/qualitative/realtime/cursors/{id}
+GET  /api/qualitative/realtime/selections/{id}
+POST /api/qualitative/realtime/sessions
+GET  /api/qualitative/realtime/sessions
+GET  /api/qualitative/realtime/activity/{id}
+```
 
-### Backend
-- `routes/qualitative_routes.py` - Core qualitative API endpoints
-- `routes/qualitative_ai_routes.py` - AI features (transcription, suggestions, themes)
-- `routes/qualitative_collab_routes.py` - Collaboration features
-- `routes/qualitative_query_routes.py` - Advanced queries
-- `qualitative_models.py` - Pydantic models
-
-### Frontend
-- `pages/QualitativeAnalysisPage.jsx` - Project list and creation
-- `pages/QualitativeWorkspacePage.jsx` - Coding studio with AI tools
-- `layouts/DashboardLayout.jsx` - Navigation with Qualitative link
-- `components/CommandPalette.jsx` - Quick navigation
+### Visualization APIs
+```
+GET  /api/qualitative/visuals/framework-matrix/{id}
+GET  /api/qualitative/visuals/quote-cards/{id}
+GET  /api/qualitative/visuals/quote-cards/{id}/export
+GET  /api/qualitative/visuals/code-frequency-chart/{id}
+GET  /api/qualitative/visuals/theme-network/{id}
+GET  /api/qualitative/visuals/coding-timeline/{id}
+GET  /api/qualitative/visuals/coverage-heatmap/{id}
+```
 
 ## Test Credentials
 - Email: demo@datapulse.io
@@ -158,33 +157,19 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 ## Changelog
 
 ### Feb 10, 2026 - Qualitative Module Complete
-- **Phase 1 MVP**: Projects, Sources, Codes, Codings, Memos, Themes, Retrieval
-- **Phase 2**: AI Transcription, PII Detection/Anonymization, Advanced Queries, Collaboration, Audit Trails, ICR
-- **Phase 3**: AI Coding Suggestions, Auto-Coding, Theme Synthesis, Report Generation
-- **Testing**: 97% pass rate (38/39 backend tests)
-
-### Feb 9, 2026
-- Public REST API for External Integrations
-- Command Palette (⌘K) with keyboard shortcuts
-- Mobile-Responsive Sidebar improvements
-- Contextual Help System
-- Onboarding Wizard
+- **Phase 1-3**: Core MVP, AI features, advanced queries
+- **Phase 4**: Mixed methods, REFI-QDA export, real-time collaboration, visuals
+- **Testing**: 100% backend pass rate (69+ tests)
 
 ## Roadmap
 
 ### Completed ✅
-- Qualitative Analysis Module - All Phases (1, 2, 3)
-
-### P1 - Next Sprint
-- Mixed methods support (link qualitative themes with quantitative variables)
-- REFI-QDA export format for interoperability
-- Real-time collaboration (WebSocket-based)
-
-### P2 - Future
-- Native mobile app wrapper
-- Advanced export templates
-- External integrations (Twilio, Power BI, Azure AD)
+- All Qualitative Analysis Module features (Phases 1-4)
 
 ### Known Issues
-- Onboarding wizard modal persists after localStorage clear (pre-existing)
-- Session state occasionally lost during testing
+- Onboarding wizard modal persists (pre-existing)
+
+### P1 - Future Enhancements
+- Full D3.js/force-directed theme network visualization
+- Video transcription support
+- Real-time collaboration UI refinements
