@@ -609,6 +609,9 @@ const TooltipStep = ({ step, onNext, onPrev, onSkip, currentStep, totalSteps }) 
               <Button size="sm" onClick={onNext} className="flex-1 h-8">
                 Next
               </Button>
+              <Button variant="ghost" size="sm" onClick={onSkip} className="h-8 px-2" title="Skip tour">
+                <X className="w-4 h-4" />
+              </Button>
             </div>
           </div>
         </div>
