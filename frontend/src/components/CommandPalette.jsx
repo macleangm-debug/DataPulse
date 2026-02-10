@@ -150,6 +150,19 @@ export function CommandPalette() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, navigate]);
 
+  // Execute a command - defined before useEffects that depend on it
+  const executeCommand = useCallback((item) => {
+    // Add to recent commands
+    const newRecent = [item.id, ...recentCommands.filter(id => id !== item.id)].slice(0, 5);
+    setRecentCommands(newRecent);
+    localStorage.setItem('datapulse_recent_commands', JSON.stringify(newRecent));
+
+    // Navigate and close
+    navigate(item.path);
+    setIsOpen(false);
+    setQuery('');
+  }, [navigate, recentCommands]);
+
   // Handle keyboard navigation within palette
   useEffect(() => {
     if (!isOpen) return;
@@ -179,24 +192,12 @@ export function CommandPalette() {
     }
   }, [isOpen]);
 
-  // Execute a command
-  const executeCommand = useCallback((item) => {
-    // Add to recent commands
-    const newRecent = [item.id, ...recentCommands.filter(id => id !== item.id)].slice(0, 5);
-    setRecentCommands(newRecent);
-    localStorage.setItem('datapulse_recent_commands', JSON.stringify(newRecent));
-
-    // Navigate and close
-    navigate(item.path);
-    setIsOpen(false);
-    setQuery('');
-  }, [navigate, recentCommands]);
-
   // Get recent items
   const recentItems = recentCommands
     .map(id => flatItems.find(item => item.id === id))
     .filter(Boolean)
     .slice(0, 3);
+
 
   return (
     <AnimatePresence>
