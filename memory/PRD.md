@@ -93,12 +93,32 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - Move forms between groups
 - Bulk move operations
 - Archive/unarchive groups
-- **Mixed Methods Support**: Theme-variable linking, joint display, convergence analysis
-- **REFI-QDA Export**: NVivo/ATLAS.ti/MAXQDA interoperability (XML, QDPX)
-- **Real-time Collaboration**: WebSocket-based live coding with presence
-- **Publication Visuals**: Framework matrices, quote cards, network diagrams
 
-### 4. PWA Features
+### Known Issues
+- None - All issues resolved
+
+### Feb 10, 2026 - Final Bug Fix
+- Fixed org_id mismatch preventing test data from appearing in UI
+- Updated all qualitative collections to use correct org_id: `09872b0e-9cb6-4aac-b46d-54a709c7f4b6`
+- Verified D3.js Theme Network visualization renders correctly (14 nodes, 7 connections)
+- All features tested and working at 100% success rate
+
+### Feb 10, 2026 - SurveyCTO Parity Implementation
+- Implemented XLSForm Import/Export (migration from SurveyCTO/ODK)
+- Implemented Audio Audit System (full/random/segment recording modes)
+- Implemented Review & Correction Workflows (submission review queue)
+- Implemented Scheduled Exports (email, S3, webhooks)
+- Implemented Form Groups/Folders (hierarchical organization)
+- Added navigation links in sidebar under Data and Field Ops sections
+
+## Backlog / Future Features
+
+### P2 - Nice to Have
+- Barcode/QR Scanner field type
+- Signature Capture field type
+- Advanced Constraints (regex, cross-field validation)
+- Cascading Selects (filtered dropdown chains)
+- Sensor Metadata Collection (accelerometer, device info)### 4. PWA Features
 - Service Worker for offline functionality
 - Encrypted local storage (AES-GCM 256-bit)
 - Background sync with conflict resolution
