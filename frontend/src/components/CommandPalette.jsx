@@ -27,7 +27,8 @@ import {
   ClipboardList,
   Shield,
   Workflow,
-  X
+  X,
+  BookOpen
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
