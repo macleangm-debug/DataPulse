@@ -76,13 +76,8 @@ export default function QualitativeAnalysisPage() {
     research_questions: ''
   });
 
-  useEffect(() => {
-    if (currentOrg?.id) {
-      loadProjects();
-    }
-  }, [currentOrg]);
-
-  const loadProjects = async () => {
+  const loadProjects = useCallback(async () => {
+    if (!currentOrg?.id) return;
     try {
       setLoading(true);
       const response = await fetch(
@@ -98,7 +93,13 @@ export default function QualitativeAnalysisPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentOrg?.id]);
+
+  useEffect(() => {
+    if (currentOrg?.id) {
+      loadProjects();
+    }
+  }, [currentOrg?.id, loadProjects]);
 
   const createProject = async () => {
     if (!newProject.name.trim()) {
