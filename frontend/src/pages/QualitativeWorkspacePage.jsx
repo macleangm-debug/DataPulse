@@ -1281,7 +1281,321 @@ export default function QualitativeWorkspacePage() {
             </ScrollArea>
           </div>
         )}
+
+        {/* Visualizations Dialog */}
+        <Dialog open={showVisuals} onOpenChange={setShowVisuals}>
+          <DialogContent className="max-w-5xl max-h-[85vh]">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-primary" />
+                Analysis Visualizations
+              </DialogTitle>
+              <DialogDescription>
+                Publication-ready charts and diagrams
+              </DialogDescription>
+            </DialogHeader>
+            
+            <Tabs value={activeVisual} onValueChange={setActiveVisual} className="mt-4">
+              <TabsList className="grid grid-cols-4 w-full">
+                <TabsTrigger value="frequency" className="gap-2">
+                  <BarChart3 className="w-4 h-4" />
+                  Code Frequency
+                </TabsTrigger>
+                <TabsTrigger value="matrix" className="gap-2">
+                  <Grid3X3 className="w-4 h-4" />
+                  Framework Matrix
+                </TabsTrigger>
+                <TabsTrigger value="network" className="gap-2">
+                  <Network className="w-4 h-4" />
+                  Theme Network
+                </TabsTrigger>
+                <TabsTrigger value="quotes" className="gap-2">
+                  <Quote className="w-4 h-4" />
+                  Quote Cards
+                </TabsTrigger>
+              </TabsList>
+              
+              <ScrollArea className="h-[55vh] mt-4">
+                <TabsContent value="frequency" className="mt-0">
+                  <CodeFrequencyChart projectId={projectId} orgId={currentOrg?.id} />
+                </TabsContent>
+                
+                <TabsContent value="matrix" className="mt-0">
+                  <FrameworkMatrix projectId={projectId} orgId={currentOrg?.id} />
+                </TabsContent>
+                
+                <TabsContent value="network" className="mt-0">
+                  <ThemeNetwork projectId={projectId} orgId={currentOrg?.id} />
+                </TabsContent>
+                
+                <TabsContent value="quotes" className="mt-0">
+                  <QuoteCards projectId={projectId} orgId={currentOrg?.id} />
+                </TabsContent>
+              </ScrollArea>
+            </Tabs>
+          </DialogContent>
+        </Dialog>
       </div>
     </DashboardLayout>
+  );
+}
+
+// ==================== VISUALIZATION COMPONENTS ====================
+
+function CodeFrequencyChart({ projectId, orgId }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/api/qualitative/visuals/code-frequency-chart/${projectId}?org_id=${orgId}`
+        );
+        if (response.ok) {
+          const result = await response.json();
+          setData(result);
+        }
+      } catch (error) {
+        console.error('Failed to fetch code frequency:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [projectId, orgId]);
+  
+  if (loading) return <div className="flex justify-center p-8"><Loader2 className="w-6 h-6 animate-spin" /></div>;
+  if (!data?.data?.length) return <div className="text-center text-muted-foreground p-8">No coding data available</div>;
+  
+  return (
+    <div className="space-y-4">
+      <div className="text-sm text-muted-foreground">
+        Total codings: {data.total_codings}
+      </div>
+      <div className="space-y-2">
+        {data.data.map((item, idx) => (
+          <div key={idx} className="flex items-center gap-3">
+            <div className="w-32 truncate font-medium text-sm">{item.name}</div>
+            <div className="flex-1 h-6 bg-slate-100 rounded-full overflow-hidden">
+              <div 
+                className="h-full rounded-full transition-all"
+                style={{ 
+                  width: `${item.percentage}%`,
+                  backgroundColor: item.color
+                }}
+              />
+            </div>
+            <div className="w-16 text-right text-sm text-muted-foreground">
+              {item.count} ({item.percentage}%)
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FrameworkMatrix({ projectId, orgId }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/api/qualitative/visuals/framework-matrix/${projectId}?org_id=${orgId}`
+        );
+        if (response.ok) {
+          const result = await response.json();
+          setData(result);
+        }
+      } catch (error) {
+        console.error('Failed to fetch matrix:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [projectId, orgId]);
+  
+  if (loading) return <div className="flex justify-center p-8"><Loader2 className="w-6 h-6 animate-spin" /></div>;
+  if (!data?.matrix?.length) return <div className="text-center text-muted-foreground p-8">No matrix data available</div>;
+  
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse text-sm">
+        <thead>
+          <tr className="bg-slate-50">
+            <th className="border p-2 text-left font-medium">Source</th>
+            {data.columns?.map((col, idx) => (
+              <th key={idx} className="border p-2 text-center font-medium" style={{ color: col.color }}>
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.matrix?.map((row, rowIdx) => (
+            <tr key={rowIdx} className="hover:bg-slate-50">
+              <td className="border p-2 font-medium">{row.row_label}</td>
+              {data.columns?.map((col, colIdx) => {
+                const cell = row.cells?.[col.id];
+                return (
+                  <td key={colIdx} className="border p-2 text-center">
+                    {cell?.has_data ? (
+                      <div className="flex flex-col items-center">
+                        <Badge variant="secondary">{cell.count}</Badge>
+                        {cell.excerpts?.[0] && (
+                          <span className="text-[10px] text-muted-foreground mt-1 line-clamp-2">
+                            "{cell.excerpts[0].substring(0, 50)}..."
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-slate-300">-</span>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function ThemeNetwork({ projectId, orgId }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/api/qualitative/visuals/theme-network/${projectId}?org_id=${orgId}`
+        );
+        if (response.ok) {
+          const result = await response.json();
+          setData(result);
+        }
+      } catch (error) {
+        console.error('Failed to fetch network:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [projectId, orgId]);
+  
+  if (loading) return <div className="flex justify-center p-8"><Loader2 className="w-6 h-6 animate-spin" /></div>;
+  if (!data?.nodes?.length) return <div className="text-center text-muted-foreground p-8">No network data available</div>;
+  
+  // Simple visualization using CSS
+  return (
+    <div className="space-y-4">
+      <div className="text-sm text-muted-foreground">
+        {data.node_count} nodes, {data.edge_count} connections
+      </div>
+      
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-purple-500" />
+            Themes
+          </h4>
+          <div className="space-y-1">
+            {data.nodes?.filter(n => n.type === 'theme').map((node, idx) => (
+              <div key={idx} className="text-sm p-2 bg-purple-50 rounded border border-purple-100">
+                {node.label}
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div>
+          <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-blue-500" />
+            Codes
+          </h4>
+          <div className="space-y-1">
+            {data.nodes?.filter(n => n.type === 'code').map((node, idx) => (
+              <div key={idx} className="text-sm p-2 rounded border" style={{ backgroundColor: `${node.color}10`, borderColor: `${node.color}30` }}>
+                <span style={{ color: node.color }}>{node.label}</span>
+                <span className="text-muted-foreground ml-2">({node.size - 5} codings)</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {data.edges?.length > 0 && (
+        <div>
+          <h4 className="font-medium text-sm mb-2">Code Co-occurrences</h4>
+          <div className="space-y-1">
+            {data.edges?.filter(e => e.type === 'co_occurrence').slice(0, 10).map((edge, idx) => {
+              const source = data.nodes?.find(n => n.id === edge.source);
+              const target = data.nodes?.find(n => n.id === edge.target);
+              return (
+                <div key={idx} className="text-xs p-2 bg-slate-50 rounded flex items-center gap-2">
+                  <span className="font-medium">{source?.label}</span>
+                  <span className="text-muted-foreground">↔</span>
+                  <span className="font-medium">{target?.label}</span>
+                  <Badge variant="secondary" className="ml-auto">{edge.weight}×</Badge>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function QuoteCards({ projectId, orgId }) {
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/api/qualitative/visuals/quote-cards/${projectId}?org_id=${orgId}&limit=20`
+        );
+        if (response.ok) {
+          const result = await response.json();
+          setCards(result.cards || []);
+        }
+      } catch (error) {
+        console.error('Failed to fetch quotes:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [projectId, orgId]);
+  
+  if (loading) return <div className="flex justify-center p-8"><Loader2 className="w-6 h-6 animate-spin" /></div>;
+  if (!cards.length) return <div className="text-center text-muted-foreground p-8">No quotes available</div>;
+  
+  return (
+    <div className="grid grid-cols-2 gap-4">
+      {cards.map((card, idx) => (
+        <div 
+          key={idx} 
+          className="bg-white border rounded-xl p-4 shadow-sm"
+          style={{ borderLeftColor: card.code?.color, borderLeftWidth: '4px' }}
+        >
+          <p className="text-sm italic text-slate-700 mb-3">"{card.quote}"</p>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">— {card.source}</span>
+            <Badge style={{ backgroundColor: card.code?.color, color: 'white' }}>
+              {card.code?.name}
+            </Badge>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
