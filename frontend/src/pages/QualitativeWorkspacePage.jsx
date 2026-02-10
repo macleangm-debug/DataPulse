@@ -886,6 +886,51 @@ export default function QualitativeWorkspacePage() {
             </button>
             
             <button
+              onClick={getAiSuggestions}
+              disabled={aiLoading}
+              className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-purple-50 text-sm text-purple-600"
+            >
+              {aiLoading ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                <Sparkles className="w-3 h-3" />
+              )}
+              Get AI suggestions
+            </button>
+            
+            {/* AI Suggestions */}
+            {aiSuggestions.length > 0 && (
+              <>
+                <Separator className="my-1" />
+                <div className="text-[10px] text-purple-600 px-2 py-1 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" />
+                  AI Suggestions
+                </div>
+                {aiSuggestions.map((sug, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      const code = codes.find(c => c.id === sug.code_id);
+                      if (code) applyCode(code);
+                    }}
+                    className="w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-md hover:bg-purple-50 text-sm text-left"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: sug.code_color }}
+                      />
+                      <span>{sug.code_name}</span>
+                    </div>
+                    <Badge variant={sug.confidence === 'high' ? 'default' : 'secondary'} className="text-[9px]">
+                      {sug.confidence}
+                    </Badge>
+                  </button>
+                ))}
+              </>
+            )}
+            
+            <button
               onClick={() => {
                 setShowCodeSelector(false);
                 setSelection(null);
