@@ -667,6 +667,7 @@ export function OnboardingProvider({ children }) {
                 step={currentStep}
                 onNext={goToNext}
                 onComplete={completeOnboarding}
+                onSkip={skipOnboarding}
                 isLast={currentStepIndex === ONBOARDING_STEPS.length - 1}
               />
             )}
