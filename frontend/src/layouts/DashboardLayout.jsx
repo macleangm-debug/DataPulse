@@ -96,7 +96,9 @@ const NAVIGATION = [
       { label: 'Cases', path: '/cases', icon: Briefcase },
       { label: 'Import Cases', path: '/cases/import', icon: Plus },
       { label: 'Datasets', path: '/datasets', icon: Table2 },
-      { label: 'Exports', path: '/exports', icon: Download }
+      { label: 'Exports', path: '/exports', icon: Download },
+      { label: 'Scheduled Exports', path: '/scheduled-exports', icon: Calendar },
+      { label: 'XLSForm Import', path: '/xlsform', icon: FileSpreadsheet }
     ]
   },
   {
