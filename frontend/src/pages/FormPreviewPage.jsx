@@ -50,8 +50,8 @@ import { toast } from 'sonner';
 
 // Field renderers for different field types
 const FieldRenderer = ({ field, value, onChange, language, errors }) => {
-  const label = field.labels?.[language] || field.labels?.en || field.name;
-  const hint = field.hints?.[language] || field.hints?.en || '';
+  const label = field.label || field.labels?.[language] || field.labels?.en || field.name;
+  const hint = field.hints?.[language] || field.hints?.en || field.hint || '';
   const hasError = errors?.[field.id];
 
   const commonProps = {
