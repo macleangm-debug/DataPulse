@@ -298,6 +298,28 @@ function App() {
             </ProtectedRoute>
           } />
           
+          {/* SurveyCTO Parity Feature Routes */}
+          <Route path="/xlsform" element={
+            <ProtectedRoute>
+              <XLSFormPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/audio-audit" element={
+            <ProtectedRoute>
+              <AudioAuditPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/review-workflow" element={
+            <ProtectedRoute>
+              <ReviewWorkflowPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/scheduled-exports" element={
+            <ProtectedRoute>
+              <ScheduledExportsPage />
+            </ProtectedRoute>
+          } />
+          
           {/* Public CAWI Survey Routes */}
           <Route path="/survey/:formId" element={<CAWISurveyPage />} />
           <Route path="/survey/complete" element={<SurveyCompletePage />} />
