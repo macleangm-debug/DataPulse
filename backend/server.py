@@ -200,6 +200,7 @@ api_router.include_router(audio_audit_router)  # Audio Audit System
 api_router.include_router(review_workflow_router)  # Review & Correction Workflows
 api_router.include_router(scheduled_export_router)  # Scheduled Exports
 api_router.include_router(form_groups_router)  # Form Groups/Folders
+api_router.include_router(advanced_fields_router)  # Barcode/Signature/Cascading Selects
 
 
 # Health check endpoint
