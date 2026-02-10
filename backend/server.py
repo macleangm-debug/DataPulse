@@ -100,6 +100,13 @@ from routes.qualitative_export_routes import router as qualitative_export_router
 from routes.qualitative_realtime_routes import router as qualitative_realtime_router, set_database as set_qual_realtime_db
 from routes.qualitative_visuals_routes import router as qualitative_visuals_router, set_database as set_qual_visuals_db
 
+# SurveyCTO Parity Features
+from routes.xlsform_routes import router as xlsform_router
+from routes.audio_audit_routes import router as audio_audit_router
+from routes.review_workflow_routes import router as review_workflow_router
+from routes.scheduled_export_routes import router as scheduled_export_router
+from routes.form_groups_routes import router as form_groups_router
+
 # Include all route modules
 api_router.include_router(auth_router)
 api_router.include_router(org_router)
