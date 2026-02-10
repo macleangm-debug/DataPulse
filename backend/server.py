@@ -170,6 +170,22 @@ set_qual_collab_db(db)
 api_router.include_router(qualitative_query_router)
 set_qual_query_db(db)
 
+# Qualitative Mixed Methods
+api_router.include_router(qualitative_mixed_router)
+set_qual_mixed_db(db)
+
+# Qualitative Export/Import (REFI-QDA)
+api_router.include_router(qualitative_export_router)
+set_qual_export_db(db)
+
+# Qualitative Real-time Collaboration
+api_router.include_router(qualitative_realtime_router)
+set_qual_realtime_db(db)
+
+# Qualitative Publication Visuals
+api_router.include_router(qualitative_visuals_router)
+set_qual_visuals_db(db)
+
 
 # Health check endpoint
 @api_router.get("/")
