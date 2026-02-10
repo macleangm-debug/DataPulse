@@ -259,7 +259,7 @@ export default function XLSFormPage() {
                     <SelectValue placeholder="Select project or leave blank" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">No project (create standalone)</SelectItem>
+                    <SelectItem value="__none__">No project (create standalone)</SelectItem>
                     {projects.map((project) => (
                       <SelectItem key={project.id} value={project.id}>
                         {project.name}
