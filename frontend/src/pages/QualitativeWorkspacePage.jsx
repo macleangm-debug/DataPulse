@@ -650,6 +650,45 @@ export default function QualitativeWorkspacePage() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            
+            {/* Export Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Download className="w-4 h-4" />
+                  Export
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => window.open(`${API_URL}/api/qualitative/export/refi-qda/${projectId}?org_id=${currentOrg?.id}`, '_blank')}>
+                  <FileText className="w-4 h-4 mr-2" />
+                  REFI-QDA (NVivo/ATLAS.ti)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => window.open(`${API_URL}/api/qualitative/export/qdpx/${projectId}?org_id=${currentOrg?.id}`, '_blank')}>
+                  <Archive className="w-4 h-4 mr-2" />
+                  QDPX Package
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => window.open(`${API_URL}/api/qualitative/export/codebook/${projectId}?org_id=${currentOrg?.id}&format=json`, '_blank')}>
+                  <Code className="w-4 h-4 mr-2" />
+                  Codebook (JSON)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => window.open(`${API_URL}/api/qualitative/export/codings/${projectId}?org_id=${currentOrg?.id}&format=csv`, '_blank')}>
+                  <Table className="w-4 h-4 mr-2" />
+                  Codings (CSV)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => window.open(`${API_URL}/api/qualitative/visuals/quote-cards/${projectId}/export?org_id=${currentOrg?.id}`, '_blank')}>
+                  <Quote className="w-4 h-4 mr-2" />
+                  Quote Cards (HTML)
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            {/* Visualizations Button */}
+            <Button variant="outline" size="sm" onClick={() => setShowVisuals(true)} className="gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Visuals
+            </Button>
+            
             <Button variant="outline" size="sm" onClick={() => setShowAddSource(true)}>
               <Upload className="w-4 h-4 mr-2" />
               Add Source
