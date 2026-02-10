@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from bson import ObjectId
 import re
 
-from models.qualitative_models import (
+from qualitative_models import (
     # Project
     QualProjectCreate, QualProjectUpdate, QualProjectResponse,
     # Source
