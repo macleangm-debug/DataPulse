@@ -353,7 +353,7 @@ export default function AudioAuditPage() {
                     <SelectValue placeholder="All statuses" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All statuses</SelectItem>
+                    <SelectItem value="__all__">All statuses</SelectItem>
                     <SelectItem value="pending">Pending</SelectItem>
                     <SelectItem value="uploaded">Uploaded</SelectItem>
                     <SelectItem value="reviewed">Reviewed</SelectItem>
