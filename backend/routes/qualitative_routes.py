@@ -102,9 +102,19 @@ async def get_user_info(user_id: str) -> dict:
     """Get user info from database"""
     if db is None:
         return {"id": user_id, "name": "Unknown"}
-    user = await db.users.find_one({"_id": ObjectId(user_id)})
-    if user:
-        return {"id": user_id, "name": user.get("name", "Unknown")}
+    try:
+        # Try to find user by ObjectId first
+        user = await db.users.find_one({"_id": ObjectId(user_id)})
+        if user:
+            return {"id": user_id, "name": user.get("name", "Unknown")}
+    except Exception:
+        # If ObjectId conversion fails, try finding by id field
+        try:
+            user = await db.users.find_one({"id": user_id})
+            if user:
+                return {"id": user_id, "name": user.get("name", "Unknown")}
+        except Exception:
+            pass
     return {"id": user_id, "name": "Unknown"}
 
 
