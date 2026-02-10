@@ -115,6 +115,9 @@ export default function QualitativeWorkspacePage() {
   const [transcribing, setTranscribing] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [reportContent, setReportContent] = useState(null);
+  const [showVisuals, setShowVisuals] = useState(false);
+  const [visualData, setVisualData] = useState(null);
+  const [activeVisual, setActiveVisual] = useState('frequency');
   
   // Dialogs
   const [showAddSource, setShowAddSource] = useState(false);
