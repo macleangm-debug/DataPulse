@@ -95,6 +95,10 @@ from routes.qualitative_routes import router as qualitative_router, set_database
 from routes.qualitative_ai_routes import router as qualitative_ai_router, set_database as set_qual_ai_db
 from routes.qualitative_collab_routes import router as qualitative_collab_router, set_database as set_qual_collab_db
 from routes.qualitative_query_routes import router as qualitative_query_router, set_database as set_qual_query_db
+from routes.qualitative_mixed_routes import router as qualitative_mixed_router, set_database as set_qual_mixed_db
+from routes.qualitative_export_routes import router as qualitative_export_router, set_database as set_qual_export_db
+from routes.qualitative_realtime_routes import router as qualitative_realtime_router, set_database as set_qual_realtime_db
+from routes.qualitative_visuals_routes import router as qualitative_visuals_router, set_database as set_qual_visuals_db
 
 # Include all route modules
 api_router.include_router(auth_router)
