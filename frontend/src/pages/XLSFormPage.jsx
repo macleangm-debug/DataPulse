@@ -127,12 +127,13 @@ export default function XLSFormPage() {
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
-      if (selectedProject) {
+      if (selectedProject && selectedProject !== '__none__') {
         formData.append('project_id', selectedProject);
       }
 
       const response = await fetch(`${API_URL}/api/xlsform/import`, {
         method: 'POST',
+        headers: getAuthHeaders(),
         body: formData,
       });
 
