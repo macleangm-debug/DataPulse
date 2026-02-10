@@ -92,6 +92,9 @@ from routes.job_routes import router as job_router
 from routes.push_notification_routes import router as push_router
 from routes.public_api_routes import router as public_api_router, set_database as set_public_api_db
 from routes.qualitative_routes import router as qualitative_router, set_database as set_qual_db
+from routes.qualitative_ai_routes import router as qualitative_ai_router, set_database as set_qual_ai_db
+from routes.qualitative_collab_routes import router as qualitative_collab_router, set_database as set_qual_collab_db
+from routes.qualitative_query_routes import router as qualitative_query_router, set_database as set_qual_query_db
 
 # Include all route modules
 api_router.include_router(auth_router)
