@@ -647,7 +647,7 @@ async def delete_code(code_id: str, org_id: str = Query(...)):
     # Delete codings with this code
     await db.qual_codings.delete_many({"code_id": code_id})
     
-    result = await db.qual_codes.delete_one({
+    await db.qual_codes.delete_one({
         "_id": ObjectId(code_id),
         "org_id": org_id
     })
