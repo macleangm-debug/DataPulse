@@ -65,7 +65,14 @@ import {
   Users,
   Brain,
   Loader2,
-  AlertTriangle
+  AlertTriangle,
+  Download,
+  Archive,
+  Table,
+  Quote,
+  BarChart3,
+  Network,
+  Grid3X3
 } from 'lucide-react';
 import { useOrgStore } from '../store';
 import { toast } from 'sonner';
