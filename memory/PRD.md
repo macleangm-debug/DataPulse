@@ -27,31 +27,28 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - Interactive dashboards with drill-down
 - Reproducibility packs with hash verification
 
-### 3. PWA Features (Enhanced Feb 9, 2026)
+### 3. Qualitative Analysis Module (Phase 1 Complete - Feb 10, 2026)
+- **Projects**: Create, list, update, delete qualitative research projects
+- **Sources**: Import transcripts, field notes, open-ended responses with metadata
+- **Codebook**: Hierarchical code management with definitions, colors, shortcuts
+- **Coding**: Apply codes to text excerpts with position tracking
+- **Memos**: Analytic, methodological, reflexive, and procedural memos
+- **Themes**: Build themes with supporting and counter evidence
+- **Retrieval**: Query codings by code, text search, co-occurrence analysis
+- **Statistics**: Project-level statistics and code frequency analysis
+
+### 4. PWA Features (Enhanced Feb 9, 2026)
 - Service Worker for offline functionality
 - Encrypted local storage (AES-GCM 256-bit)
 - Background sync with conflict resolution
 - Push Notifications Manager with 25+ notification types
-- Notification categories: Sync, Quality, Submissions, Team, Devices, AI, Backcheck, System
 - Storage management UI
-- PWA Settings panel in Settings > App tab
 
-### 4. Push Notification System (Added Feb 9, 2026)
-- Backend VAPID key management with auto-generation
-- Push subscription management per user/org
-- Quality alert notifications (speeding, GPS, straight-lining, duplicates)
-- Notification preferences stored in MongoDB
-- Server-sent push notifications via pywebpush
-
-### API Endpoints - Push Notifications
-- `GET /api/push/vapid-public-key` - Get VAPID public key
-- `POST /api/push/subscribe` - Subscribe to push
-- `DELETE /api/push/unsubscribe` - Unsubscribe
-- `POST /api/push/send` - Send notification
-- `POST /api/push/trigger/quality-alert` - Trigger quality alert
-- `POST /api/push/test` - Test notification
-- `GET /api/push/history/{org_id}` - Notification history
-- `GET /api/push/alerts/{org_id}` - Quality alerts list
+### 5. UX Enhancements
+- Onboarding Wizard (driver.js) for new users
+- Contextual Help System with side panel
+- Command Palette (⌘K) for quick navigation
+- Mobile-responsive sidebar
 
 ## Architecture
 
@@ -61,40 +58,43 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - GPT-5.2 integration via Emergent LLM Key for AI features
 
 ### Frontend
-- React with Vite
-- TailwindCSS + Shadcn/UI components
+- React with TailwindCSS + Shadcn/UI
 - Zustand for state management
 - Recharts for visualizations
 - react-grid-layout for dashboards
 
-### PWA Stack
-- Service Worker (`/public/sw.js`)
-- Web App Manifest (`/public/manifest.json`)
-- Offline page (`/public/offline.html`)
-- Encrypted storage (`/lib/encryptedStorage.js`)
-- Sync manager (`/lib/offlineStorage.js`)
+### Qualitative Module API Endpoints
+- `GET/POST /api/qualitative/projects` - Project management
+- `GET/POST /api/qualitative/sources` - Source/transcript management
+- `GET/POST /api/qualitative/codes` - Codebook management
+- `GET/POST /api/qualitative/codings` - Code application to excerpts
+- `GET/POST /api/qualitative/memos` - Research memos
+- `GET/POST /api/qualitative/themes` - Theme management
+- `POST /api/qualitative/retrieve/by-code` - Retrieve excerpts by code
+- `POST /api/qualitative/retrieve/text-search` - Full-text search
+- `POST /api/qualitative/retrieve/co-occurrence` - Code co-occurrence analysis
+- `POST /api/qualitative/retrieve/matrix` - Matrix coding queries
+- `GET /api/qualitative/stats/{project_id}` - Project statistics
+
+### MongoDB Collections (Qualitative)
+- `qual_projects` - Qualitative research projects
+- `qual_sources` - Source documents/transcripts
+- `qual_codes` - Codebook codes
+- `qual_codings` - Applied codings
+- `qual_memos` - Research memos
+- `qual_themes` - Themes/findings
 
 ## Key Files Reference
 
-### Backend Routes
-- `routes/form_routes.py` - Survey instruments
-- `routes/submission_routes.py` - Data submissions
-- `routes/analysis_routes.py` - Analytics endpoints
-- `routes/stats_routes.py` - Statistical functions
-- `routes/survey_stats_routes.py` - Complex survey statistics
-- `routes/ai_copilot_routes.py` - AI analysis
-- `routes/quality_ai_routes.py` - Quality monitoring
-- `routes/device_routes.py` - Device management
+### Backend
+- `routes/qualitative_routes.py` - Qualitative API endpoints (1300+ lines)
+- `qualitative_models.py` - Pydantic models for qualitative module
 
-### Frontend Components
-- `components/PWAComponents.jsx` - PWA features
-- `components/NotificationCenter.jsx` - Notification system
-- `components/OnboardingWizard.jsx` - Interactive onboarding tour
-- `components/ContextualHelp.jsx` - Help system with tooltips and panel
-- `components/CommandPalette.jsx` - ⌘K universal search and shortcuts
-- `components/OfflineSync.jsx` - Sync UI
-- `pages/SettingsPage.jsx` - Settings with App tab
-- `layouts/DashboardLayout.jsx` - Main layout with mobile sidebar
+### Frontend
+- `pages/QualitativeAnalysisPage.jsx` - Project list and creation
+- `pages/QualitativeWorkspacePage.jsx` - Coding studio workspace
+- `layouts/DashboardLayout.jsx` - Navigation with Qualitative link
+- `components/CommandPalette.jsx` - Quick navigation (includes Qualitative)
 
 ## Test Credentials
 - Email: demo@datapulse.io
@@ -103,90 +103,41 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 
 ## Changelog
 
+### Feb 10, 2026
+- **Qualitative Analysis Module - Phase 1 MVP Complete**:
+  - Full backend API implementation (Projects, Sources, Codes, Codings, Memos, Themes)
+  - Frontend pages for project list and coding workspace
+  - Navigation integration (sidebar + command palette)
+  - Text selection and code application with visual highlighting
+  - Retrieval queries (by-code, text search, co-occurrence, matrix)
+  - Project statistics dashboard
+  - Bug fixes: get_user_info ObjectId handling, CommandPalette hook ordering
+
 ### Feb 9, 2026
-- **Public REST API for External Integrations (NEW)**:
-  - API Key authentication with read/write/admin permissions
-  - Versioned API at `/api/v1/`
-  - Endpoints: Forms, Submissions, Projects, Export, Statistics
-  - Webhook system for real-time events (submission.created, quality.alert, etc.)
-  - API key management (create, list, revoke)
-  - API Documentation page at /api-docs
-  - Health check endpoint at /api/v1/health
-- **Command Palette (⌘K) (NEW)**:
-  - Universal search with ⌘K / Ctrl+K keyboard shortcut
-  - Navigation commands (Dashboard, Projects, Forms, Submissions, Analysis, etc.)
-  - Quick actions (Create New Form, Create New Project, Import/Export Data)
-  - Additional shortcuts: ⌘N (New Form), ⌘P (Projects), ⌘D (Dashboard), ⌘, (Settings)
-  - Keyboard navigation (↑↓ Navigate, ↵ Select, ESC Close)
-  - Recent commands history saved to localStorage
-- **Mobile-Responsive Sidebar (ENHANCED)**:
-  - Full-height slide-out drawer with smooth animations
-  - Organization selector dropdown for quick switching
-  - Quick action buttons (New Form, New Project) at top
-  - Expandable navigation groups with animated transitions
-  - User profile section with Settings and Sign out buttons
-  - Mobile search button in header to open Command Palette
-- **Contextual Help System (NEW)**:
-  - Toggle-able help mode with indicators on UI elements
-  - Help (?) button in header to access Help Center panel
-  - Slide-out Help Center with categorized help topics (Navigation, Features, Builder, Analysis, Team)
-  - 20+ help topics with descriptions and quick tips
-  - Rotating Pro Tips banner at bottom of screen (10 tips, rotates every 30 seconds)
-  - Keyboard shortcuts reference
-  - Help preference saved to localStorage
-- **Onboarding Wizard (NEW)**:
-  - Interactive product tour with 10 steps for new users
-  - Welcome modal highlighting key features (Offline, Analytics, AI Quality, Security)
-  - Interactive tooltips for navigation rail, org selector, search, notifications
-  - Feature spotlights for Offline Data Collection, Professional Data Analysis, AI Quality Monitoring
-  - Completion screen with actionable next steps (Create Project, Build Form, Invite Team, Import Data)
-  - "Replay Onboarding Tour" button in Settings > Profile tab
-  - Triggers automatically on first login, remembers completion via localStorage
-- **Header UI Redesign (Verified)**:
-  - Moved Organization Selector from sidebar to top-left of header bar
-  - Centered search bar with keyboard shortcut hint (⌘K)
-  - User profile with avatar and role on top-right
-  - New button dropdown for quick form/project creation
-  - Notification bell with badge indicator
-  - All dropdowns verified working without clipping
-- Enhanced PWA components with new features:
-  - PushNotificationsManager - Enable/disable notifications with preferences
-  - OfflineModePage - Full-screen offline experience
-  - PWASettingsPanel - Comprehensive PWA settings
-  - SyncStatusToast - Real-time sync progress
-- Created NotificationCenter with 25+ notification types in 8 categories
-- Added "App" tab to Settings page for PWA management
-- Added helper methods to offlineStorage.js (getCachedForms, getPendingCount)
-- Push notification backend with VAPID keys and subscription management
-
-### Feb 7-8, 2026
-- Completed Data Analysis Module (100%)
-- All statistical functions implemented
-- AI Copilot with guardrails
-- Reproducibility packs
-
-### Feb 6, 2026
-- Completed Data Collection Module (100%)
-- CAPI offline functionality
-- Quality AI monitoring
-- Device management
+- Public REST API for External Integrations
+- Command Palette (⌘K) with keyboard shortcuts
+- Mobile-Responsive Sidebar improvements
+- Contextual Help System
+- Onboarding Wizard
 
 ## Roadmap
 
-### P0 (Immediate) - COMPLETED
-- ✅ Wire up backend quality alerts to trigger frontend notifications
-- ✅ Real push notification server with VAPID keys
-- ✅ Header UI redesign with organization selector in top bar
-- ✅ Onboarding wizard for new users
-- ✅ Contextual help system for user retention
+### P0 - Completed
+- ✅ Qualitative Analysis Module Phase 1 (Core MVP)
 
-### P1 (Next Sprint)
-- Mobile device testing for PWA and onboarding
-- Audio notification file
-- Enhanced conflict resolution UI
-- Add more contextual help topics throughout the app
+### P1 - Next Sprint (Qualitative Phase 2)
+- AI-Assisted Transcription with diarization
+- PII detection and one-click anonymization
+- Advanced queries (boolean, proximity)
+- Multi-coder collaboration workflows
+- Inter-coder reliability (ICR) calculations
 
-### P2 (Future)
-- Native mobile app wrapper (if needed)
-- Real-time collaboration features
-- Advanced export templates
+### P2 - Future (Qualitative Phase 3)
+- AI coding suggestions with rationale
+- AI theme synthesis from coded data
+- Report builder for themes and evidence packs
+- Mixed methods support (link qual to quant)
+
+### Known Issues
+- Onboarding wizard modal persists after localStorage clear (pre-existing)
+- Session state occasionally lost during testing
