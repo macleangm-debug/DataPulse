@@ -155,21 +155,22 @@ export function CommandPalette() {
     if (!isOpen) return;
 
     const handleKeyDown = (e) => {
+      const currentFlatItems = filteredCommands.flatMap(cat => cat.items);
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setSelectedIndex(prev => (prev + 1) % flatItems.length);
+        setSelectedIndex(prev => (prev + 1) % Math.max(1, currentFlatItems.length));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedIndex(prev => (prev - 1 + flatItems.length) % flatItems.length);
-      } else if (e.key === 'Enter' && flatItems[selectedIndex]) {
+        setSelectedIndex(prev => (prev - 1 + currentFlatItems.length) % Math.max(1, currentFlatItems.length));
+      } else if (e.key === 'Enter' && currentFlatItems[selectedIndex]) {
         e.preventDefault();
-        executeCommand(flatItems[selectedIndex]);
+        executeCommand(currentFlatItems[selectedIndex]);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, selectedIndex, flatItems]);
+  }, [isOpen, selectedIndex, filteredCommands, executeCommand]);
 
   // Focus input when opened
   useEffect(() => {
