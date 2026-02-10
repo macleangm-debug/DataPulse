@@ -157,7 +157,9 @@ export default function XLSFormPage() {
   const handleExport = async (formId) => {
     setExporting(true);
     try {
-      const response = await fetch(`${API_URL}/api/xlsform/export/${formId}`);
+      const response = await fetch(`${API_URL}/api/xlsform/export/${formId}`, {
+        headers: getAuthHeaders()
+      });
       
       if (!response.ok) {
         throw new Error('Export failed');
@@ -183,7 +185,9 @@ export default function XLSFormPage() {
 
   const downloadTemplate = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/xlsform/template`);
+      const response = await fetch(`${API_URL}/api/xlsform/template`, {
+        headers: getAuthHeaders()
+      });
       
       if (!response.ok) {
         throw new Error('Download failed');
