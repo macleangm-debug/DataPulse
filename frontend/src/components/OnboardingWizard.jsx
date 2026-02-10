@@ -711,6 +711,7 @@ export function OnboardingProvider({ children }) {
                 step={currentStep}
                 onNext={goToNext}
                 onPrev={goToPrev}
+                onSkip={skipOnboarding}
                 currentStep={currentStepIndex + 1}
                 totalSteps={totalSteps}
               />
