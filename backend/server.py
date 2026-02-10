@@ -193,6 +193,13 @@ set_qual_realtime_db(db)
 api_router.include_router(qualitative_visuals_router)
 set_qual_visuals_db(db)
 
+# SurveyCTO Parity Features
+api_router.include_router(xlsform_router)  # XLSForm Import/Export
+api_router.include_router(audio_audit_router)  # Audio Audit System
+api_router.include_router(review_workflow_router)  # Review & Correction Workflows
+api_router.include_router(scheduled_export_router)  # Scheduled Exports
+api_router.include_router(form_groups_router)  # Form Groups/Folders
+
 
 # Health check endpoint
 @api_router.get("/")
