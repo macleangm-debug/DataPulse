@@ -3,7 +3,7 @@
  * Projects list and entry point for qualitative research
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
