@@ -147,6 +147,10 @@ api_router.include_router(push_router)
 api_router.include_router(public_api_router)
 set_public_api_db(db)
 
+# Qualitative Analysis Module
+api_router.include_router(qualitative_router)
+set_qual_db(db)
+
 
 # Health check endpoint
 @api_router.get("/")
