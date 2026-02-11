@@ -444,13 +444,13 @@ export default function PricingPage() {
           
           {/* Billing toggle */}
           <div className="flex items-center justify-center gap-4 mb-8">
-            <span className={cn("text-sm font-medium", !isYearly && "text-foreground")}>Monthly</span>
+            <span className={cn("text-sm font-medium transition-colors", !isYearly ? "text-slate-900 dark:text-white" : "text-slate-400 dark:text-slate-500")}>Monthly</span>
             <Switch 
               checked={isYearly} 
               onCheckedChange={setIsYearly}
               className="data-[state=checked]:bg-cyan-500"
             />
-            <span className={cn("text-sm font-medium", isYearly && "text-foreground")}>
+            <span className={cn("text-sm font-medium transition-colors", isYearly ? "text-slate-900 dark:text-white" : "text-slate-400 dark:text-slate-500")}>
               Yearly
               <Badge variant="secondary" className="ml-2 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
                 Save 17%
