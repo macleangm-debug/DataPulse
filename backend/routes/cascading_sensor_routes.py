@@ -53,7 +53,7 @@ async def create_cascade_config(
         "org_id": org_id,
         "name": config.name,
         "description": config.description,
-        "levels": [l.model_dump() for l in config.levels],
+        "levels": [level.model_dump() for level in config.levels],
         "allow_other": config.allow_other,
         "search_enabled": config.search_enabled,
         "created_by": current_user["user_id"],
