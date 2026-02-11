@@ -312,8 +312,8 @@ export function DashboardPage() {
           {/* Data Quality */}
           <Card className="bg-white border border-slate-200">
             <CardHeader>
-              <CardTitle className="text-slate-900">Data Quality</CardTitle>
-              <CardDescription className="text-slate-500">Overall quality metrics</CardDescription>
+              <CardTitle className="text-slate-900">{t('dashboard.dataQuality')}</CardTitle>
+              <CardDescription className="text-slate-500">{t('dashboard.overallQualityMetrics')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {loading ? (
@@ -326,7 +326,7 @@ export function DashboardPage() {
                 <>
                   <div>
                     <div className="flex justify-between mb-2">
-                      <span className="text-sm text-slate-500">Avg Quality Score</span>
+                      <span className="text-sm text-slate-500">{t('dashboard.avgQualityScore')}</span>
                       <span className={`text-sm font-mono font-medium ${getQualityColor(quality.avg_quality_score)}`}>
                         {quality.avg_quality_score}%
                       </span>
@@ -336,16 +336,16 @@ export function DashboardPage() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center p-3 rounded-lg bg-emerald-50 border border-emerald-100">
                       <p className="text-2xl font-semibold text-emerald-600">{quality.approved_count}</p>
-                      <p className="text-xs text-slate-500">Approved</p>
+                      <p className="text-xs text-slate-500">{t('dashboard.approved')}</p>
                     </div>
                     <div className="text-center p-3 rounded-lg bg-red-50 border border-red-100">
                       <p className="text-2xl font-semibold text-red-600">{quality.rejected_count}</p>
-                      <p className="text-xs text-slate-500">Rejected</p>
+                      <p className="text-xs text-slate-500">{t('dashboard.rejected')}</p>
                     </div>
                   </div>
                   <div className="text-center p-3 rounded-lg bg-amber-50 border border-amber-100">
                     <p className="text-2xl font-semibold text-amber-600">{quality.flagged_count}</p>
-                    <p className="text-xs text-slate-500">Flagged for Review</p>
+                    <p className="text-xs text-slate-500">{t('dashboard.flaggedForReview')}</p>
                   </div>
                 </>
               ) : (
