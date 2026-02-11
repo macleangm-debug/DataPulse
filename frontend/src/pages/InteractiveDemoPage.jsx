@@ -719,10 +719,14 @@ export default function InteractiveDemoPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {DEMO_SURVEYS.map((survey) => (
-                    <div key={survey.id} className="p-4 rounded-xl bg-slate-700/50 hover:bg-slate-700 transition-colors cursor-pointer">
+                    <div 
+                      key={survey.id} 
+                      onClick={() => handleSurveyClick(survey)}
+                      className="p-4 rounded-xl bg-slate-700/50 hover:bg-slate-700 transition-colors cursor-pointer group"
+                    >
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h3 className="font-medium text-white mb-1">{survey.name}</h3>
+                          <h3 className="font-medium text-white mb-1 group-hover:text-cyan-400 transition-colors">{survey.name}</h3>
                           <div className="flex items-center gap-3 text-xs text-slate-400">
                             <span className="flex items-center gap-1">
                               <Users className="w-3 h-3" /> {survey.team} team members
@@ -732,11 +736,14 @@ export default function InteractiveDemoPage() {
                             </span>
                           </div>
                         </div>
-                        <Badge variant={survey.status === 'active' ? 'default' : 'secondary'} className={cn(
-                          survey.status === 'active' ? "bg-emerald-500/20 text-emerald-400" : "bg-slate-600 text-slate-300"
-                        )}>
-                          {survey.status}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge variant={survey.status === 'active' ? 'default' : 'secondary'} className={cn(
+                            survey.status === 'active' ? "bg-emerald-500/20 text-emerald-400" : "bg-slate-600 text-slate-300"
+                          )}>
+                            {survey.status}
+                          </Badge>
+                          <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 transition-colors" />
+                        </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <Progress value={(survey.submissions / survey.target) * 100} className="flex-1 h-2" />
