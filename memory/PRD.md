@@ -196,12 +196,30 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 | Voice-to-Text | ❌ | ✅ Full support |
 | Geofencing | Basic | ✅ Advanced zones |
 
+### Feb 11, 2026 - Landing Page & Infrastructure Scalability
+- **Landing Page** - New marketing/demo landing page at root URL (`/` and `/demo`)
+  - Hero section with animated counters (45+ Question Types, 10,000+ Demo Submissions, 99.9% Uptime, 50+ Features)
+  - Features showcase with 6 interactive cards (Dashboard, Form Builder, GPS, Team, Offline, Media)
+  - AI Capabilities section highlighting 6 AI features that surpass competition
+  - Form Builder preview with drag-and-drop interface demo
+  - Comparison table: DataPulse vs Others (SurveyCTO/ODK)
+  - CTA section with Start Free Trial and Explore Demo buttons
+  - Dark theme with gradient backgrounds and modern UI
+  - Responsive navigation with mobile menu support
+- **Infrastructure Scalability** - Background task and caching infrastructure
+  - Redis Cache Service (`cache_service.py`) - Caching for dashboards, analytics, forms
+  - Celery Task Workers (`celery_worker.py`, `celery_tasks.py`) - Background AI processing
+  - Task Routes API (`task_routes.py`) - Endpoints for task status, submission, and cache management
+  - Supported background tasks: Transcription, Sentiment Analysis, Translation, Quality Check, Bulk Export
+  - Infrastructure health endpoint: `/api/tasks/health`
+
 ## Backlog / Future Features
 
 ### P2 - Nice to Have
 - Export option to choose between data labels and values
 - Likert scale and ranking question widgets
 - Image OCR with GPT-4 Vision (placeholder implemented)
+- Redis server deployment (currently configured but not running in preview)
 
 ### 4. PWA Features
 - Service Worker for offline functionality
