@@ -150,7 +150,9 @@ const FieldEditor = ({ field, allFields, onChange, onClose }) => {
   };
 
   const hasOptions = ['select', 'radio', 'checkbox', 'multiselect'].includes(field.type);
+  const isCascade = field.type === 'cascade';
   const isCalculate = field.type === 'calculate';
+  const isNestedRepeat = field.type === 'nested_repeat';
 
   return (
     <Sheet open={true} onOpenChange={onClose}>
