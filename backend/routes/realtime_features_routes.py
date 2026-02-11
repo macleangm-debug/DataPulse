@@ -473,11 +473,12 @@ async def create_blockchain_record(
         raise HTTPException(status_code=404, detail="Submission not found")
     
     # Get previous record
-    prev_record = await db.blockchain_records.find_one(
+    prev_records = await db.blockchain_records.find(
         {},
         {"_id": 0}
-    ).sort("created_at", -1)
+    ).sort("created_at", -1).limit(1).to_list(1)
     
+    prev_record = prev_records[0] if prev_records else None
     previous_hash = prev_record["block_hash"] if prev_record else "0" * 64
     
     # Create data hash
