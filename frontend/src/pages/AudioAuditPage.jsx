@@ -60,7 +60,27 @@ import { formatDistanceToNow } from 'date-fns';
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem('access_token');
+  // Try multiple sources for the auth token
+  let token = localStorage.getItem('access_token');
+  
+  // Fallback: Check auth-storage (Zustand persisted store)
+  if (!token) {
+    const authStorage = localStorage.getItem('auth-storage');
+    if (authStorage) {
+      try {
+        const parsed = JSON.parse(authStorage);
+        token = parsed?.state?.token || null;
+      } catch (e) {
+        console.error('Failed to parse auth-storage:', e);
+      }
+    }
+  }
+  
+  // Fallback: Check 'token' key
+  if (!token) {
+    token = localStorage.getItem('token');
+  }
+  
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 };
 
