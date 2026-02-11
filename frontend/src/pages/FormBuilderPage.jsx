@@ -273,6 +273,186 @@ const FieldEditor = ({ field, allFields, onChange, onClose }) => {
                     />
                   </>
                 )}
+
+                {/* Cascading Select Configuration */}
+                {isCascade && (
+                  <>
+                    <Separator />
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <GitBranch className="w-4 h-4 text-primary" />
+                        <Label className="text-white font-medium">Cascade Configuration</Label>
+                      </div>
+                      
+                      {/* Cascade Levels */}
+                      <div className="space-y-3">
+                        <Label className="text-xs text-gray-500">Cascade Levels (Parent → Child)</Label>
+                        {(localField.cascade_levels || []).map((level, idx) => (
+                          <Card key={idx} className="bg-muted/30 p-3">
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <Badge variant="outline">Level {idx + 1}</Badge>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => {
+                                    const levels = [...(localField.cascade_levels || [])];
+                                    levels.splice(idx, 1);
+                                    setLocalField({ ...localField, cascade_levels: levels });
+                                  }}
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              </div>
+                              <Input
+                                value={level.label || ''}
+                                onChange={(e) => {
+                                  const levels = [...(localField.cascade_levels || [])];
+                                  levels[idx] = { ...levels[idx], label: e.target.value };
+                                  setLocalField({ ...localField, cascade_levels: levels });
+                                }}
+                                placeholder="Level label (e.g., Country, State, City)"
+                              />
+                              <Select
+                                value={level.source || 'inline'}
+                                onValueChange={(v) => {
+                                  const levels = [...(localField.cascade_levels || [])];
+                                  levels[idx] = { ...levels[idx], source: v };
+                                  setLocalField({ ...localField, cascade_levels: levels });
+                                }}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Data source" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="inline">Inline Options</SelectItem>
+                                  <SelectItem value="dataset">From Dataset</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </Card>
+                        ))}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const levels = [...(localField.cascade_levels || [])];
+                            levels.push({ label: '', source: 'inline', options: [] });
+                            setLocalField({ ...localField, cascade_levels: levels });
+                          }}
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Level
+                        </Button>
+                      </div>
+
+                      {/* Cascade Settings */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between p-2 bg-card/30 rounded">
+                          <Label className="text-sm">Allow search</Label>
+                          <Switch
+                            checked={localField.cascade_settings?.search_enabled || false}
+                            onCheckedChange={(checked) => setLocalField({
+                              ...localField,
+                              cascade_settings: { ...localField.cascade_settings, search_enabled: checked }
+                            })}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-card/30 rounded">
+                          <Label className="text-sm">Allow "Other" option</Label>
+                          <Switch
+                            checked={localField.cascade_settings?.allow_other || false}
+                            onCheckedChange={(checked) => setLocalField({
+                              ...localField,
+                              cascade_settings: { ...localField.cascade_settings, allow_other: checked }
+                            })}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* Nested Repeat Configuration */}
+                {isNestedRepeat && (
+                  <>
+                    <Separator />
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <Network className="w-4 h-4 text-primary" />
+                        <Label className="text-white font-medium">Nested Repeat Settings</Label>
+                      </div>
+                      
+                      <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                        <p className="text-sm text-blue-300">
+                          Nested repeats allow you to collect hierarchical data, 
+                          like household → members → assets per member.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label>Parent Repeat Group</Label>
+                        <Select
+                          value={localField.nested_settings?.parent_repeat || ''}
+                          onValueChange={(v) => setLocalField({
+                            ...localField,
+                            nested_settings: { ...localField.nested_settings, parent_repeat: v }
+                          })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select parent repeat" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {otherFields.filter(f => f.type === 'repeat').map((f) => (
+                              <SelectItem key={f.id} value={f.name}>{f.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label>Min Iterations</Label>
+                          <Input
+                            type="number"
+                            value={localField.nested_settings?.min_count || ''}
+                            onChange={(e) => setLocalField({
+                              ...localField,
+                              nested_settings: { ...localField.nested_settings, min_count: parseInt(e.target.value) || null }
+                            })}
+                            placeholder="1"
+                            min="0"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Max Iterations</Label>
+                          <Input
+                            type="number"
+                            value={localField.nested_settings?.max_count || ''}
+                            onChange={(e) => setLocalField({
+                              ...localField,
+                              nested_settings: { ...localField.nested_settings, max_count: parseInt(e.target.value) || null }
+                            })}
+                            placeholder="No limit"
+                            min="1"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Add Button Label</Label>
+                        <Input
+                          value={localField.nested_settings?.add_label || ''}
+                          onChange={(e) => setLocalField({
+                            ...localField,
+                            nested_settings: { ...localField.nested_settings, add_label: e.target.value }
+                          })}
+                          placeholder="Add another item"
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
               </TabsContent>
 
               {/* Validation Tab */}
