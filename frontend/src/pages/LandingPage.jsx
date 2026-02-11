@@ -300,11 +300,27 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+        <FloatingAnimationStyles />
+        
         {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50/50 to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
         <div className="absolute top-0 left-0 right-0 h-[500px] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.3),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.15),rgba(255,255,255,0))]" />
         <div className="absolute top-40 -left-32 w-96 h-96 bg-gradient-to-br from-blue-400/30 to-cyan-400/30 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 -right-32 w-[500px] h-[500px] bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl" />
+        
+        {/* Floating Icons - Left Side */}
+        <FloatingIcon icon={MapPin} color="emerald" className="top-32 left-[8%]" delay={0} duration={4} />
+        <FloatingIcon icon={Camera} color="blue" className="top-56 left-[5%]" delay={0.5} duration={3.5} />
+        <FloatingIcon icon={Mic} color="purple" className="top-80 left-[12%]" delay={1} duration={4.5} />
+        <FloatingIcon icon={WifiOff} color="cyan" className="top-[420px] left-[6%]" delay={1.5} duration={3} />
+        <FloatingIcon icon={Brain} color="pink" className="top-[520px] left-[10%]" delay={0.3} duration={4} />
+        
+        {/* Floating Icons - Right Side */}
+        <FloatingIcon icon={BarChart3} color="blue" className="top-36 right-[7%]" delay={0.8} duration={3.8} />
+        <FloatingIcon icon={Globe} color="cyan" className="top-60 right-[10%]" delay={0.2} duration={4.2} />
+        <FloatingIcon icon={Shield} color="emerald" className="top-[340px] right-[5%]" delay={1.2} duration={3.2} />
+        <FloatingIcon icon={QrCode} color="orange" className="top-[440px] right-[12%]" delay={0.6} duration={4.6} />
+        <FloatingIcon icon={Cloud} color="purple" className="top-[540px] right-[8%]" delay={1.8} duration={3.5} />
         
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <Badge variant="secondary" className="mb-6 px-4 py-2 text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-700/50">
