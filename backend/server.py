@@ -207,6 +207,10 @@ api_router.include_router(form_groups_router)  # Form Groups/Folders
 api_router.include_router(advanced_fields_router)  # Barcode/Signature/Cascading Selects
 api_router.include_router(cascading_sensor_router)  # Cascading Selects & Sensor Metadata
 
+# AI & Advanced Features (Beyond SurveyCTO)
+api_router.include_router(ai_services_router)  # AI Transcription, Sentiment, Translation, OCR
+api_router.include_router(realtime_features_router)  # Real-time Dashboards, Geofencing, Blockchain
+
 
 # Health check endpoint
 @api_router.get("/")
