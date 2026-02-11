@@ -611,27 +611,8 @@ async def extract_text_from_image(
         raise HTTPException(status_code=500, detail="AI service not configured")
     
     try:
-        from emergentintegrations.llm.chat import LlmChat, UserMessage
-        import base64
-        
-        # Read and encode image
+        # Read image content
         content = await file.read()
-        image_base64 = base64.b64encode(content).decode('utf-8')
-        
-        # Determine mime type
-        mime_type = file.content_type or "image/jpeg"
-        
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
-            session_id=f"ocr-{uuid.uuid4()}",
-            system_message="""You are an OCR expert. Extract all text from the provided image.
-            Return a JSON object with:
-            - text: the full extracted text
-            - structured_data: any structured data found (names, dates, numbers, addresses)
-            - document_type: detected document type (id_card, receipt, form, etc.)
-            - confidence: confidence score 0-1
-            Return ONLY valid JSON."""
-        ).with_model("openai", "gpt-4o")
         
         # Note: For actual image processing with vision, we'd use GPT-4V
         # This is a placeholder that shows the intended functionality
@@ -643,6 +624,7 @@ async def extract_text_from_image(
             "structured_data": {},
             "document_type": "unknown",
             "confidence": 0.0,
+            "file_size": len(content),
             "note": "Full OCR requires GPT-4 Vision API with image input support"
         }
         
