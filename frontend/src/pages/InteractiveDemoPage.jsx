@@ -450,6 +450,8 @@ export default function InteractiveDemoPage() {
   const navigate = useNavigate();
   const [showTour, setShowTour] = useState(false);
   const [tourStep, setTourStep] = useState(0);
+  const [activeView, setActiveView] = useState('dashboard'); // dashboard, surveys, submissions, form-preview
+  const [selectedSurvey, setSelectedSurvey] = useState(null);
   
   // Refs for tour targets
   const statsRef = React.useRef(null);
@@ -491,6 +493,18 @@ export default function InteractiveDemoPage() {
     setShowTour(false);
     sessionStorage.setItem('demo_tour_seen', 'true');
   }, []);
+  
+  // Handle survey click
+  const handleSurveyClick = (survey) => {
+    setSelectedSurvey(survey);
+    setActiveView('form-preview');
+  };
+  
+  // Handle sidebar navigation
+  const handleNavClick = (view) => {
+    setActiveView(view);
+    setSelectedSurvey(null);
+  };
 
   const getTargetRef = (targetId) => {
     const refs = {
