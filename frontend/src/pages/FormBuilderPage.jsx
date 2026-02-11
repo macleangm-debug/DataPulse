@@ -89,6 +89,7 @@ const fieldTypes = [
   { type: 'textarea', label: 'Long Text', icon: AlignLeft },
   { type: 'date', label: 'Date', icon: Calendar },
   { type: 'select', label: 'Dropdown', icon: List },
+  { type: 'cascade', label: 'Cascading Select', icon: GitBranch },
   { type: 'radio', label: 'Single Choice', icon: Circle },
   { type: 'checkbox', label: 'Multiple Choice', icon: CheckSquare },
   { type: 'gps', label: 'GPS Location', icon: MapPin },
@@ -101,6 +102,7 @@ const fieldTypes = [
   { type: 'calculate', label: 'Calculate', icon: Calculator },
   { type: 'group', label: 'Group', icon: Settings2 },
   { type: 'repeat', label: 'Repeat Group', icon: Repeat },
+  { type: 'nested_repeat', label: 'Nested Repeat', icon: Network },
 ];
 
 const FieldTypeButton = ({ type, label, icon: Icon, onClick }) => (
