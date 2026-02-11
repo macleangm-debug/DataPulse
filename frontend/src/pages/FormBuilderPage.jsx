@@ -513,6 +513,149 @@ const FieldEditor = ({ field, allFields, onChange, onClose }) => {
                     </div>
                   </div>
                 )}
+
+                {/* Advanced Cross-Field Validation */}
+                <Separator className="my-4" />
+                <Collapsible>
+                  <CollapsibleTrigger asChild>
+                    <Button variant="ghost" className="w-full justify-between p-3 h-auto">
+                      <div className="flex items-center gap-2">
+                        <Settings className="w-4 h-4 text-primary" />
+                        <div className="text-left">
+                          <p className="font-medium text-white">Advanced Constraints</p>
+                          <p className="text-xs text-gray-500">Cross-field validation rules</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-2 space-y-4">
+                    {/* Constraint Expression */}
+                    <div className="space-y-2">
+                      <Label>Constraint Expression</Label>
+                      <Textarea
+                        value={localField.validation?.constraint || ''}
+                        onChange={(e) => 
+                          setLocalField({
+                            ...localField,
+                            validation: { ...localField.validation, constraint: e.target.value }
+                          })
+                        }
+                        placeholder="e.g., . > ${start_date} or . <= 100"
+                        rows={2}
+                      />
+                      <p className="text-xs text-gray-500">
+                        Use "." for this field's value, and {'"${field_name}"'} to reference other fields
+                      </p>
+                    </div>
+                    
+                    {/* Constraint Error Message */}
+                    <div className="space-y-2">
+                      <Label>Error Message</Label>
+                      <Input
+                        value={localField.validation?.constraint_message || ''}
+                        onChange={(e) => 
+                          setLocalField({
+                            ...localField,
+                            validation: { ...localField.validation, constraint_message: e.target.value }
+                          })
+                        }
+                        placeholder="e.g., End date must be after start date"
+                      />
+                    </div>
+
+                    {/* Quick Constraint Templates */}
+                    <div className="space-y-2">
+                      <Label className="text-xs text-gray-500">Quick Templates</Label>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge 
+                          variant="outline" 
+                          className="cursor-pointer hover:bg-primary/20"
+                          onClick={() => setLocalField({
+                            ...localField,
+                            validation: { 
+                              ...localField.validation, 
+                              constraint: '. > ${other_field}',
+                              constraint_message: 'Value must be greater than referenced field'
+                            }
+                          })}
+                        >
+                          Greater Than
+                        </Badge>
+                        <Badge 
+                          variant="outline" 
+                          className="cursor-pointer hover:bg-primary/20"
+                          onClick={() => setLocalField({
+                            ...localField,
+                            validation: { 
+                              ...localField.validation, 
+                              constraint: '. < ${other_field}',
+                              constraint_message: 'Value must be less than referenced field'
+                            }
+                          })}
+                        >
+                          Less Than
+                        </Badge>
+                        <Badge 
+                          variant="outline" 
+                          className="cursor-pointer hover:bg-primary/20"
+                          onClick={() => setLocalField({
+                            ...localField,
+                            validation: { 
+                              ...localField.validation, 
+                              constraint: '. != ${other_field}',
+                              constraint_message: 'Values must be different'
+                            }
+                          })}
+                        >
+                          Not Equal To
+                        </Badge>
+                        <Badge 
+                          variant="outline" 
+                          className="cursor-pointer hover:bg-primary/20"
+                          onClick={() => setLocalField({
+                            ...localField,
+                            validation: { 
+                              ...localField.validation, 
+                              constraint: '. >= 0 and . <= 100',
+                              constraint_message: 'Value must be between 0 and 100'
+                            }
+                          })}
+                        >
+                          Range
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* Available Fields Reference */}
+                    {otherFields.length > 0 && (
+                      <div className="p-3 bg-card/30 rounded-lg">
+                        <Label className="text-xs text-gray-500 mb-2 block">Reference these fields:</Label>
+                        <div className="flex flex-wrap gap-1">
+                          {otherFields.slice(0, 8).map((f) => (
+                            <Badge 
+                              key={f.id} 
+                              variant="outline" 
+                              className="text-xs cursor-pointer hover:bg-primary/20"
+                              onClick={() => {
+                                const current = localField.validation?.constraint || '';
+                                setLocalField({
+                                  ...localField,
+                                  validation: { 
+                                    ...localField.validation, 
+                                    constraint: current + '${' + f.name + '}'
+                                  }
+                                });
+                              }}
+                            >
+                              {f.name}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </CollapsibleContent>
+                </Collapsible>
               </TabsContent>
 
               {/* Logic Tab */}
