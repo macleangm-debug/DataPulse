@@ -633,16 +633,9 @@ async def extract_text_from_image(
             Return ONLY valid JSON."""
         ).with_model("openai", "gpt-4o")
         
-        # Create message with image
-        message = UserMessage(
-            text=f"Extract all text from this image:\n\ndata:{mime_type};base64,{image_base64[:100]}..."
-        )
-        
-        # Note: For actual image processing, we'd need vision API
-        # This is a placeholder that describes the intended functionality
-        response = await chat.send_message(UserMessage(
-            text="Please describe what OCR functionality would extract from a document image, including structured data detection."
-        ))
+        # Note: For actual image processing with vision, we'd use GPT-4V
+        # This is a placeholder that shows the intended functionality
+        # Full OCR with vision requires image input support
         
         result = {
             "id": str(uuid.uuid4()),
