@@ -320,6 +320,11 @@ function App() {
               <ScheduledExportsPage />
             </ProtectedRoute>
           } />
+          <Route path="/form-folders" element={
+            <ProtectedRoute>
+              <FormGroupsPage />
+            </ProtectedRoute>
+          } />
           
           {/* Public CAWI Survey Routes */}
           <Route path="/survey/:formId" element={<CAWISurveyPage />} />
