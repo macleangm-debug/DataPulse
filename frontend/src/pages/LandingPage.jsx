@@ -550,9 +550,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-
-      {/* Demo Tour Modal */}
-      <DemoTour isOpen={isTourOpen} onClose={() => setIsTourOpen(false)} />
     </div>
   );
 }
