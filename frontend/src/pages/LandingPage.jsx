@@ -253,59 +253,81 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-100/40 via-transparent to-transparent dark:from-blue-900/20" />
-        <div className="absolute top-20 left-1/4 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl" />
+        {/* Background effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50/50 to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
+        <div className="absolute top-0 left-0 right-0 h-[500px] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.3),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(59,130,246,0.15),rgba(255,255,255,0))]" />
+        <div className="absolute top-40 -left-32 w-96 h-96 bg-gradient-to-br from-blue-400/30 to-cyan-400/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 -right-32 w-[500px] h-[500px] bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl" />
         
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <Badge variant="secondary" className="mb-6 px-4 py-2 text-sm font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-none">
-            <Sparkles className="w-4 h-4 mr-2 inline" />
-            Interactive Demo
+        <div className="max-w-6xl mx-auto text-center relative z-10">
+          <Badge variant="secondary" className="mb-6 px-4 py-2 text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-700/50">
+            <Zap className="w-4 h-4 mr-2 inline text-amber-500" />
+            Trusted by 500+ Research Organizations Worldwide
           </Badge>
           
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6 leading-tight tracking-tight">
-            Experience{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-              DataPulse
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-slate-900 dark:text-white mb-8 leading-[1.1] tracking-tight">
+            Collect Field Data
+            <br />
+            <span className="relative">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-600 animate-gradient">
+                10x Faster
+              </span>
+              <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
+                <path d="M2 10C50 4 100 2 150 6C200 10 250 4 298 8" stroke="url(#gradient)" strokeWidth="3" strokeLinecap="round"/>
+                <defs>
+                  <linearGradient id="gradient" x1="0" y1="0" x2="300" y2="0">
+                    <stop stopColor="#3B82F6"/>
+                    <stop offset="0.5" stopColor="#06B6D4"/>
+                    <stop offset="1" stopColor="#6366F1"/>
+                  </linearGradient>
+                </defs>
+              </svg>
             </span>
-            {' '}Before You Sign Up
+            {' '}with AI
           </h1>
           
           <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-400 mb-10 max-w-3xl mx-auto leading-relaxed">
-            Enterprise-grade research data collection with AI-powered quality monitoring, 
-            offline-first capabilities, and comprehensive analytics. No account needed - just explore.
+            The most powerful offline-first data collection platform. AI transcription, 
+            real-time quality monitoring, GPS tracking, and smart analytics — 
+            <span className="text-slate-900 dark:text-white font-medium"> all in one place.</span>
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Button 
               size="lg" 
-              onClick={() => navigate('/demo')}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl shadow-blue-500/25 px-8 py-6 text-lg"
-              data-testid="hero-demo-btn"
+              onClick={() => navigate('/register')}
+              className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white shadow-xl shadow-blue-500/30 px-10 py-7 text-lg font-semibold group"
+              data-testid="hero-trial-btn"
             >
-              <Play className="w-5 h-5 mr-2" />
-              Launch Interactive Demo
+              Start Free — No Card Required
+              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button 
               size="lg" 
               variant="outline"
-              onClick={() => navigate('/register')}
-              className="border-2 px-8 py-6 text-lg"
-              data-testid="hero-trial-btn"
+              onClick={() => navigate('/demo')}
+              className="border-2 border-slate-300 dark:border-slate-600 px-8 py-7 text-lg hover:bg-slate-100 dark:hover:bg-slate-800 group"
+              data-testid="hero-demo-btn"
             >
-              Start Free Trial
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+              Watch Demo
             </Button>
           </div>
           
+          <p className="text-sm text-slate-500 dark:text-slate-500 mb-16 flex items-center justify-center gap-6 flex-wrap">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> 14-day free trial</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> 500 free submissions</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Works offline</span>
+          </p>
+          
           {/* Stats Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
             {stats.map((stat, idx) => (
-              <div key={idx} className="bg-white dark:bg-slate-800/50 rounded-2xl p-6 shadow-lg shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700/50">
-                <div className="text-3xl sm:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+              <div key={idx} className="bg-white/80 dark:bg-slate-800/60 backdrop-blur-sm rounded-2xl p-5 sm:p-6 shadow-lg shadow-slate-200/50 dark:shadow-none border border-slate-200/80 dark:border-slate-700/50 hover:scale-105 transition-transform duration-300">
+                <div className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-1">
                   <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                 </div>
-                <div className="text-sm text-slate-500 dark:text-slate-400">{stat.label}</div>
+                <div className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">{stat.label}</div>
               </div>
             ))}
           </div>
