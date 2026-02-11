@@ -302,8 +302,28 @@ export function DashboardLayout({ children }) {
             })}
           </nav>
 
-          {/* Bottom section - Profile */}
+          {/* Bottom section - Theme Toggle & Profile */}
           <div className="mt-auto flex flex-col items-center gap-2">
+            {/* Theme Toggle */}
+            <Tooltip delayDuration={300}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={toggleTheme}
+                  className="w-11 h-11 flex items-center justify-center rounded-xl hover:bg-muted transition-colors"
+                  data-testid="theme-toggle-btn"
+                >
+                  {theme === 'dark' ? (
+                    <Sun className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <Moon className="w-5 h-5 text-muted-foreground" />
+                  )}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</p>
+              </TooltipContent>
+            </Tooltip>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="w-11 h-11 flex items-center justify-center rounded-xl hover:bg-muted">
