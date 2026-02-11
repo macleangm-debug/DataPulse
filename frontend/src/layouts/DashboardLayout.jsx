@@ -84,6 +84,7 @@ const NAVIGATION = [
     items: [
       { label: 'All Projects', path: '/projects', icon: Folder },
       { label: 'Forms', path: '/forms', icon: FileText },
+      { label: 'Form Folders', path: '/form-folders', icon: Folder },
       { label: 'Templates', path: '/templates', icon: Layout },
       { label: 'Submissions', path: '/submissions', icon: ClipboardList }
     ]
