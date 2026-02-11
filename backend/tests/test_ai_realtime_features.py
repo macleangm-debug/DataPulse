@@ -495,9 +495,13 @@ class TestBlockchainVerification:
         
         if response.status_code == 200:
             data = response.json()
-            submissions = data.get("submissions", [])
-            if submissions:
-                TestBlockchainVerification.test_submission_id = submissions[0]["id"]
+            # Handle both list and dict response formats
+            if isinstance(data, list) and len(data) > 0:
+                TestBlockchainVerification.test_submission_id = data[0]["id"]
+            elif isinstance(data, dict):
+                submissions = data.get("submissions", [])
+                if submissions:
+                    TestBlockchainVerification.test_submission_id = submissions[0]["id"]
         
         if not TestBlockchainVerification.test_submission_id:
             pytest.skip("No submissions available for blockchain test")
