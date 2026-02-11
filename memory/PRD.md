@@ -206,15 +206,24 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
   - CTA section with Start Free Trial and Explore Demo buttons
   - Dark theme with gradient backgrounds and modern UI
   - Responsive navigation with mobile menu support
-- **Guided Demo Tour** - Interactive walkthrough system (`DemoTour.jsx`)
-  - Welcome modal with emoji and tour introduction
-  - 7-step guided tour with progress indicators
-  - Feature spotlight modals with gradient headers
-  - Highlight tooltips for UI elements
-  - Completion modal with feature checklist and CTA
-  - Skip and navigation controls (Back/Next/Skip Tour)
-  - Escape key support for closing
-  - Reusable tour components for future use
+- **Guided Demo Tour** - Interactive walkthrough system (`InteractiveDemoPage.jsx`)
+  - Full dashboard demo at `/demo` with sample data (surveys, stats, activity)
+  - Demo mode banner: "Sample data from Customer Feedback Survey – Actions like save & export are disabled"
+  - 8-step guided tour auto-starts on first visit:
+    1. Welcome modal with emoji and duration indicator
+    2. Stats tooltip highlighting dashboard metrics
+    3. Surveys tooltip for active forms list
+    4. Activity tooltip for recent team activity
+    5. Sidebar tooltip for navigation menu
+    6. Offline-First feature spotlight
+    7. AI Quality feature spotlight
+    8. Completion modal with feature checklist and CTA
+  - Tooltips highlight actual UI elements with cyan ring border
+  - Progress dots and step counters throughout
+  - Skip Tour, Back, Next navigation controls
+  - "Take Tour" button in banner for replay
+  - "Exit Demo" returns to landing page
+  - Session storage prevents tour re-trigger on page refresh
 - **Infrastructure Scalability** - Background task and caching infrastructure
   - Redis Cache Service (`cache_service.py`) - Caching for dashboards, analytics, forms
   - Celery Task Workers (`celery_worker.py`, `celery_tasks.py`) - Background AI processing
