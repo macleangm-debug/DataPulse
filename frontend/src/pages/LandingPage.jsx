@@ -279,22 +279,12 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Button 
               size="lg" 
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/demo')}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl shadow-blue-500/25 px-8 py-6 text-lg"
               data-testid="hero-demo-btn"
             >
               <Play className="w-5 h-5 mr-2" />
               Launch Interactive Demo
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline"
-              onClick={() => setIsTourOpen(true)}
-              className="border-2 px-8 py-6 text-lg bg-white/10 backdrop-blur hover:bg-white/20"
-              data-testid="hero-tour-btn"
-            >
-              <Hand className="w-5 h-5 mr-2" />
-              Take a Tour
             </Button>
             <Button 
               size="lg" 
