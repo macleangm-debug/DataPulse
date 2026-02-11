@@ -546,6 +546,9 @@ export function DashboardLayout({ children }) {
               {/* Help Toggle */}
               <HelpToggleButton />
 
+              {/* Language Selector */}
+              <LanguageSelectorCompact />
+
               {/* Quick Create Button */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
