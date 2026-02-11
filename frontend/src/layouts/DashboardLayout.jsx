@@ -616,6 +616,14 @@ export function DashboardLayout({ children }) {
                     <p className="text-xs text-muted-foreground">{user?.email}</p>
                   </div>
                   <div className="py-1">
+                    <DropdownMenuItem onClick={toggleTheme}>
+                      {theme === 'dark' ? (
+                        <Sun className="w-4 h-4 mr-2" />
+                      ) : (
+                        <Moon className="w-4 h-4 mr-2" />
+                      )}
+                      {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/settings')}>
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
