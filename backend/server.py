@@ -107,6 +107,7 @@ from routes.review_workflow_routes import router as review_workflow_router
 from routes.scheduled_export_routes import router as scheduled_export_router
 from routes.form_groups_routes import router as form_groups_router
 from routes.advanced_fields_routes import router as advanced_fields_router
+from routes.cascading_sensor_routes import router as cascading_sensor_router
 
 # Include all route modules
 api_router.include_router(auth_router)
