@@ -42,6 +42,7 @@ import AudioAuditPage from './pages/AudioAuditPage';
 import ReviewWorkflowPage from './pages/ReviewWorkflowPage';
 import ScheduledExportsPage from './pages/ScheduledExportsPage';
 import FormGroupsPage from './pages/FormGroupsPage';
+import RealtimeDashboardPage from './pages/RealtimeDashboardPage';
 import { PWAInstallPrompt, NetworkStatus, SyncStatusToast, OfflineModePage } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import { NotificationCenter, NotificationProvider } from './components/NotificationCenter';
