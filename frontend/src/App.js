@@ -326,6 +326,11 @@ function App() {
               <FormGroupsPage />
             </ProtectedRoute>
           } />
+          <Route path="/realtime-dashboard" element={
+            <ProtectedRoute>
+              <RealtimeDashboardPage />
+            </ProtectedRoute>
+          } />
           
           {/* Public CAWI Survey Routes */}
           <Route path="/survey/:formId" element={<CAWISurveyPage />} />
