@@ -13,7 +13,6 @@ import {
   Building2, 
   Users, 
   Rocket,
-  HardDrive,
   Database,
   ArrowRight,
   Sparkles
