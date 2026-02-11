@@ -69,6 +69,8 @@ import { useAuthStore, useOrgStore, useUIStore } from '../store';
 import { cn } from '../lib/utils';
 import { OfflineStatusIndicator } from '../components/OfflineStatus';
 import { HelpToggleButton } from '../components/ContextualHelp';
+import { LanguageSelectorCompact } from '../components/LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
 // Navigation structure - grouped for Canva-style rail
 const NAVIGATION = [
