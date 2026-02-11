@@ -66,18 +66,19 @@ const FOLDER_COLORS = [
   { name: 'Cyan', value: '#06b6d4' },
 ];
 
-// Folder Tree Item Component
-const FolderTreeItem = ({ 
+// Folder Tree Item Component - Non-recursive for build compatibility
+function FolderTreeItem({ 
   folder, 
-  level = 0, 
+  level, 
   selectedFolder, 
   onSelect, 
   onEdit, 
   onDelete, 
   onArchive,
   expandedFolders,
-  onToggleExpand 
-}) => {
+  onToggleExpand,
+  renderChildren
+}) {
   const isExpanded = expandedFolders.includes(folder.id);
   const isSelected = selectedFolder?.id === folder.id;
   const hasChildren = folder.children && folder.children.length > 0;
@@ -85,7 +86,7 @@ const FolderTreeItem = ({
   return (
     <div>
       <div
-        className={`flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-colors ${
+        className={`flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-colors group ${
           isSelected 
             ? 'bg-primary/20 text-primary' 
             : 'hover:bg-muted/50 text-foreground'
@@ -148,27 +149,10 @@ const FolderTreeItem = ({
         </DropdownMenu>
       </div>
       
-      {isExpanded && hasChildren && (
-        <div>
-          {folder.children.map((child) => (
-            <FolderTreeItem
-              key={child.id}
-              folder={child}
-              level={level + 1}
-              selectedFolder={selectedFolder}
-              onSelect={onSelect}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              onArchive={onArchive}
-              expandedFolders={expandedFolders}
-              onToggleExpand={onToggleExpand}
-            />
-          ))}
-        </div>
-      )}
+      {isExpanded && hasChildren && renderChildren(folder.children, level + 1)}
     </div>
   );
-};
+}
 
 export default function FormGroupsPage() {
   const navigate = useNavigate();
