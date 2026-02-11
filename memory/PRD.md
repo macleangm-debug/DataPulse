@@ -196,6 +196,16 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 | Voice-to-Text | ❌ | ✅ Full support |
 | Geofencing | Basic | ✅ Advanced zones |
 
+### Feb 11, 2026 - Light/Dark Mode Theme Toggle
+- **Theme System Enhancement**
+  - Added Sun/Moon toggle button in header bar (accessible on all screens)
+  - Added theme toggle in rail sidebar bottom section (desktop)
+  - Added "Light Mode" / "Dark Mode" option in user profile dropdowns
+  - Theme preference now persisted in localStorage via `ui-storage`
+  - CSS variables properly defined for both light (`:root`) and dark (`.dark`) modes
+  - Smooth transitions between themes
+  - Icons switch between Sun (light mode) and Moon (dark mode)
+
 ### Feb 11, 2026 - Landing Page & Infrastructure Scalability
 - **Landing Page** - New marketing/demo landing page at root URL (`/` and `/demo`)
   - Hero section with animated counters (45+ Question Types, 10,000+ Demo Submissions, 99.9% Uptime, 50+ Features)
