@@ -521,6 +521,26 @@ export function DashboardLayout({ children }) {
 
             {/* Right side actions */}
             <div className="flex items-center gap-1.5">
+              {/* Theme Toggle */}
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={toggleTheme}
+                    className="p-2.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                    data-testid="header-theme-toggle"
+                  >
+                    {theme === 'dark' ? (
+                      <Sun className="w-5 h-5" />
+                    ) : (
+                      <Moon className="w-5 h-5" />
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</p>
+                </TooltipContent>
+              </Tooltip>
+
               {/* Help Toggle */}
               <HelpToggleButton />
 
