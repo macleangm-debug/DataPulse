@@ -46,7 +46,9 @@ import {
   BookOpen,
   FileSpreadsheet,
   Mic,
-  Calendar
+  Calendar,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
