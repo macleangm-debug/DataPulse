@@ -361,11 +361,11 @@ export function DashboardPage() {
           <Card className="lg:col-span-2 bg-white border border-slate-200">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-slate-900">Recent Activity</CardTitle>
-                <CardDescription className="text-slate-500">Latest submissions</CardDescription>
+                <CardTitle className="text-slate-900">{t('dashboard.recentActivity')}</CardTitle>
+                <CardDescription className="text-slate-500">{t('dashboard.latestSubmissions')}</CardDescription>
               </div>
               <Button variant="ghost" size="sm" onClick={() => navigate('/submissions')}>
-                View all
+                {t('common.all')}
                 <ArrowUpRight className="w-4 h-4 ml-1" />
               </Button>
             </CardHeader>
@@ -391,7 +391,7 @@ export function DashboardPage() {
               ) : (
                 <div className="text-center py-8">
                   <Database className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-                  <p className="text-sm text-slate-400">No recent activity</p>
+                  <p className="text-sm text-slate-400">{t('common.noData')}</p>
                 </div>
               )}
             </CardContent>
