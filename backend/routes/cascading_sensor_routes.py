@@ -128,7 +128,6 @@ async def get_cascade_options(
         
         # Filter by parent value
         if parent_value and level_index > 0:
-            parent_field = config["levels"][level_index - 1]["field_name"]
             options = [o for o in options if o.get("parent_value") == parent_value]
         
         # Apply search filter
