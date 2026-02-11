@@ -202,6 +202,7 @@ api_router.include_router(review_workflow_router)  # Review & Correction Workflo
 api_router.include_router(scheduled_export_router)  # Scheduled Exports
 api_router.include_router(form_groups_router)  # Form Groups/Folders
 api_router.include_router(advanced_fields_router)  # Barcode/Signature/Cascading Selects
+api_router.include_router(cascading_sensor_router)  # Cascading Selects & Sensor Metadata
 
 
 # Health check endpoint
