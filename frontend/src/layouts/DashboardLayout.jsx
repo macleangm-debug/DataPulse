@@ -637,6 +637,10 @@ export function DashboardLayout({ children }) {
                       <LayoutGrid className="w-4 h-4 mr-2" />
                       Appearance
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/settings?tab=language')}>
+                      <Languages className="w-4 h-4 mr-2" />
+                      Language
+                    </DropdownMenuItem>
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
