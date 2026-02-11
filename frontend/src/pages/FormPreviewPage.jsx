@@ -265,6 +265,35 @@ const FieldRenderer = ({ field, value, onChange, language, errors }) => {
           />
         );
 
+      case 'cascade':
+        return (
+          <CascadingSelect
+            field={field}
+            value={value || {}}
+            onChange={(cascadeValue) => onChange(field.id, cascadeValue)}
+            disabled={field.readonly}
+          />
+        );
+
+      case 'nested_repeat':
+        return (
+          <NestedRepeatGroup
+            field={field}
+            value={value || []}
+            onChange={(repeatValue) => onChange(field.id, repeatValue)}
+            renderField={(childField, childValue, childOnChange) => (
+              <FieldRenderer
+                field={childField}
+                value={childValue}
+                onChange={(_, v) => childOnChange(childField.id, v)}
+                language={language}
+                errors={errors}
+              />
+            )}
+            disabled={field.readonly}
+          />
+        );
+
       default:
         return (
           <Input
