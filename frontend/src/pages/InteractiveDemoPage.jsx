@@ -633,36 +633,149 @@ export default function InteractiveDemoPage() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-6">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-2xl font-bold text-white mb-1">Dashboard</h1>
-              <p className="text-slate-400">Welcome back! Here's your survey overview.</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input 
-                  type="text" 
-                  placeholder="Search..." 
-                  className="pl-9 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white placeholder:text-slate-500 w-64 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                />
+        <main className="flex-1 p-6 overflow-auto">
+          {/* Form Preview View */}
+          {activeView === 'form-preview' && selectedSurvey && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <Button 
+                  variant="ghost" 
+                  onClick={() => setActiveView('dashboard')}
+                  className="text-slate-400 hover:text-white gap-2"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to Dashboard
+                </Button>
               </div>
-              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
-                <Bell className="w-5 h-5" />
-              </Button>
-              <Button className="bg-cyan-500 hover:bg-cyan-600 text-white gap-2">
-                <Plus className="w-4 h-4" />
-                New Survey
-              </Button>
-            </div>
-          </div>
+              
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-white text-xl">{selectedSurvey.name}</CardTitle>
+                      <p className="text-sm text-slate-400 mt-1">Form Preview - Click fields to see how they work</p>
+                    </div>
+                    <Badge className="bg-emerald-500/20 text-emerald-400">{selectedSurvey.status}</Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Sample Form Fields */}
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-lg bg-slate-700/50 border border-slate-600">
+                      <label className="block text-sm font-medium text-white mb-2">1. Full Name *</label>
+                      <input 
+                        type="text" 
+                        placeholder="Enter your full name"
+                        className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                      />
+                    </div>
+                    
+                    <div className="p-4 rounded-lg bg-slate-700/50 border border-slate-600">
+                      <label className="block text-sm font-medium text-white mb-2">2. How satisfied are you with our service? *</label>
+                      <div className="flex gap-4 mt-2">
+                        {['Very Unsatisfied', 'Unsatisfied', 'Neutral', 'Satisfied', 'Very Satisfied'].map((opt, i) => (
+                          <label key={i} className="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="satisfaction" className="w-4 h-4 accent-cyan-500" />
+                            <span className="text-sm text-slate-300">{opt}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="p-4 rounded-lg bg-slate-700/50 border border-slate-600">
+                      <label className="block text-sm font-medium text-white mb-2">3. Additional Comments</label>
+                      <textarea 
+                        placeholder="Share your thoughts..."
+                        rows={3}
+                        className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder:text-slate-500 focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
+                      />
+                    </div>
+                    
+                    <div className="p-4 rounded-lg bg-slate-700/50 border border-slate-600">
+                      <label className="block text-sm font-medium text-white mb-2">4. Upload Photo (Optional)</label>
+                      <div className="border-2 border-dashed border-slate-600 rounded-lg p-8 text-center hover:border-cyan-500 transition-colors cursor-pointer">
+                        <Database className="w-8 h-8 text-slate-500 mx-auto mb-2" />
+                        <p className="text-sm text-slate-400">Click to upload or drag and drop</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end gap-3 pt-4 border-t border-slate-700">
+                    <Button variant="outline" className="border-slate-600 text-slate-300">Save Draft</Button>
+                    <Button className="bg-cyan-500 hover:bg-cyan-600">Submit Response</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+          
+          {/* Other Views Placeholder */}
+          {['surveys', 'submissions', 'quality', 'team', 'gps', 'settings'].includes(activeView) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center justify-center min-h-[60vh]"
+            >
+              <div className="w-20 h-20 rounded-2xl bg-cyan-500/20 flex items-center justify-center mb-4">
+                {activeView === 'surveys' && <FileText className="w-10 h-10 text-cyan-400" />}
+                {activeView === 'submissions' && <FolderOpen className="w-10 h-10 text-cyan-400" />}
+                {activeView === 'quality' && <Brain className="w-10 h-10 text-cyan-400" />}
+                {activeView === 'team' && <Users className="w-10 h-10 text-cyan-400" />}
+                {activeView === 'gps' && <MapPin className="w-10 h-10 text-cyan-400" />}
+                {activeView === 'settings' && <Settings className="w-10 h-10 text-cyan-400" />}
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-2 capitalize">{activeView}</h2>
+              <p className="text-slate-400 mb-6 text-center max-w-md">
+                This section is available in the full version. Sign up for free to explore all features!
+              </p>
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => setActiveView('dashboard')} className="border-slate-600">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+                <Button onClick={() => navigate('/register')} className="bg-cyan-500 hover:bg-cyan-600">
+                  Start Free Trial
+                </Button>
+              </div>
+            </motion.div>
+          )}
+          
+          {/* Dashboard View */}
+          {activeView === 'dashboard' && (
+            <>
+              {/* Header */}
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h1 className="text-2xl font-bold text-white mb-1">Dashboard</h1>
+                  <p className="text-slate-400">Welcome back! Here's your survey overview.</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input 
+                      type="text" 
+                      placeholder="Search..." 
+                      className="pl-9 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white placeholder:text-slate-500 w-64 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    />
+                  </div>
+                  <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+                    <Bell className="w-5 h-5" />
+                  </Button>
+                  <Button className="bg-cyan-500 hover:bg-cyan-600 text-white gap-2">
+                    <Plus className="w-4 h-4" />
+                    New Survey
+                  </Button>
+                </div>
+              </div>
 
-          {/* Stats Cards */}
-          <div 
-            ref={statsRef}
-            className="grid grid-cols-4 gap-4 mb-8"
+              {/* Stats Cards */}
+              <div 
+                ref={statsRef}
+                className="grid grid-cols-4 gap-4 mb-8"
             data-tour="demo-stats"
           >
             {[
