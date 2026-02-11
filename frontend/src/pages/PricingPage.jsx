@@ -152,14 +152,6 @@ const PRICING_TIERS = [
   }
 ];
 
-// Storage add-on pricing
-const STORAGE_ADDONS = [
-  { gb: 50, price: 10, label: '+50 GB' },
-  { gb: 100, price: 18, label: '+100 GB' },
-  { gb: 500, price: 75, label: '+500 GB' },
-  { gb: 1000, price: 120, label: '+1 TB' },
-];
-
 // FAQ items
 const FAQ_ITEMS = [
   {
