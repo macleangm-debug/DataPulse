@@ -8,6 +8,7 @@ Build a sophisticated data collection platform (DataPulse) with:
 - Light/Dark mode
 - Multilingual support (i18n)
 - Pricing page with competitive analysis
+- Floating animated icons for visual appeal
 
 ## User Personas
 1. **Research Organizations** - Need robust offline data collection, AI transcription
@@ -26,6 +27,7 @@ Build a sophisticated data collection platform (DataPulse) with:
 - [x] Navigation bar on pricing page (Feb 2026)
 - [x] Catchy landing page hero redesign (Feb 2026)
 - [x] Removed storage calculator and SurveyCTO comparison from pricing (Feb 2026)
+- [x] Floating animated icons on landing page hero (Feb 2026)
 
 ### In Progress
 - [ ] Apply i18n translations across entire application (P0)
@@ -51,6 +53,7 @@ Build a sophisticated data collection platform (DataPulse) with:
 - Framer Motion for animations
 - react-i18next for internationalization
 - Shadcn/UI components
+- Custom CSS keyframe animations for floating icons
 
 ### Backend
 - Flask (Python)
@@ -59,7 +62,7 @@ Build a sophisticated data collection platform (DataPulse) with:
 - MongoDB for data storage
 
 ### Key Files
-- `/app/frontend/src/pages/LandingPage.jsx` - Marketing landing page
+- `/app/frontend/src/pages/LandingPage.jsx` - Marketing landing page with floating icons
 - `/app/frontend/src/pages/PricingPage.jsx` - Pricing tiers & FAQ
 - `/app/frontend/src/pages/InteractiveDemoPage.jsx` - Interactive demo
 - `/app/frontend/src/components/DemoTour.jsx` - Guided tour component
@@ -75,7 +78,17 @@ Build a sophisticated data collection platform (DataPulse) with:
 - Email: `demo@datapulse.io`
 - Password: `Test123!`
 
+## UI Components
+
+### Floating Icons (Landing Page Hero)
+- 10 icons total (5 left, 5 right)
+- Left: MapPin, Camera, Mic, WifiOff, Brain
+- Right: BarChart3, Globe, Shield, QrCode, Cloud
+- Animation: Custom float keyframes with staggered delays
+- Visible only on lg screens and above
+
 ## Notes
 - Interactive demo uses mocked data for demonstration
 - Theme preference persisted in localStorage
 - i18n translations only applied to Dashboard page currently
+- Floating icons use CSS keyframe animations for performance
