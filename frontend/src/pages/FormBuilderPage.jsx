@@ -10,6 +10,7 @@ import {
   Trash2,
   GripVertical,
   Settings2,
+  Settings,
   Type,
   Hash,
   Calendar,
