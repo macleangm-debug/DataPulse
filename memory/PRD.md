@@ -206,6 +206,15 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
   - CTA section with Start Free Trial and Explore Demo buttons
   - Dark theme with gradient backgrounds and modern UI
   - Responsive navigation with mobile menu support
+- **Guided Demo Tour** - Interactive walkthrough system (`DemoTour.jsx`)
+  - Welcome modal with emoji and tour introduction
+  - 7-step guided tour with progress indicators
+  - Feature spotlight modals with gradient headers
+  - Highlight tooltips for UI elements
+  - Completion modal with feature checklist and CTA
+  - Skip and navigation controls (Back/Next/Skip Tour)
+  - Escape key support for closing
+  - Reusable tour components for future use
 - **Infrastructure Scalability** - Background task and caching infrastructure
   - Redis Cache Service (`cache_service.py`) - Caching for dashboards, analytics, forms
   - Celery Task Workers (`celery_worker.py`, `celery_tasks.py`) - Background AI processing
