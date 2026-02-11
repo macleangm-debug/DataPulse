@@ -129,12 +129,17 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 - Correction Requests tab for tracking field-level corrections
 - Backend: 94% pass rate (15/16 tests), Frontend: 100% pass rate
 
-## Backlog / Future Features
+### Feb 11, 2026 - Audio Audit, Form Folders, and Advanced Constraints
+- **Audio Audit System Frontend** - Fixed auth token handling, stats cards (Total Recordings, Duration, Pending Review, Flagged), form selector, status/type filters
+- **Form Groups/Folders Frontend** - New page at /form-folders with folder tree view, create/edit/delete folders with color picker, move forms between folders, nested folder support
+- **Advanced Form Constraints** - Added to Form Builder Validation tab with:
+  - Constraint expression textarea for cross-field validation (e.g., ". > ${start_date}")
+  - Custom error message input
+  - Quick templates: Greater Than, Less Than, Not Equal To, Range
+  - Available fields reference panel for easy insertion
+- Backend: 100% pass rate (16/16 tests), Frontend: 100% pass rate
 
-### P1 - High Priority
-- Build out Audio Audit System Frontend (placeholder page exists)
-- Implement Form Groups/Folders Frontend UI
-- Advanced Constraints (regex, cross-field validation)
+## Backlog / Future Features
 
 ### P2 - Nice to Have
 - Cascading Selects (filtered dropdown chains)
