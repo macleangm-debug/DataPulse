@@ -206,7 +206,7 @@ export default function LandingPage() {
               <a href="#features" className="text-sm font-medium text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">Features</a>
               <a href="#ai" className="text-sm font-medium text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">AI Capabilities</a>
               <a href="#compare" className="text-sm font-medium text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">Compare</a>
-              <a href="#builder" className="text-sm font-medium text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">Try Builder</a>
+              <span onClick={() => navigate('/pricing')} className="text-sm font-medium text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors cursor-pointer">Pricing</span>
             </div>
             
             <div className="hidden md:flex items-center gap-3">
