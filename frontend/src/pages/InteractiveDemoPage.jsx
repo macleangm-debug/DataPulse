@@ -899,6 +899,8 @@ export default function InteractiveDemoPage() {
               </Card>
             </div>
           </div>
+            </>
+          )}
         </main>
       </div>
 
