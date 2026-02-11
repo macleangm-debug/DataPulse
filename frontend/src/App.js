@@ -342,9 +342,12 @@ function App() {
             </ProtectedRoute>
           } />
 
-          {/* Default redirect */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          {/* Landing Page (Public) */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/demo" element={<LandingPage />} />
+          
+          {/* Default redirect for unknown routes */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         
         {/* PWA Components */}
