@@ -1,6 +1,6 @@
 /**
  * DataPulse Pricing Page
- * Competitive pricing with storage limits factored in
+ * Clean pricing tiers with feature comparison
  */
 
 import React, { useState } from 'react';
@@ -15,19 +15,13 @@ import {
   Rocket,
   HardDrive,
   Database,
-  Brain,
-  Globe,
-  Shield,
-  Headphones,
   ArrowRight,
-  Sparkles,
-  Info
+  Sparkles
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Switch } from '../components/ui/switch';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../components/ui/tooltip';
 import { cn } from '../lib/utils';
 
 // Pricing tiers with storage included
