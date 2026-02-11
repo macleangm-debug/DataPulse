@@ -9,7 +9,7 @@ import os
 from datetime import datetime
 import time
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://datapulse-enterprise.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://datapulse-preview-1.preview.emergentagent.com')
 
 # Test data - using provided test IDs
 TEST_ORG_ID = "test-org-123"
