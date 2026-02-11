@@ -29,8 +29,55 @@ import {
   ChevronRight,
   Star,
   Menu,
-  X
+  X,
+  Smartphone,
+  Cloud,
+  Wifi
 } from 'lucide-react';
+
+// Floating icon component for hero section
+const FloatingIcon = ({ icon: Icon, className, delay = 0, duration = 3, color }) => {
+  const colorClasses = {
+    blue: 'bg-blue-500/10 text-blue-500 border-blue-500/30 shadow-blue-500/20',
+    cyan: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/30 shadow-cyan-500/20',
+    purple: 'bg-purple-500/10 text-purple-500 border-purple-500/30 shadow-purple-500/20',
+    emerald: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30 shadow-emerald-500/20',
+    orange: 'bg-orange-500/10 text-orange-500 border-orange-500/30 shadow-orange-500/20',
+    pink: 'bg-pink-500/10 text-pink-500 border-pink-500/30 shadow-pink-500/20',
+  };
+
+  return (
+    <div 
+      className={`absolute hidden lg:flex items-center justify-center w-12 h-12 rounded-xl border backdrop-blur-sm shadow-lg ${colorClasses[color]} ${className}`}
+      style={{
+        animation: `float ${duration}s ease-in-out infinite`,
+        animationDelay: `${delay}s`,
+      }}
+    >
+      <Icon className="w-6 h-6" />
+    </div>
+  );
+};
+
+// Add floating animation keyframes via style tag
+const FloatingAnimationStyles = () => (
+  <style>{`
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      25% { transform: translateY(-10px) rotate(2deg); }
+      50% { transform: translateY(-5px) rotate(0deg); }
+      75% { transform: translateY(-15px) rotate(-2deg); }
+    }
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(3deg); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+    }
+  `}</style>
+);
 
 // Animated counter component
 const AnimatedCounter = ({ end, duration = 2000, suffix = '' }) => {
