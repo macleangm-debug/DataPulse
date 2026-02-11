@@ -174,6 +174,7 @@ export function DashboardLayout({ children }) {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const { currentOrg, organizations, setCurrentOrg } = useOrgStore();
+  const { theme, toggleTheme } = useUIStore();
   
   const [activeGroup, setActiveGroup] = useState('home');
   const [panelOpen, setPanelOpen] = useState(true);
