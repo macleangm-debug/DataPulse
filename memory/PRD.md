@@ -196,6 +196,35 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
 | Voice-to-Text | ❌ | ✅ Full support |
 | Geofencing | Basic | ✅ Advanced zones |
 
+### Feb 11, 2026 - Multilingual Support (i18n)
+- **i18n Framework** - Complete internationalization system using react-i18next
+  - Language detection from browser/localStorage
+  - Persistent language preference in `datapulse-language` localStorage key
+  - RTL support for Arabic (document.dir changes automatically)
+- **Supported Languages** (6 total):
+  - 🇺🇸 English (en) - Default
+  - 🇪🇸 Español / Spanish (es)
+  - 🇫🇷 Français / French (fr)
+  - 🇰🇪 Kiswahili / Swahili (sw) - For East African research
+  - 🇧🇷 Português / Portuguese (pt)
+  - 🇸🇦 العربية / Arabic (ar) - RTL support
+- **Translation Files** - Comprehensive JSON files covering:
+  - Common UI elements (buttons, actions, status)
+  - Navigation and menu items
+  - Dashboard metrics and labels
+  - Form builder terminology
+  - Submission status and quality metrics
+  - Error messages and notifications
+  - Auth screens and settings
+- **Language Selector Component** - Multiple variants:
+  - Compact selector in header (flag + code)
+  - Dropdown with native language names
+  - Language option in user settings menu
+- **Dashboard Integration** - Key pages translated:
+  - Dashboard stats cards and charts
+  - Quality metrics section
+  - Activity feed labels
+
 ### Feb 11, 2026 - Light/Dark Mode Theme Toggle
 - **Theme System Enhancement**
   - Added Sun/Moon toggle button in header bar (accessible on all screens)
