@@ -153,6 +153,7 @@ export function DashboardPage() {
   };
 
   const [viewMode, setViewMode] = useState('standard');
+  const { t } = useTranslation();
 
   if (!currentOrg) {
     return (
@@ -167,7 +168,7 @@ export function DashboardPage() {
           </p>
           <Button onClick={() => navigate('/organizations/new')} data-testid="create-org-btn">
             <Plus className="w-4 h-4 mr-2" />
-            Create Organization
+            {t('common.create')} Organization
           </Button>
         </div>
       </DashboardLayout>
@@ -181,9 +182,9 @@ export function DashboardPage() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <HelpTooltip helpKey="dashboard-overview">
-              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Dashboard</h1>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{t('dashboard.title')}</h1>
             </HelpTooltip>
-            <p className="text-slate-500">{currentOrg.name} overview</p>
+            <p className="text-slate-500">{currentOrg.name} {t('dashboard.overview').toLowerCase()}</p>
           </div>
           <div className="flex gap-2 items-center">
             <Tabs value={viewMode} onValueChange={setViewMode} className="mr-4">
