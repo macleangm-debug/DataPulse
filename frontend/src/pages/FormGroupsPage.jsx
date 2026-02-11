@@ -495,20 +495,44 @@ export default function FormGroupsPage() {
                     <Separator className="my-2" />
                     
                     {/* Folder Tree */}
-                    {tree.map((folder) => (
-                      <FolderTreeItem
-                        key={folder.id}
-                        folder={folder}
-                        level={0}
-                        selectedFolder={selectedFolder}
-                        onSelect={setSelectedFolder}
-                        onEdit={openEditDialog}
-                        onDelete={openDeleteDialog}
-                        onArchive={archiveFolder}
-                        expandedFolders={expandedFolders}
-                        onToggleExpand={toggleExpand}
-                      />
-                    ))}
+                    {tree.map((folder) => {
+                      // Recursive render function
+                      const renderFolderChildren = (children, childLevel) => (
+                        <div>
+                          {children.map((child) => (
+                            <FolderTreeItem
+                              key={child.id}
+                              folder={child}
+                              level={childLevel}
+                              selectedFolder={selectedFolder}
+                              onSelect={setSelectedFolder}
+                              onEdit={openEditDialog}
+                              onDelete={openDeleteDialog}
+                              onArchive={archiveFolder}
+                              expandedFolders={expandedFolders}
+                              onToggleExpand={toggleExpand}
+                              renderChildren={renderFolderChildren}
+                            />
+                          ))}
+                        </div>
+                      );
+                      
+                      return (
+                        <FolderTreeItem
+                          key={folder.id}
+                          folder={folder}
+                          level={0}
+                          selectedFolder={selectedFolder}
+                          onSelect={setSelectedFolder}
+                          onEdit={openEditDialog}
+                          onDelete={openDeleteDialog}
+                          onArchive={archiveFolder}
+                          expandedFolders={expandedFolders}
+                          onToggleExpand={toggleExpand}
+                          renderChildren={renderFolderChildren}
+                        />
+                      );
+                    })}
                   </div>
                 )}
               </ScrollArea>
