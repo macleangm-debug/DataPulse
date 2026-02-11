@@ -423,13 +423,19 @@ export default function PricingPage() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
                 <Database className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold">
+              <span className="text-xl font-bold text-slate-900 dark:text-white">
                 Data<span className="text-cyan-600 dark:text-cyan-400">Pulse</span>
               </span>
             </div>
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center gap-8">
+              <span onClick={() => navigate('/')} className="text-sm font-medium text-slate-600 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400 transition-colors cursor-pointer">Home</span>
+              <span onClick={() => navigate('/demo')} className="text-sm font-medium text-slate-600 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400 transition-colors cursor-pointer">Demo</span>
+              <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400 cursor-default">Pricing</span>
+            </div>
             <div className="flex items-center gap-4">
-              <Button variant="ghost" onClick={() => navigate('/login')}>Log In</Button>
-              <Button onClick={() => navigate('/register')}>Start Free Trial</Button>
+              <Button variant="ghost" className="text-slate-700 dark:text-slate-300" onClick={() => navigate('/login')}>Log In</Button>
+              <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white" onClick={() => navigate('/register')}>Start Free Trial</Button>
             </div>
           </div>
         </div>
@@ -481,102 +487,6 @@ export default function PricingPage() {
               />
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Storage Section */}
-      <section className="py-16 px-4 bg-slate-100 dark:bg-slate-900/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">
-              <HardDrive className="w-8 h-8 inline-block mr-2 text-cyan-500" />
-              Storage That Scales With You
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Every plan includes generous storage for your media files. Need more? 
-              Add storage anytime without changing plans.
-            </p>
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Storage Add-ons */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Additional Storage Packs</CardTitle>
-                <CardDescription>Add to any paid plan</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-4">
-                  {STORAGE_ADDONS.map((addon) => (
-                    <div 
-                      key={addon.gb}
-                      className="p-4 rounded-lg border border-slate-200 dark:border-slate-700 text-center hover:border-cyan-500 transition-colors cursor-pointer"
-                    >
-                      <p className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">{addon.label}</p>
-                      <p className="text-sm text-muted-foreground">${addon.price}/month</p>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground mt-4 text-center">
-                  Volume discounts available for Enterprise customers
-                </p>
-              </CardContent>
-            </Card>
-            
-            {/* Calculator */}
-            <StorageCalculator />
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison vs SurveyCTO */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why DataPulse Over SurveyCTO?</h2>
-            <p className="text-muted-foreground">More features, better pricing, AI-powered</p>
-          </div>
-          
-          <Card>
-            <CardContent className="p-0">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-700">
-                    <th className="text-left p-4">Feature</th>
-                    <th className="text-center p-4">
-                      <span className="text-cyan-600 dark:text-cyan-400 font-bold">DataPulse</span>
-                      <br />
-                      <span className="text-xs text-muted-foreground">$99/mo</span>
-                    </th>
-                    <th className="text-center p-4">
-                      <span className="text-slate-500">SurveyCTO</span>
-                      <br />
-                      <span className="text-xs text-muted-foreground">$149/mo</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { feature: 'Monthly Submissions', datapulse: '25,000', competitor: '10,000' },
-                    { feature: 'Storage Included', datapulse: '100 GB', competitor: '5 GB' },
-                    { feature: 'AI Transcription', datapulse: '1,000/mo', competitor: '—' },
-                    { feature: 'AI Sentiment Analysis', datapulse: '✓', competitor: '—' },
-                    { feature: 'Real-time Dashboards', datapulse: 'Advanced', competitor: 'Basic' },
-                    { feature: 'Review Workflows', datapulse: '✓', competitor: '✓' },
-                    { feature: 'Data Quality AI', datapulse: '✓', competitor: '—' },
-                    { feature: 'Languages', datapulse: '6', competitor: '2' },
-                    { feature: 'API Access', datapulse: '✓', competitor: '✓' },
-                  ].map((row, idx) => (
-                    <tr key={idx} className="border-b border-slate-100 dark:border-slate-800">
-                      <td className="p-4 font-medium">{row.feature}</td>
-                      <td className="p-4 text-center text-cyan-600 dark:text-cyan-400 font-medium">{row.datapulse}</td>
-                      <td className="p-4 text-center text-muted-foreground">{row.competitor}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
         </div>
       </section>
 
