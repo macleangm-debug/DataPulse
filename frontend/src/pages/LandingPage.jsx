@@ -112,7 +112,6 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('builder');
-  const [isTourOpen, setIsTourOpen] = useState(false);
 
   const stats = [
     { value: 45, suffix: '+', label: 'Question Types' },
