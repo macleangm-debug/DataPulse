@@ -139,13 +139,33 @@ DataPulse is an enterprise-grade research data collection and analysis platform 
   - Available fields reference panel for easy insertion
 - Backend: 100% pass rate (16/16 tests), Frontend: 100% pass rate
 
+### Feb 11, 2026 - Cascading Selects, Sensor Metadata, Dataset Versioning, Nested Repeats
+- **Cascading Selects** - New field type for filtered dropdown chains:
+  - Configurable cascade levels (e.g., Country → State → City)
+  - Inline options or dataset-backed data sources
+  - Search enabled and "Allow Other" options
+  - API: /api/advanced-fields/cascades/* for CRUD and option filtering
+- **Sensor Metadata Collection** - Capture device sensors during submission:
+  - Battery level, GPS location, accelerometer, network status
+  - Configurable collection intervals per form
+  - Movement analysis for quality checks
+  - API: /api/advanced-fields/sensors/* for recording and config
+- **Server Datasets Enhancements** - Versioning and real-time updates:
+  - Named version snapshots with restore capability
+  - Version history tracking with change logs
+  - Real-time update publishing and polling
+  - Column statistics (distinct values, fill rates)
+  - API: /api/datasets/{org}/{id}/versions/* and /realtime/*
+- **Nested Repeat Groups** - Repeats within repeats for hierarchical data:
+  - Parent repeat group selector
+  - Min/Max iteration limits
+  - Custom add button labels
+  - Indexed item display (e.g., 1.1, 1.2, 2.1)
+- Backend: 100% pass rate (19/19 tests), Frontend: 100% pass rate
+
 ## Backlog / Future Features
 
 ### P2 - Nice to Have
-- Cascading Selects (filtered dropdown chains)
-- Sensor Metadata Collection (accelerometer, device info)
-- Server Datasets with real-time updates and versioning
-- Nested repeat groups and cascading selects in forms
 - Export option to choose between data labels and values
 - Likert scale and ranking question widgets
 
