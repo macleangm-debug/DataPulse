@@ -181,7 +181,7 @@ async def update_cascade_config(
     update_data = {
         "name": config.name,
         "description": config.description,
-        "levels": [l.model_dump() for l in config.levels],
+        "levels": [level.model_dump() for level in config.levels],
         "allow_other": config.allow_other,
         "search_enabled": config.search_enabled,
         "updated_at": datetime.now(timezone.utc).isoformat()
