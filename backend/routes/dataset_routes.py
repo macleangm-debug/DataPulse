@@ -708,3 +708,272 @@ async def get_changes_since_version(
         "changed_records": changed_records,
         "change_count": len(changed_records)
     }
+
+
+# ============ Enhanced Versioning & Real-Time Updates ============
+
+class VersionSnapshot(BaseModel):
+    """Snapshot of a dataset version"""
+    version: int
+    snapshot_name: Optional[str] = None
+    notes: Optional[str] = None
+
+
+@router.post("/{org_id}/{dataset_id}/versions/snapshot")
+async def create_version_snapshot(
+    request: Request,
+    org_id: str,
+    dataset_id: str,
+    snapshot: VersionSnapshot
+):
+    """Create a named snapshot of the current dataset version"""
+    db = request.app.state.db
+    
+    dataset = await db.lookup_datasets.find_one({"id": dataset_id, "org_id": org_id})
+    if not dataset:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    
+    collection = db[f"dataset_{dataset_id}"]
+    
+    # Get all current records
+    records = await collection.find(
+        {"_meta.is_active": True}, 
+        {"_id": 0}
+    ).to_list(100000)
+    
+    # Store snapshot
+    snapshot_doc = {
+        "id": str(__import__('uuid').uuid4()),
+        "dataset_id": dataset_id,
+        "org_id": org_id,
+        "version": dataset.get("version", 1),
+        "snapshot_name": snapshot.snapshot_name or f"Snapshot v{dataset.get('version', 1)}",
+        "notes": snapshot.notes,
+        "record_count": len(records),
+        "records": records,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.dataset_snapshots.insert_one(snapshot_doc)
+    
+    return {
+        "id": snapshot_doc["id"],
+        "message": "Snapshot created",
+        "version": snapshot_doc["version"],
+        "record_count": len(records)
+    }
+
+
+@router.get("/{org_id}/{dataset_id}/versions/history")
+async def get_version_history(
+    request: Request,
+    org_id: str,
+    dataset_id: str,
+    limit: int = 20
+):
+    """Get version history and snapshots for a dataset"""
+    db = request.app.state.db
+    
+    dataset = await db.lookup_datasets.find_one({"id": dataset_id, "org_id": org_id})
+    if not dataset:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    
+    # Get snapshots
+    snapshots = await db.dataset_snapshots.find(
+        {"dataset_id": dataset_id},
+        {"_id": 0, "records": 0}  # Exclude actual record data
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    # Get change log
+    changes = await db.dataset_changes.find(
+        {"dataset_id": dataset_id},
+        {"_id": 0}
+    ).sort("timestamp", -1).limit(limit).to_list(limit)
+    
+    return {
+        "dataset_id": dataset_id,
+        "current_version": dataset.get("version", 1),
+        "snapshots": snapshots,
+        "recent_changes": changes
+    }
+
+
+@router.post("/{org_id}/{dataset_id}/versions/{snapshot_id}/restore")
+async def restore_version_snapshot(
+    request: Request,
+    org_id: str,
+    dataset_id: str,
+    snapshot_id: str
+):
+    """Restore a dataset to a previous snapshot version"""
+    db = request.app.state.db
+    
+    dataset = await db.lookup_datasets.find_one({"id": dataset_id, "org_id": org_id})
+    if not dataset:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    
+    snapshot = await db.dataset_snapshots.find_one({"id": snapshot_id, "dataset_id": dataset_id})
+    if not snapshot:
+        raise HTTPException(status_code=404, detail="Snapshot not found")
+    
+    collection = db[f"dataset_{dataset_id}"]
+    
+    # Clear current records
+    await collection.delete_many({})
+    
+    # Restore snapshot records
+    if snapshot.get("records"):
+        await collection.insert_many(snapshot["records"])
+    
+    # Update dataset version
+    new_version = dataset.get("version", 1) + 1
+    await db.lookup_datasets.update_one(
+        {"id": dataset_id},
+        {
+            "$set": {
+                "version": new_version,
+                "record_count": len(snapshot.get("records", [])),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Log the restore
+    await db.dataset_changes.insert_one({
+        "dataset_id": dataset_id,
+        "action": "restore",
+        "snapshot_id": snapshot_id,
+        "restored_to_version": snapshot["version"],
+        "new_version": new_version,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "message": "Dataset restored",
+        "restored_from_version": snapshot["version"],
+        "new_version": new_version,
+        "record_count": len(snapshot.get("records", []))
+    }
+
+
+class RealTimeUpdate(BaseModel):
+    """Real-time update to push to connected clients"""
+    record_id: str
+    action: str  # create, update, delete
+    data: Optional[Dict[str, Any]] = None
+
+
+@router.post("/{org_id}/{dataset_id}/realtime/publish")
+async def publish_realtime_update(
+    request: Request,
+    org_id: str,
+    dataset_id: str,
+    update: RealTimeUpdate
+):
+    """Publish a real-time update for WebSocket/SSE subscribers"""
+    db = request.app.state.db
+    
+    dataset = await db.lookup_datasets.find_one({"id": dataset_id, "org_id": org_id})
+    if not dataset:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    
+    # Store the update for polling clients
+    update_doc = {
+        "id": str(__import__('uuid').uuid4()),
+        "dataset_id": dataset_id,
+        "org_id": org_id,
+        "record_id": update.record_id,
+        "action": update.action,
+        "data": update.data,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "version": dataset.get("version", 1)
+    }
+    
+    await db.dataset_realtime_updates.insert_one(update_doc)
+    
+    return {
+        "id": update_doc["id"],
+        "message": "Update published",
+        "action": update.action
+    }
+
+
+@router.get("/{org_id}/{dataset_id}/realtime/poll")
+async def poll_realtime_updates(
+    request: Request,
+    org_id: str,
+    dataset_id: str,
+    since_timestamp: Optional[str] = None,
+    limit: int = 100
+):
+    """Poll for recent updates (for clients that can't use WebSocket)"""
+    db = request.app.state.db
+    
+    query = {"dataset_id": dataset_id, "org_id": org_id}
+    
+    if since_timestamp:
+        query["timestamp"] = {"$gt": since_timestamp}
+    
+    updates = await db.dataset_realtime_updates.find(
+        query,
+        {"_id": 0}
+    ).sort("timestamp", 1).limit(limit).to_list(limit)
+    
+    return {
+        "dataset_id": dataset_id,
+        "updates": updates,
+        "count": len(updates)
+    }
+
+
+# ============ Dataset Analytics ============
+
+@router.get("/{org_id}/{dataset_id}/stats")
+async def get_dataset_stats(
+    request: Request,
+    org_id: str,
+    dataset_id: str
+):
+    """Get detailed statistics about a dataset"""
+    db = request.app.state.db
+    
+    dataset = await db.lookup_datasets.find_one({"id": dataset_id, "org_id": org_id})
+    if not dataset:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    
+    collection = db[f"dataset_{dataset_id}"]
+    
+    total_records = await collection.count_documents({})
+    active_records = await collection.count_documents({"_meta.is_active": True})
+    
+    # Get column stats
+    column_stats = []
+    for col in dataset.get("columns", []):
+        distinct_count = len(await collection.distinct(col["name"]))
+        null_count = await collection.count_documents({
+            "$or": [
+                {col["name"]: None},
+                {col["name"]: {"$exists": False}},
+                {col["name"]: ""}
+            ]
+        })
+        column_stats.append({
+            "name": col["name"],
+            "type": col.get("type", "string"),
+            "distinct_values": distinct_count,
+            "null_count": null_count,
+            "fill_rate": round((total_records - null_count) / total_records * 100, 1) if total_records > 0 else 0
+        })
+    
+    return {
+        "dataset_id": dataset_id,
+        "name": dataset["name"],
+        "version": dataset.get("version", 1),
+        "total_records": total_records,
+        "active_records": active_records,
+        "deleted_records": total_records - active_records,
+        "snapshot_count": await db.dataset_snapshots.count_documents({"dataset_id": dataset_id}),
+        "column_stats": column_stats,
+        "created_at": dataset.get("created_at"),
+        "updated_at": dataset.get("updated_at")
+    }
