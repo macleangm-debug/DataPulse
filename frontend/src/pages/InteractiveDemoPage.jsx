@@ -584,19 +584,20 @@ export default function InteractiveDemoPage() {
           {/* Navigation */}
           <nav className="space-y-1">
             {[
-              { icon: BarChart3, label: 'Dashboard', active: true },
-              { icon: FileText, label: 'Surveys', badge: '3' },
-              { icon: FolderOpen, label: 'Submissions', badge: '127' },
-              { icon: Brain, label: 'Quality AI' },
-              { icon: Users, label: 'Team' },
-              { icon: MapPin, label: 'GPS Map' },
-              { icon: Settings, label: 'Settings' },
+              { icon: BarChart3, label: 'Dashboard', view: 'dashboard' },
+              { icon: FileText, label: 'Surveys', view: 'surveys', badge: '3' },
+              { icon: FolderOpen, label: 'Submissions', view: 'submissions', badge: '127' },
+              { icon: Brain, label: 'Quality AI', view: 'quality' },
+              { icon: Users, label: 'Team', view: 'team' },
+              { icon: MapPin, label: 'GPS Map', view: 'gps' },
+              { icon: Settings, label: 'Settings', view: 'settings' },
             ].map((item, idx) => (
               <button
                 key={idx}
+                onClick={() => handleNavClick(item.view)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                  item.active 
+                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer",
+                  activeView === item.view || (activeView === 'form-preview' && item.view === 'surveys')
                     ? "bg-cyan-500/20 text-cyan-400" 
                     : "text-slate-400 hover:bg-slate-700/50 hover:text-white"
                 )}
