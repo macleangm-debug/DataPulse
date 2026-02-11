@@ -292,6 +292,16 @@ export default function LandingPage() {
             <Button 
               size="lg" 
               variant="outline"
+              onClick={() => setIsTourOpen(true)}
+              className="border-2 px-8 py-6 text-lg bg-white/10 backdrop-blur hover:bg-white/20"
+              data-testid="hero-tour-btn"
+            >
+              <Hand className="w-5 h-5 mr-2" />
+              Take a Tour
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline"
               onClick={() => navigate('/register')}
               className="border-2 px-8 py-6 text-lg"
               data-testid="hero-trial-btn"
