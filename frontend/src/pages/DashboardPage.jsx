@@ -232,26 +232,26 @@ export function DashboardPage() {
           ) : (
             <>
               <StatCard
-                title="Total Projects"
+                title={t('dashboard.totalProjects')}
                 value={stats?.total_projects || 0}
                 icon={FolderKanban}
                 onClick={() => navigate('/projects')}
               />
               <StatCard
-                title="Active Forms"
+                title={t('dashboard.activeForms')}
                 value={stats?.total_forms || 0}
                 icon={FileText}
                 onClick={() => navigate('/forms')}
               />
               <StatCard
-                title="Submissions"
+                title={t('dashboard.submissions')}
                 value={stats?.total_submissions || 0}
                 icon={Database}
-                description={`${stats?.submissions_today || 0} today`}
+                description={`${stats?.submissions_today || 0} ${t('dashboard.today')}`}
                 onClick={() => navigate('/submissions')}
               />
               <StatCard
-                title="Pending Reviews"
+                title={t('dashboard.pendingReviews')}
                 value={stats?.pending_reviews || 0}
                 icon={AlertCircle}
                 onClick={() => navigate('/submissions?status=pending')}
@@ -265,8 +265,8 @@ export function DashboardPage() {
           {/* Submission Trends */}
           <Card className="lg:col-span-2 bg-white border border-slate-200">
             <CardHeader>
-              <CardTitle className="text-slate-900">Submission Trends</CardTitle>
-              <CardDescription className="text-slate-500">Last 14 days</CardDescription>
+              <CardTitle className="text-slate-900">{t('dashboard.submissionTrends')}</CardTitle>
+              <CardDescription className="text-slate-500">{t('dashboard.last14Days')}</CardDescription>
             </CardHeader>
             <CardContent>
               {loading ? (
