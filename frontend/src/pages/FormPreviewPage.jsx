@@ -45,6 +45,7 @@ import { AudioRecorder } from '../components/AudioRecorder';
 import { VideoRecorder } from '../components/VideoRecorder';
 import { BarcodeCapture } from '../components/BarcodeCapture';
 import { SignatureCaptureInline } from '../components/SignatureCapture';
+import { CascadingSelect, NestedRepeatGroup } from '../components/CascadingSelect';
 import { formAPI } from '../lib/api';
 import { toast } from 'sonner';
 
