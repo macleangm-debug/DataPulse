@@ -127,7 +127,8 @@ const NAVIGATION = [
       { label: 'Simulation', path: '/simulation', icon: Route },
       { label: 'Analytics', path: '/analytics', icon: BarChart3 },
       { label: 'Quality', path: '/quality', icon: Sparkles },
-      { label: 'GPS Map', path: '/map', icon: MapPin }
+      { label: 'GPS Map', path: '/map', icon: MapPin },
+      { label: 'Real-time Dashboards', path: '/realtime-dashboard', icon: BarChart3 }
     ]
   },
   {
