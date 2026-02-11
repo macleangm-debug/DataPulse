@@ -155,18 +155,6 @@ const PRICING_TIERS = [
 // FAQ items
 const FAQ_ITEMS = [
   {
-    question: 'What counts towards storage?',
-    answer: 'Storage includes all media files (photos, audio, video recordings, signatures, file uploads) and form attachments. Text responses and metadata use minimal storage and are not counted against your limit.'
-  },
-  {
-    question: 'What happens if I exceed my storage limit?',
-    answer: 'You\'ll receive a notification at 80% usage. Once at 100%, new media uploads will be paused until you upgrade or purchase additional storage. Text-only submissions will continue to work.'
-  },
-  {
-    question: 'Can I purchase additional storage?',
-    answer: 'Yes! You can add storage to any paid plan. Additional storage starts at $10/month for 50GB. Volume discounts are available for Enterprise customers.'
-  },
-  {
     question: 'How are AI transcription credits calculated?',
     answer: 'Each audio file transcribed counts as 1 credit, regardless of length. Unused credits roll over for up to 3 months on annual plans.'
   },
@@ -177,6 +165,18 @@ const FAQ_ITEMS = [
   {
     question: 'Can I switch plans anytime?',
     answer: 'Absolutely. Upgrade anytime and pay the prorated difference. Downgrade at the end of your billing cycle. Your data is always preserved.'
+  },
+  {
+    question: 'What happens when I reach my submission limit?',
+    answer: 'You\'ll receive a notification at 80% usage. Once at 100%, new submissions will be paused until the next billing cycle or you upgrade your plan.'
+  },
+  {
+    question: 'Do you offer discounts for non-profits?',
+    answer: 'Yes! Non-profit organizations, academic institutions, and NGOs are eligible for up to 30% discount. Contact our sales team to learn more.'
+  },
+  {
+    question: 'Is my data secure?',
+    answer: 'Absolutely. We use enterprise-grade encryption, regular security audits, and comply with GDPR, HIPAA, and SOC 2 standards.'
   }
 ];
 
