@@ -211,6 +211,10 @@ api_router.include_router(cascading_sensor_router)  # Cascading Selects & Sensor
 api_router.include_router(ai_services_router)  # AI Transcription, Sentiment, Translation, OCR
 api_router.include_router(realtime_features_router)  # Real-time Dashboards, Geofencing, Blockchain
 
+# Background Task Management
+from routes.task_routes import router as task_router
+api_router.include_router(task_router)  # Task status, cache management
+
 
 # Health check endpoint
 @api_router.get("/")
