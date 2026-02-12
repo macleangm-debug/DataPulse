@@ -198,12 +198,15 @@ export function ShareSurveyDialog({
               {activeTab === 'qrcode' && (
                 <div className="space-y-4">
                   <div className="flex flex-col items-center justify-center py-8">
-                    <div className="w-48 h-48 bg-white rounded-lg p-4 flex items-center justify-center">
+                    <div ref={qrRef} className="w-48 h-48 bg-white rounded-lg p-4 flex items-center justify-center">
                       {publicUrl ? (
-                        <img 
-                          src={generateQRCodeSVG(publicUrl)} 
-                          alt="QR Code" 
-                          className="w-full h-full"
+                        <QRCodeSVG
+                          value={publicUrl}
+                          size={160}
+                          level="M"
+                          includeMargin={false}
+                          bgColor="#ffffff"
+                          fgColor="#0f172a"
                         />
                       ) : (
                         <div className="w-full h-full bg-slate-200 rounded flex items-center justify-center">
