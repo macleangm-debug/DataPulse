@@ -58,7 +58,68 @@
     "team": "Equipo",
     "gpsMap": "Mapa GPS",
     "analytics": "Análisis",
-    "reports": "Informes"
+    "reports": "Informes",
+    "templates": "Plantillas",
+    "dataViz": "Estudio DataViz"
+  },
+  "projects": {
+    "allProjects": "Todos los Proyectos",
+    "formFolders": "Carpetas de Formularios",
+    "newProject": "Nuevo Proyecto",
+    "createProject": "Crear Proyecto",
+    "projectName": "Nombre del Proyecto",
+    "manageDescription": "Gestiona tus proyectos de recopilación de datos",
+    "addDescription": "Añadir un nuevo proyecto de recopilación de datos",
+    "descriptionPlaceholder": "Breve descripción del proyecto",
+    "paused": "Pausado",
+    "completed": "Completado"
+  },
+  "data": {
+    "cases": "Casos",
+    "importCases": "Importar Casos",
+    "datasets": "Conjuntos de Datos",
+    "exports": "Exportaciones",
+    "scheduledExports": "Exportaciones Programadas",
+    "xlsformImport": "Importar XLSForm"
+  },
+  "fieldOps": {
+    "fieldCollection": "Recopilación de Campo",
+    "cati": "Centro CATI",
+    "backcheck": "Verificación",
+    "tokenSurveys": "Encuestas con Token",
+    "preload": "Precarga/Escritura",
+    "devices": "Dispositivos",
+    "audioAudit": "Auditoría de Audio",
+    "reviewWorkflow": "Flujo de Revisión"
+  },
+  "quality": {
+    "title": "Calidad de Datos",
+    "dataAnalysis": "Análisis de Datos",
+    "qualitative": "Cualitativo",
+    "qualityAI": "Calidad IA",
+    "simulation": "Simulación",
+    "quality": "Calidad",
+    "gpsMap": "Mapa GPS",
+    "realtimeDashboards": "Paneles en Tiempo Real",
+    "qualityScore": "Puntuación de Calidad",
+    "issues": "Problemas",
+    "warnings": "Advertencias",
+    "passed": "Aprobado",
+    "failed": "Fallido",
+    "speedCheck": "Verificación de Velocidad",
+    "gpsCheck": "Verificación GPS",
+    "duplicateCheck": "Detección de Duplicados",
+    "outlierCheck": "Detección de Valores Atípicos",
+    "consistencyCheck": "Verificación de Consistencia",
+    "completenessCheck": "Verificación de Completitud",
+    "aiAnalysis": "Análisis IA",
+    "sentiment": "Sentimiento",
+    "transcription": "Transcripción",
+    "translation": "Traducción"
+  },
+  "apps": {
+    "plugins": "Extensiones",
+    "workflows": "Flujos de Trabajo"
   },
   "dashboard": {
     "title": "Panel",
