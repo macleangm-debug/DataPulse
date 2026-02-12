@@ -234,25 +234,8 @@
     "attachments": "Adjuntos",
     "metadata": "Metadatos",
     "history": "Historial",
-    "corrections": "Correcciones"
-  },
-  "quality": {
-    "title": "Calidad de Datos",
-    "qualityScore": "Puntuación de Calidad",
-    "issues": "Problemas",
-    "warnings": "Advertencias",
-    "passed": "Aprobado",
-    "failed": "Fallido",
-    "speedCheck": "Verificación de Velocidad",
-    "gpsCheck": "Verificación GPS",
-    "duplicateCheck": "Detección de Duplicados",
-    "outlierCheck": "Detección de Valores Atípicos",
-    "consistencyCheck": "Verificación de Consistencia",
-    "completenessCheck": "Verificación de Completitud",
-    "aiAnalysis": "Análisis IA",
-    "sentiment": "Sentimiento",
-    "transcription": "Transcripción",
-    "translation": "Traducción"
+    "corrections": "Correcciones",
+    "viewAndReview": "Ver y revisar datos recopilados"
   },
   "team": {
     "title": "Equipo",
@@ -267,7 +250,9 @@
     "lastActive": "Última Actividad",
     "assignedForms": "Formularios Asignados",
     "submissions": "Envíos",
-    "performance": "Rendimiento"
+    "performance": "Rendimiento",
+    "manageDescription": "Gestionar miembros del equipo y permisos",
+    "addMemberDescription": "Agregar un usuario existente a tu organización"
   },
   "settings": {
     "title": "Configuración",
@@ -287,7 +272,14 @@
     "api": "API",
     "billing": "Facturación",
     "changePassword": "Cambiar Contraseña",
-    "twoFactor": "Autenticación de Dos Factores"
+    "twoFactor": "Autenticación de Dos Factores",
+    "roles": "Roles",
+    "translations": "Traducciones",
+    "apiSecurity": "Seguridad API",
+    "apiDocs": "Documentación API",
+    "superAdmin": "Super Administrador",
+    "app": "Aplicación",
+    "manageDescription": "Gestiona tu cuenta y preferencias"
   },
   "auth": {
     "login": "Iniciar Sesión",
