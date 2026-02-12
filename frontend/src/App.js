@@ -370,6 +370,23 @@ function App() {
           <Route path="/collect/:token" element={<TokenCollectPage />} />
           <Route path="/collect/:token/form/:formId" element={<CollectFormPage />} />
           
+          {/* DataViz Studio Routes */}
+          <Route path="/dataviz" element={
+            <ProtectedRoute>
+              <DataVizStudioPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/dataviz/builder/:dashboardId" element={
+            <ProtectedRoute>
+              <DashboardBuilderPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/dataviz/view/:dashboardId" element={
+            <ProtectedRoute>
+              <DashboardViewPage />
+            </ProtectedRoute>
+          } />
+          
           {/* Default redirect for unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
