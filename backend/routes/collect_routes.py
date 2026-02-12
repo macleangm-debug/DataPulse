@@ -35,6 +35,7 @@ class CreateTokenRequest(BaseModel):
     enumerator_id: str
     form_ids: List[str]
     expires_hours: Optional[int] = 72  # Default 3 days
+    enumerator_name: Optional[str] = None  # Allow manual name entry
 
 class SubmissionData(BaseModel):
     form_id: str
