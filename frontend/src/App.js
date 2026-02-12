@@ -357,6 +357,15 @@ function App() {
           {/* Pricing Page (Public) */}
           <Route path="/pricing" element={<PricingPage />} />
           
+          {/* Mobile Collection Routes (Public) */}
+          {/* Option A: Simple Login-based Collection */}
+          <Route path="/collect" element={<MobileCollectPage />} />
+          <Route path="/collect/form/:formId" element={<CollectFormPage />} />
+          
+          {/* Option B: Token-based Collection (No Login) */}
+          <Route path="/collect/:token" element={<TokenCollectPage />} />
+          <Route path="/collect/:token/form/:formId" element={<CollectFormPage />} />
+          
           {/* Default redirect for unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
