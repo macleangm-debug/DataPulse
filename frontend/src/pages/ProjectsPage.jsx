@@ -242,24 +242,24 @@ export function ProjectsPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="font-barlow text-3xl font-bold tracking-tight text-foreground">Projects</h1>
-            <p className="text-muted-foreground">Manage your data collection projects</p>
+            <h1 className="font-barlow text-3xl font-bold tracking-tight text-foreground">{t('nav.projects')}</h1>
+            <p className="text-muted-foreground">{t('projects.manageDescription', 'Manage your data collection projects')}</p>
           </div>
           <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button data-testid="create-project-btn">
                 <Plus className="w-4 h-4 mr-2" />
-                New Project
+                {t('projects.newProject', 'New Project')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className="font-barlow">Create Project</DialogTitle>
-                <DialogDescription>Add a new data collection project</DialogDescription>
+                <DialogTitle className="font-barlow">{t('projects.createProject', 'Create Project')}</DialogTitle>
+                <DialogDescription>{t('projects.addDescription', 'Add a new data collection project')}</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Project Name</Label>
+                  <Label htmlFor="name">{t('projects.projectName', 'Project Name')}</Label>
                   <Input
                     id="name"
                     value={newProject.name}
@@ -269,12 +269,12 @@ export function ProjectsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{t('common.description')}</Label>
                   <Textarea
                     id="description"
                     value={newProject.description}
                     onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                    placeholder="Brief description of the project"
+                    placeholder={t('projects.descriptionPlaceholder', 'Brief description of the project')}
                     rows={3}
                     data-testid="project-description-input"
                   />
@@ -282,10 +282,10 @@ export function ProjectsPage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
                 <Button onClick={handleCreateProject} disabled={creating} data-testid="save-project-btn">
-                  {creating ? 'Creating...' : 'Create Project'}
+                  {creating ? t('common.loading') : t('projects.createProject', 'Create Project')}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -297,7 +297,7 @@ export function ProjectsPage() {
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Search projects..."
+              placeholder={t('common.search') + ' ' + t('nav.projects').toLowerCase() + '...'}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10"
@@ -306,14 +306,14 @@ export function ProjectsPage() {
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-40">
-              <SelectValue placeholder="Status" />
+              <SelectValue placeholder={t('common.status')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="draft">Draft</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="paused">Paused</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="all">{t('common.all')} {t('common.status')}</SelectItem>
+              <SelectItem value="draft">{t('forms.draft')}</SelectItem>
+              <SelectItem value="active">{t('forms.active')}</SelectItem>
+              <SelectItem value="paused">{t('projects.paused', 'Paused')}</SelectItem>
+              <SelectItem value="completed">{t('projects.completed', 'Completed')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
