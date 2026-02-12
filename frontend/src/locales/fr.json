@@ -272,7 +272,14 @@
     "api": "API",
     "billing": "Facturation",
     "changePassword": "Changer le Mot de passe",
-    "twoFactor": "Authentification à Deux Facteurs"
+    "twoFactor": "Authentification à Deux Facteurs",
+    "roles": "Rôles",
+    "translations": "Traductions",
+    "apiSecurity": "Sécurité API",
+    "apiDocs": "Documentation API",
+    "superAdmin": "Super Administrateur",
+    "app": "Application",
+    "manageDescription": "Gérer votre compte et vos préférences"
   },
   "auth": {
     "login": "Se Connecter",
