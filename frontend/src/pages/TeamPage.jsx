@@ -128,6 +128,7 @@ const MemberRow = ({ member, currentUserId, onRemove, onRoleChange }) => {
 export function TeamPage() {
   const { currentOrg } = useOrgStore();
   const { user } = useAuthStore();
+  const { t } = useTranslation();
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
