@@ -319,20 +319,20 @@ export function FormsPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="font-barlow text-3xl font-bold tracking-tight text-white">Forms</h1>
-            <p className="text-gray-400">Design and manage your data collection forms</p>
+            <h1 className="font-barlow text-3xl font-bold tracking-tight text-white">{t('forms.title')}</h1>
+            <p className="text-gray-400">{t('forms.formDescription', 'Design and manage your data collection forms')}</p>
           </div>
           <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button data-testid="create-form-btn">
                 <Plus className="w-4 h-4 mr-2" />
-                New Form
+                {t('forms.newForm')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className="font-barlow">Create Form</DialogTitle>
-                <DialogDescription>Add a new data collection form</DialogDescription>
+                <DialogTitle className="font-barlow">{t('forms.createForm')}</DialogTitle>
+                <DialogDescription>{t('forms.addForm', 'Add a new data collection form')}</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
