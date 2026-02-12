@@ -149,6 +149,7 @@ const ProjectCard = ({ project, onStatusChange, onSelect }) => {
 
 export function ProjectsPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { currentOrg } = useOrgStore();
   const { projects, setProjects, setCurrentProject } = useProjectStore();
   const [loading, setLoading] = useState(true);
