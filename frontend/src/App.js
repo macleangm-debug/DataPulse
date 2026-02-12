@@ -46,6 +46,10 @@ import RealtimeDashboardPage from './pages/RealtimeDashboardPage';
 import LandingPage from './pages/LandingPage';
 import InteractiveDemoPage from './pages/InteractiveDemoPage';
 import PricingPage from './pages/PricingPage';
+// Mobile Collection Pages
+import MobileCollectPage from './pages/MobileCollectPage';
+import TokenCollectPage from './pages/TokenCollectPage';
+import CollectFormPage from './pages/CollectFormPage';
 import { PWAInstallPrompt, NetworkStatus, SyncStatusToast, OfflineModePage } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import { NotificationCenter, NotificationProvider } from './components/NotificationCenter';
