@@ -477,6 +477,14 @@ export function FormsPage() {
           </Card>
         )}
       </div>
+      
+      {/* Share Survey Dialog */}
+      <ShareSurveyDialog
+        isOpen={shareDialogOpen}
+        onClose={() => setShareDialogOpen(false)}
+        surveyName={shareForm?.name || 'Survey'}
+        publicUrl={shareForm ? getPublicSurveyUrl(shareForm.id) : ''}
+      />
     </DashboardLayout>
   );
 }
