@@ -80,6 +80,7 @@ export function SettingsPage() {
   const { user, logout } = useAuthStore();
   const { currentOrg } = useOrgStore();
   const { theme, setTheme, language, setLanguage } = useUIStore();
+  const { t } = useTranslation();
   
   const [profile, setProfile] = useState({
     name: user?.name || '',
