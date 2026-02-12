@@ -35,6 +35,7 @@ export function ShareSurveyDialog({
   const [activeTab, setActiveTab] = useState('link');
   const [copied, setCopied] = useState(false);
   const [copiedEmbed, setCopiedEmbed] = useState(false);
+  const qrRef = useRef(null);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(publicUrl);
