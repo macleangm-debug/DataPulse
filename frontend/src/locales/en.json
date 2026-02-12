@@ -250,7 +250,9 @@
     "lastActive": "Last Active",
     "assignedForms": "Assigned Forms",
     "submissions": "Submissions",
-    "performance": "Performance"
+    "performance": "Performance",
+    "manageDescription": "Manage team members and permissions",
+    "addMemberDescription": "Add an existing user to your organization"
   },
   "settings": {
     "title": "Settings",
@@ -270,7 +272,14 @@
     "api": "API",
     "billing": "Billing",
     "changePassword": "Change Password",
-    "twoFactor": "Two-Factor Authentication"
+    "twoFactor": "Two-Factor Authentication",
+    "roles": "Roles",
+    "translations": "Translations",
+    "apiSecurity": "API Security",
+    "apiDocs": "API Docs",
+    "superAdmin": "Super Admin",
+    "app": "App",
+    "manageDescription": "Manage your account and preferences"
   },
   "auth": {
     "login": "Sign In",
