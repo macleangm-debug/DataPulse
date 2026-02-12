@@ -58,7 +58,68 @@
     "team": "Team",
     "gpsMap": "GPS Map",
     "analytics": "Analytics",
-    "reports": "Reports"
+    "reports": "Reports",
+    "templates": "Templates",
+    "dataViz": "DataViz Studio"
+  },
+  "projects": {
+    "allProjects": "All Projects",
+    "formFolders": "Form Folders",
+    "newProject": "New Project",
+    "createProject": "Create Project",
+    "projectName": "Project Name",
+    "manageDescription": "Manage your data collection projects",
+    "addDescription": "Add a new data collection project",
+    "descriptionPlaceholder": "Brief description of the project",
+    "paused": "Paused",
+    "completed": "Completed"
+  },
+  "data": {
+    "cases": "Cases",
+    "importCases": "Import Cases",
+    "datasets": "Datasets",
+    "exports": "Exports",
+    "scheduledExports": "Scheduled Exports",
+    "xlsformImport": "XLSForm Import"
+  },
+  "fieldOps": {
+    "fieldCollection": "Field Collection",
+    "cati": "CATI Center",
+    "backcheck": "Back-check",
+    "tokenSurveys": "Token Surveys",
+    "preload": "Preload/Writeback",
+    "devices": "Devices",
+    "audioAudit": "Audio Audit",
+    "reviewWorkflow": "Review Workflow"
+  },
+  "quality": {
+    "title": "Data Quality",
+    "dataAnalysis": "Data Analysis",
+    "qualitative": "Qualitative",
+    "qualityAI": "Quality AI",
+    "simulation": "Simulation",
+    "quality": "Quality",
+    "gpsMap": "GPS Map",
+    "realtimeDashboards": "Real-time Dashboards",
+    "qualityScore": "Quality Score",
+    "issues": "Issues",
+    "warnings": "Warnings",
+    "passed": "Passed",
+    "failed": "Failed",
+    "speedCheck": "Speed Check",
+    "gpsCheck": "GPS Verification",
+    "duplicateCheck": "Duplicate Detection",
+    "outlierCheck": "Outlier Detection",
+    "consistencyCheck": "Consistency Check",
+    "completenessCheck": "Completeness Check",
+    "aiAnalysis": "AI Analysis",
+    "sentiment": "Sentiment",
+    "transcription": "Transcription",
+    "translation": "Translation"
+  },
+  "apps": {
+    "plugins": "Plugins",
+    "workflows": "Workflows"
   },
   "dashboard": {
     "title": "Dashboard",
