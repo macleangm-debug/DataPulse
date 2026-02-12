@@ -104,3 +104,27 @@ Build a sophisticated data collection platform (DataPulse) with:
 - [ ] Celery tasks for background exports
 - [ ] AI transcription integration
 - [ ] Email report scheduling
+
+## Test Data
+
+### Seeded Data (Dec 2025)
+- **Organization**: DataPulse Demo Organization (org_id: `904d278e`)
+- **Project**: Customer Satisfaction Survey 2024
+- **Forms**: 
+  - Customer Feedback Form (form_id: `6d1cea4d`) - 10 fields
+  - Product Usage Survey (form_id: `33408ffd`) - 6 fields
+- **Submissions**: 500 total across 30 days
+- **Enumerators**: 5 active field workers
+- **Sample Dashboard**: Customer Insights Dashboard
+
+### Test Credentials
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | demo@datapulse.io | Test123! |
+| Enumerator | enumerator1@datapulse.io | field123 |
+
+## Key Files
+- `backend/scripts/seed_dataviz_data.py` - Data seeding for DataViz
+- `backend/routes/dataviz_routes.py` - DataViz API endpoints
+- `src/pages/dataviz/` - DataViz frontend pages
+- `src/components/ShareSurveyDialog.jsx` - Share modal with QR code
