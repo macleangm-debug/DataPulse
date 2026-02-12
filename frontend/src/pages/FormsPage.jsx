@@ -336,13 +336,13 @@ export function FormsPage() {
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label htmlFor="project">Project</Label>
+                  <Label htmlFor="project">{t('nav.projects', 'Project')}</Label>
                   <Select
                     value={newForm.project_id}
                     onValueChange={(value) => setNewForm({ ...newForm, project_id: value })}
                   >
                     <SelectTrigger data-testid="form-project-select">
-                      <SelectValue placeholder="Select project" />
+                      <SelectValue placeholder={t('common.select') + ' ' + t('nav.projects', 'project').toLowerCase()} />
                     </SelectTrigger>
                     <SelectContent>
                       {projects.map((project) => (
@@ -354,7 +354,7 @@ export function FormsPage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="name">Form Name</Label>
+                  <Label htmlFor="name">{t('forms.formName')}</Label>
                   <Input
                     id="name"
                     value={newForm.name}
@@ -364,12 +364,12 @@ export function FormsPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{t('common.description')}</Label>
                   <Textarea
                     id="description"
                     value={newForm.description}
                     onChange={(e) => setNewForm({ ...newForm, description: e.target.value })}
-                    placeholder="Brief description of the form"
+                    placeholder={t('forms.descriptionPlaceholder', 'Brief description of the form')}
                     rows={3}
                     data-testid="form-description-input"
                   />
@@ -377,10 +377,10 @@ export function FormsPage() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
                 <Button onClick={handleCreateForm} disabled={creating} data-testid="save-form-btn">
-                  {creating ? 'Creating...' : 'Create Form'}
+                  {creating ? t('common.loading') : t('forms.createForm')}
                 </Button>
               </DialogFooter>
             </DialogContent>
