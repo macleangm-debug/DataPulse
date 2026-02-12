@@ -281,20 +281,20 @@ export function SettingsPage() {
       <div className="space-y-6 max-w-4xl" data-testid="settings-page">
         {/* Header */}
         <div>
-          <h1 className="font-barlow text-3xl font-bold tracking-tight text-foreground">Settings</h1>
-          <p className="text-muted-foreground">Manage your account and preferences</p>
+          <h1 className="font-barlow text-3xl font-bold tracking-tight text-foreground">{t('settings.title')}</h1>
+          <p className="text-muted-foreground">{t('settings.manageDescription', 'Manage your account and preferences')}</p>
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 lg:w-[800px]">
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="appearance">Appearance</TabsTrigger>
-            <TabsTrigger value="notifications">Alerts</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
-            <TabsTrigger value="privacy">Privacy</TabsTrigger>
-            <TabsTrigger value="organization">Org</TabsTrigger>
-            <TabsTrigger value="api">API</TabsTrigger>
-            <TabsTrigger value="app">App</TabsTrigger>
+            <TabsTrigger value="profile">{t('settings.profile')}</TabsTrigger>
+            <TabsTrigger value="appearance">{t('settings.appearance')}</TabsTrigger>
+            <TabsTrigger value="notifications">{t('settings.notifications')}</TabsTrigger>
+            <TabsTrigger value="security">{t('settings.security')}</TabsTrigger>
+            <TabsTrigger value="privacy">{t('settings.privacy')}</TabsTrigger>
+            <TabsTrigger value="organization">{t('settings.organization', 'Org')}</TabsTrigger>
+            <TabsTrigger value="api">{t('settings.api')}</TabsTrigger>
+            <TabsTrigger value="app">{t('settings.app', 'App')}</TabsTrigger>
           </TabsList>
 
           {/* Profile Tab */}
