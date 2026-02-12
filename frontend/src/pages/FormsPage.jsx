@@ -164,6 +164,21 @@ export function FormsPage() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [newForm, setNewForm] = useState({ name: '', description: '', project_id: '' });
   const [creating, setCreating] = useState(false);
+  
+  // Share dialog state
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [shareForm, setShareForm] = useState(null);
+
+  // Get the base URL for surveys
+  const getPublicSurveyUrl = (formId) => {
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/survey/${formId}`;
+  };
+
+  const handleShare = (form) => {
+    setShareForm(form);
+    setShareDialogOpen(true);
+  };
 
   useEffect(() => {
     if (currentOrg) {
