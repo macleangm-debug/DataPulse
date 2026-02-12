@@ -169,6 +169,9 @@ api_router.include_router(push_router)
 # Mobile Collection for Enumerators
 api_router.include_router(collect_router)
 
+# DataViz Studio - Analytics & Visualization
+api_router.include_router(dataviz_router)
+
 # Public API for external integrations (versioned: /api/v1/...)
 api_router.include_router(public_api_router)
 set_public_api_db(db)
