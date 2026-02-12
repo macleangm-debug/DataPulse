@@ -209,21 +209,21 @@ export function TeamPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="font-barlow text-3xl font-bold tracking-tight text-white">Team</h1>
-            <p className="text-gray-400">Manage team members and permissions</p>
+            <h1 className="font-barlow text-3xl font-bold tracking-tight text-white">{t('team.title')}</h1>
+            <p className="text-gray-400">{t('team.manageDescription', 'Manage team members and permissions')}</p>
           </div>
           <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
             <DialogTrigger asChild>
               <Button data-testid="invite-member-btn">
                 <Plus className="w-4 h-4 mr-2" />
-                Add Member
+                {t('team.addMember')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className="font-barlow">Add Team Member</DialogTitle>
+                <DialogTitle className="font-barlow">{t('team.addMember')}</DialogTitle>
                 <DialogDescription>
-                  Add an existing user to your organization
+                  {t('team.addMemberDescription', 'Add an existing user to your organization')}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
