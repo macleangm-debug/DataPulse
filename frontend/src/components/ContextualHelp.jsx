@@ -287,7 +287,7 @@ const PRO_TIPS = [
 export function HelpProvider({ children }) {
   const [helpEnabled, setHelpEnabled] = useState(() => {
     const saved = localStorage.getItem('datapulse_help_enabled');
-    return saved === null ? true : saved === 'true';
+    return saved === 'true'; // Default to false unless explicitly enabled
   });
   const [showHelpPanel, setShowHelpPanel] = useState(false);
   const [currentTip, setCurrentTip] = useState(0);
