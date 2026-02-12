@@ -213,6 +213,13 @@
   },
   "quality": {
     "title": "Ubora wa Data",
+    "dataAnalysis": "Uchambuzi wa Data",
+    "qualitative": "Ubora",
+    "qualityAI": "Ubora wa AI",
+    "simulation": "Uigaji",
+    "quality": "Ubora",
+    "gpsMap": "Ramani ya GPS",
+    "realtimeDashboards": "Dashibodi za Wakati Halisi",
     "qualityScore": "Alama ya Ubora",
     "issues": "Matatizo",
     "warnings": "Maonyo",
@@ -242,7 +249,9 @@
     "lastActive": "Alitenda Mwisho",
     "assignedForms": "Fomu Zilizopewa",
     "submissions": "Mawasilisho",
-    "performance": "Utendaji"
+    "performance": "Utendaji",
+    "manageDescription": "Simamia wanachama wa timu na ruhusa",
+    "addMemberDescription": "Ongeza mtumiaji aliyepo kwenye shirika lako"
   },
   "settings": {
     "title": "Mipangilio",
@@ -262,7 +271,14 @@
     "api": "API",
     "billing": "Malipo",
     "changePassword": "Badilisha Nenosiri",
-    "twoFactor": "Uthibitisho wa Hatua Mbili"
+    "twoFactor": "Uthibitisho wa Hatua Mbili",
+    "roles": "Majukumu",
+    "translations": "Tafsiri",
+    "apiSecurity": "Usalama wa API",
+    "apiDocs": "Nyaraka za API",
+    "superAdmin": "Msimamizi Mkuu",
+    "app": "Programu",
+    "manageDescription": "Simamia akaunti yako na mapendeleo"
   },
   "auth": {
     "login": "Ingia",

@@ -213,6 +213,13 @@
   },
   "quality": {
     "title": "جودة البيانات",
+    "dataAnalysis": "تحليل البيانات",
+    "qualitative": "نوعي",
+    "qualityAI": "جودة الذكاء الاصطناعي",
+    "simulation": "محاكاة",
+    "quality": "الجودة",
+    "gpsMap": "خريطة GPS",
+    "realtimeDashboards": "لوحات التحكم الفورية",
     "qualityScore": "درجة الجودة",
     "issues": "المشاكل",
     "warnings": "التحذيرات",
@@ -242,7 +249,9 @@
     "lastActive": "آخر نشاط",
     "assignedForms": "النماذج المسندة",
     "submissions": "الإرسالات",
-    "performance": "الأداء"
+    "performance": "الأداء",
+    "manageDescription": "إدارة أعضاء الفريق والصلاحيات",
+    "addMemberDescription": "إضافة مستخدم موجود إلى مؤسستك"
   },
   "settings": {
     "title": "الإعدادات",
@@ -262,7 +271,14 @@
     "api": "API",
     "billing": "الفواتير",
     "changePassword": "تغيير كلمة المرور",
-    "twoFactor": "المصادقة الثنائية"
+    "twoFactor": "المصادقة الثنائية",
+    "roles": "الأدوار",
+    "translations": "الترجمات",
+    "apiSecurity": "أمان API",
+    "apiDocs": "وثائق API",
+    "superAdmin": "المدير الأعلى",
+    "app": "التطبيق",
+    "manageDescription": "إدارة حسابك وتفضيلاتك"
   },
   "auth": {
     "login": "تسجيل الدخول",

@@ -213,6 +213,13 @@
   },
   "quality": {
     "title": "Qualidade dos Dados",
+    "dataAnalysis": "Análise de Dados",
+    "qualitative": "Qualitativo",
+    "qualityAI": "Qualidade IA",
+    "simulation": "Simulação",
+    "quality": "Qualidade",
+    "gpsMap": "Mapa GPS",
+    "realtimeDashboards": "Painéis em Tempo Real",
     "qualityScore": "Pontuação de Qualidade",
     "issues": "Problemas",
     "warnings": "Avisos",
@@ -242,7 +249,9 @@
     "lastActive": "Última Atividade",
     "assignedForms": "Formulários Atribuídos",
     "submissions": "Envios",
-    "performance": "Desempenho"
+    "performance": "Desempenho",
+    "manageDescription": "Gerenciar membros da equipe e permissões",
+    "addMemberDescription": "Adicionar um usuário existente à sua organização"
   },
   "settings": {
     "title": "Configurações",
@@ -262,7 +271,14 @@
     "api": "API",
     "billing": "Faturamento",
     "changePassword": "Alterar Senha",
-    "twoFactor": "Autenticação de Dois Fatores"
+    "twoFactor": "Autenticação de Dois Fatores",
+    "roles": "Funções",
+    "translations": "Traduções",
+    "apiSecurity": "Segurança da API",
+    "apiDocs": "Documentação da API",
+    "superAdmin": "Super Administrador",
+    "app": "Aplicativo",
+    "manageDescription": "Gerenciar sua conta e preferências"
   },
   "auth": {
     "login": "Entrar",
