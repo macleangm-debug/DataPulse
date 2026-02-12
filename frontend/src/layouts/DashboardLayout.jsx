@@ -334,7 +334,7 @@ export function DashboardLayout({ children }) {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="right">
-                <p>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</p>
+                <p>{theme === 'dark' ? t('settings.lightMode', 'Light Mode') : t('settings.darkMode', 'Dark Mode')}</p>
               </TooltipContent>
             </Tooltip>
 
