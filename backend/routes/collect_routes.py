@@ -72,7 +72,6 @@ async def enumerator_login(login_data: EnumeratorLogin, request: Request):
     
     # Find enumerator by email
     enumerator = await db.enumerators.find_one({"email": login_data.email.lower()})
-    print(f"Login attempt: {login_data.email.lower()}, found enumerator: {enumerator is not None}")
     
     if not enumerator:
         # Also check users collection for enumerator role
@@ -89,7 +88,6 @@ async def enumerator_login(login_data: EnumeratorLogin, request: Request):
     # Verify password
     stored_password = enumerator.get("password_hash") or enumerator.get("password")
     input_hash = hash_password(login_data.password)
-    print(f"Password check: stored={stored_password[:20]}..., input_hash={input_hash[:20]}...")
     
     if stored_password != input_hash:
         # Also try plain comparison for demo accounts
