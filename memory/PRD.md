@@ -19,6 +19,7 @@ Build a sophisticated data collection platform (DataPulse) with:
 - [x] Interactive demo page with guided tour (Dec 2025)
 - [x] Light/Dark mode toggle with persistence (Dec 2025)
 - [x] i18n framework with 6 languages (Dec 2025)
+- [x] **i18n translations applied across app pages** (Dec 2025) - Dashboard, Forms, Projects, Submissions, Settings, Team, Navigation
 - [x] Pricing page with 4 tiers (Dec 2025)
 - [x] Pro Tip banner removed (Feb 2026)
 
@@ -43,6 +44,16 @@ Build a sophisticated data collection platform (DataPulse) with:
 - [x] ShareSurveyDialog - Survey sharing modal with **QR code** (qrcode.react)
 - [x] OnboardingWizard - Interactive tour system
 - [x] DashboardHeader - Toolbar with theme, lang, notifications
+
+### i18n Implementation (Dec 2025)
+- [x] Navigation labels use translation keys (English, Spanish, French)
+- [x] Dashboard page fully translated
+- [x] Forms page (title, filters, buttons)
+- [x] Projects page (title, create dialog)
+- [x] Submissions page (stats, filters)
+- [x] Settings page (all 8 tabs)
+- [x] Team page (header, dialogs)
+- [x] Language selector working (sidebar)
 
 ## Architecture
 
