@@ -46,7 +46,7 @@ Build a sophisticated data collection platform (DataPulse) with:
 - [x] DashboardHeader - Toolbar with theme, lang, notifications
 
 ### i18n Implementation (Dec 2025)
-- [x] Navigation labels use translation keys (English, Spanish, French)
+- [x] Navigation labels use translation keys (all 6 languages)
 - [x] Dashboard page fully translated
 - [x] Forms page (title, filters, buttons)
 - [x] Projects page (title, create dialog)
@@ -54,6 +54,7 @@ Build a sophisticated data collection platform (DataPulse) with:
 - [x] Settings page (all 8 tabs)
 - [x] Team page (header, dialogs)
 - [x] Language selector working (sidebar)
+- [x] **All 6 languages complete**: English, Spanish, French, Portuguese, Swahili, Arabic
 
 ## Architecture
 
