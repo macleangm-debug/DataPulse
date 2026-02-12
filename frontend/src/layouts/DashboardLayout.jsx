@@ -74,91 +74,99 @@ import { LanguageSelectorCompact } from '../components/LanguageSelector';
 import { useTranslation } from 'react-i18next';
 
 // Navigation structure - grouped for Canva-style rail
+// Using translation keys (nav.xxx) that will be resolved at render time
 const NAVIGATION = [
   {
     id: 'home',
-    label: 'Home',
+    labelKey: 'nav.home',
+    fallback: 'Home',
     icon: House,
     path: '/dashboard',
     items: []
   },
   {
     id: 'projects',
-    label: 'Projects',
+    labelKey: 'nav.projects',
+    fallback: 'Projects',
     icon: Folder,
     items: [
-      { label: 'All Projects', path: '/projects', icon: Folder },
-      { label: 'Forms', path: '/forms', icon: FileText },
-      { label: 'Form Folders', path: '/form-folders', icon: Folder },
-      { label: 'Templates', path: '/templates', icon: Layout },
-      { label: 'Submissions', path: '/submissions', icon: ClipboardList }
+      { labelKey: 'projects.allProjects', fallback: 'All Projects', path: '/projects', icon: Folder },
+      { labelKey: 'nav.forms', fallback: 'Forms', path: '/forms', icon: FileText },
+      { labelKey: 'projects.formFolders', fallback: 'Form Folders', path: '/form-folders', icon: Folder },
+      { labelKey: 'nav.templates', fallback: 'Templates', path: '/templates', icon: Layout },
+      { labelKey: 'nav.submissions', fallback: 'Submissions', path: '/submissions', icon: ClipboardList }
     ]
   },
   {
     id: 'data',
-    label: 'Data',
+    labelKey: 'nav.data',
+    fallback: 'Data',
     icon: Database,
     items: [
-      { label: 'Cases', path: '/cases', icon: Briefcase },
-      { label: 'Import Cases', path: '/cases/import', icon: Plus },
-      { label: 'Datasets', path: '/datasets', icon: Table2 },
-      { label: 'Exports', path: '/exports', icon: Download },
-      { label: 'Scheduled Exports', path: '/scheduled-exports', icon: Calendar },
-      { label: 'XLSForm Import', path: '/xlsform', icon: FileSpreadsheet }
+      { labelKey: 'data.cases', fallback: 'Cases', path: '/cases', icon: Briefcase },
+      { labelKey: 'data.importCases', fallback: 'Import Cases', path: '/cases/import', icon: Plus },
+      { labelKey: 'data.datasets', fallback: 'Datasets', path: '/datasets', icon: Table2 },
+      { labelKey: 'data.exports', fallback: 'Exports', path: '/exports', icon: Download },
+      { labelKey: 'data.scheduledExports', fallback: 'Scheduled Exports', path: '/scheduled-exports', icon: Calendar },
+      { labelKey: 'data.xlsformImport', fallback: 'XLSForm Import', path: '/xlsform', icon: FileSpreadsheet }
     ]
   },
   {
     id: 'field_ops',
-    label: 'Field Ops',
+    labelKey: 'nav.fieldOps',
+    fallback: 'Field Ops',
     icon: MapPin,
     items: [
-      { label: 'Field Collection', path: '/field-collection', icon: Share2 },
-      { label: 'CATI Center', path: '/cati', icon: Phone },
-      { label: 'Back-check', path: '/backcheck', icon: ClipboardCheck },
-      { label: 'Token Surveys', path: '/token-surveys', icon: Link2 },
-      { label: 'Preload/Writeback', path: '/preload', icon: ArrowLeftRight },
-      { label: 'Devices', path: '/devices', icon: Smartphone },
-      { label: 'Audio Audit', path: '/audio-audit', icon: Mic },
-      { label: 'Review Workflow', path: '/review-workflow', icon: ClipboardCheck }
+      { labelKey: 'fieldOps.fieldCollection', fallback: 'Field Collection', path: '/field-collection', icon: Share2 },
+      { labelKey: 'fieldOps.cati', fallback: 'CATI Center', path: '/cati', icon: Phone },
+      { labelKey: 'fieldOps.backcheck', fallback: 'Back-check', path: '/backcheck', icon: ClipboardCheck },
+      { labelKey: 'fieldOps.tokenSurveys', fallback: 'Token Surveys', path: '/token-surveys', icon: Link2 },
+      { labelKey: 'fieldOps.preload', fallback: 'Preload/Writeback', path: '/preload', icon: ArrowLeftRight },
+      { labelKey: 'fieldOps.devices', fallback: 'Devices', path: '/devices', icon: Smartphone },
+      { labelKey: 'fieldOps.audioAudit', fallback: 'Audio Audit', path: '/audio-audit', icon: Mic },
+      { labelKey: 'fieldOps.reviewWorkflow', fallback: 'Review Workflow', path: '/review-workflow', icon: ClipboardCheck }
     ]
   },
   {
     id: 'quality',
-    label: 'Quality & AI',
+    labelKey: 'nav.qualityAI',
+    fallback: 'Quality & AI',
     icon: Sparkles,
     items: [
-      { label: 'Data Analysis', path: '/analysis', icon: BarChart3 },
-      { label: 'Qualitative', path: '/qualitative', icon: BookOpen },
-      { label: 'Quality AI', path: '/quality-ai', icon: Brain },
-      { label: 'Simulation', path: '/simulation', icon: Route },
-      { label: 'Analytics', path: '/analytics', icon: BarChart3 },
-      { label: 'Quality', path: '/quality', icon: Sparkles },
-      { label: 'GPS Map', path: '/map', icon: MapPin },
-      { label: 'Real-time Dashboards', path: '/realtime-dashboard', icon: BarChart3 },
-      { label: 'DataViz Studio', path: '/dataviz', icon: BarChart3 }
+      { labelKey: 'quality.dataAnalysis', fallback: 'Data Analysis', path: '/analysis', icon: BarChart3 },
+      { labelKey: 'quality.qualitative', fallback: 'Qualitative', path: '/qualitative', icon: BookOpen },
+      { labelKey: 'quality.qualityAI', fallback: 'Quality AI', path: '/quality-ai', icon: Brain },
+      { labelKey: 'quality.simulation', fallback: 'Simulation', path: '/simulation', icon: Route },
+      { labelKey: 'nav.analytics', fallback: 'Analytics', path: '/analytics', icon: BarChart3 },
+      { labelKey: 'quality.quality', fallback: 'Quality', path: '/quality', icon: Sparkles },
+      { labelKey: 'quality.gpsMap', fallback: 'GPS Map', path: '/map', icon: MapPin },
+      { labelKey: 'quality.realtimeDashboards', fallback: 'Real-time Dashboards', path: '/realtime-dashboard', icon: BarChart3 },
+      { labelKey: 'nav.dataViz', fallback: 'DataViz Studio', path: '/dataviz', icon: BarChart3 }
     ]
   },
   {
     id: 'apps',
-    label: 'Apps',
+    labelKey: 'nav.apps',
+    fallback: 'Apps',
     icon: LayoutGrid,
     items: [
-      { label: 'Plugins', path: '/plugins', icon: Puzzle },
-      { label: 'Workflows', path: '/workflows', icon: Workflow }
+      { labelKey: 'apps.plugins', fallback: 'Plugins', path: '/plugins', icon: Puzzle },
+      { labelKey: 'apps.workflows', fallback: 'Workflows', path: '/workflows', icon: Workflow }
     ]
   },
   {
     id: 'settings',
-    label: 'Settings',
+    labelKey: 'nav.settings',
+    fallback: 'Settings',
     icon: Settings,
     items: [
-      { label: 'Team', path: '/team', icon: Users },
-      { label: 'Roles', path: '/rbac', icon: Shield },
-      { label: 'Translations', path: '/translations', icon: Languages },
-      { label: 'API Security', path: '/security', icon: Key },
-      { label: 'API Docs', path: '/api-docs', icon: Code },
-      { label: 'Settings', path: '/settings', icon: Settings },
-      { label: 'Super Admin', path: '/admin', icon: Crown }
+      { labelKey: 'nav.team', fallback: 'Team', path: '/team', icon: Users },
+      { labelKey: 'settings.roles', fallback: 'Roles', path: '/rbac', icon: Shield },
+      { labelKey: 'settings.translations', fallback: 'Translations', path: '/translations', icon: Languages },
+      { labelKey: 'settings.apiSecurity', fallback: 'API Security', path: '/security', icon: Key },
+      { labelKey: 'settings.apiDocs', fallback: 'API Docs', path: '/api-docs', icon: Code },
+      { labelKey: 'nav.settings', fallback: 'Settings', path: '/settings', icon: Settings },
+      { labelKey: 'settings.superAdmin', fallback: 'Super Admin', path: '/admin', icon: Crown }
     ]
   }
 ];
