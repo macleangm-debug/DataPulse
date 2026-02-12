@@ -399,6 +399,7 @@ export function DashboardLayout({ children }) {
                     const Icon = item.icon;
                     const isActive = location.pathname === item.path || 
                                     location.pathname.startsWith(item.path + '/');
+                    const itemLabel = t(item.labelKey, item.fallback);
                     
                     return (
                       <Link
@@ -412,7 +413,7 @@ export function DashboardLayout({ children }) {
                         )}
                       >
                         <Icon className="w-4 h-4" />
-                        {item.label}
+                        {itemLabel}
                         {isActive && (
                           <ChevronRight className="w-4 h-4 ml-auto" />
                         )}
