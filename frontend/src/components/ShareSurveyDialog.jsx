@@ -54,45 +54,20 @@ export function ShareSurveyDialog({
     window.open(publicUrl, '_blank');
   };
 
-  // Generate QR code as SVG data URL
-  const generateQRCodeSVG = (text) => {
-    // Simple QR code pattern (placeholder - in production use qrcode.react)
-    const size = 160;
-    const moduleSize = 4;
-    const modules = Math.floor(size / moduleSize);
-    
-    // Create a deterministic pattern based on the URL
-    let pattern = [];
-    for (let i = 0; i < modules * modules; i++) {
-      const charCode = text.charCodeAt(i % text.length) || 0;
-      pattern.push((charCode + i) % 3 === 0);
-    }
-    
-    let rects = '';
-    for (let row = 0; row < modules; row++) {
-      for (let col = 0; col < modules; col++) {
-        const idx = row * modules + col;
-        // Add finder patterns (corners)
-        const isFinderArea = 
-          (row < 7 && col < 7) || // Top-left
-          (row < 7 && col >= modules - 7) || // Top-right
-          (row >= modules - 7 && col < 7); // Bottom-left
-        
-        if (isFinderArea || pattern[idx]) {
-          rects += `<rect x="${col * moduleSize}" y="${row * moduleSize}" width="${moduleSize}" height="${moduleSize}" fill="#0f172a"/>`;
-        }
+  const handleDownloadQR = () => {
+    if (qrRef.current) {
+      const svg = qrRef.current.querySelector('svg');
+      if (svg) {
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+        const svgUrl = URL.createObjectURL(svgBlob);
+        const link = document.createElement('a');
+        link.href = svgUrl;
+        link.download = `${surveyName.replace(/\s+/g, '_')}_qr.svg`;
+        link.click();
+        URL.revokeObjectURL(svgUrl);
       }
     }
-    
-    return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}"><rect width="${size}" height="${size}" fill="white"/>${rects}</svg>`)}`;
-  };
-
-  const handleDownloadQR = () => {
-    const svg = generateQRCodeSVG(publicUrl);
-    const link = document.createElement('a');
-    link.href = svg;
-    link.download = `${surveyName.replace(/\s+/g, '_')}_qr.svg`;
-    link.click();
   };
 
   const tabs = [
