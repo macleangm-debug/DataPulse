@@ -491,6 +491,7 @@ async def sync_via_token(token: str, sync_data: SyncRequest, request: Request):
 async def get_assigned_forms(db, enumerator_id: str, org_id: str = None) -> List[Dict]:
     """Get forms assigned to an enumerator"""
     forms = []
+    print(f"get_assigned_forms: enumerator_id={enumerator_id}, org_id={org_id}")
     
     # Check form assignments
     assignments = await db.form_assignments.find({
@@ -501,12 +502,18 @@ async def get_assigned_forms(db, enumerator_id: str, org_id: str = None) -> List
     }).to_list(100)
     
     assigned_form_ids = [a.get("form_id") for a in assignments]
+    print(f"Found {len(assigned_form_ids)} specific assignments")
     
-    # If no specific assignments, get all org forms
+    # If no specific assignments, get all org forms that are published
     if not assigned_form_ids and org_id:
-        query = {"org_id": org_id, "status": {"$in": ["published", "active"]}}
-    else:
+        query = {"org_id": org_id, "status": {"$in": ["published", "active", None]}}
+        print(f"Using org forms query: {query}")
+    elif assigned_form_ids:
         query = {"_id": {"$in": [ObjectId(fid) for fid in assigned_form_ids if fid]}}
+    else:
+        # Fallback: get all published forms
+        query = {"status": {"$in": ["published", "active"]}}
+        print("Fallback: getting all published forms")
     
     async for form in db.forms.find(query):
         forms.append({
