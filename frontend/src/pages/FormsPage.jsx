@@ -155,6 +155,7 @@ const FormCard = ({ form, onPublish, onDuplicate, onArchive, onShare }) => {
 
 export function FormsPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { currentOrg } = useOrgStore();
   const { projects, currentProject, setCurrentProject } = useProjectStore();
   const [forms, setForms] = useState([]);
