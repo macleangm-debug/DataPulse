@@ -288,6 +288,7 @@ export function DashboardLayout({ children }) {
             {NAVIGATION.map((group) => {
               const Icon = group.icon;
               const isActive = activeGroup === group.id;
+              const groupLabel = t(group.labelKey, group.fallback);
               
               return (
                 <Tooltip key={group.id} delayDuration={300}>
@@ -303,12 +304,12 @@ export function DashboardLayout({ children }) {
                     >
                       <Icon className="w-5 h-5" />
                       <span className="text-[10px] font-medium leading-tight text-center">
-                        {group.label}
+                        {groupLabel}
                       </span>
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="bg-popover text-popover-foreground border border-border">
-                    {group.label}
+                    {groupLabel}
                   </TooltipContent>
                 </Tooltip>
               );
