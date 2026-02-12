@@ -388,6 +388,13 @@ function App() {
             </ProtectedRoute>
           } />
           
+          {/* Field Collection Management */}
+          <Route path="/field-collection" element={
+            <ProtectedRoute>
+              <CollectionTokensPage />
+            </ProtectedRoute>
+          } />
+          
           {/* Default redirect for unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
