@@ -58,7 +58,68 @@
     "team": "Équipe",
     "gpsMap": "Carte GPS",
     "analytics": "Analyses",
-    "reports": "Rapports"
+    "reports": "Rapports",
+    "templates": "Modèles",
+    "dataViz": "Studio DataViz"
+  },
+  "projects": {
+    "allProjects": "Tous les Projets",
+    "formFolders": "Dossiers de Formulaires",
+    "newProject": "Nouveau Projet",
+    "createProject": "Créer un Projet",
+    "projectName": "Nom du Projet",
+    "manageDescription": "Gérer vos projets de collecte de données",
+    "addDescription": "Ajouter un nouveau projet de collecte de données",
+    "descriptionPlaceholder": "Brève description du projet",
+    "paused": "En pause",
+    "completed": "Terminé"
+  },
+  "data": {
+    "cases": "Cas",
+    "importCases": "Importer des Cas",
+    "datasets": "Jeux de Données",
+    "exports": "Exportations",
+    "scheduledExports": "Exports Planifiés",
+    "xlsformImport": "Import XLSForm"
+  },
+  "fieldOps": {
+    "fieldCollection": "Collecte de Terrain",
+    "cati": "Centre CATI",
+    "backcheck": "Vérification",
+    "tokenSurveys": "Enquêtes par Jeton",
+    "preload": "Préchargement/Écriture",
+    "devices": "Appareils",
+    "audioAudit": "Audit Audio",
+    "reviewWorkflow": "Flux de Révision"
+  },
+  "quality": {
+    "title": "Qualité des Données",
+    "dataAnalysis": "Analyse de Données",
+    "qualitative": "Qualitatif",
+    "qualityAI": "Qualité IA",
+    "simulation": "Simulation",
+    "quality": "Qualité",
+    "gpsMap": "Carte GPS",
+    "realtimeDashboards": "Tableaux de Bord en Temps Réel",
+    "qualityScore": "Score de Qualité",
+    "issues": "Problèmes",
+    "warnings": "Avertissements",
+    "passed": "Réussi",
+    "failed": "Échoué",
+    "speedCheck": "Vérification de Vitesse",
+    "gpsCheck": "Vérification GPS",
+    "duplicateCheck": "Détection de Doublons",
+    "outlierCheck": "Détection de Valeurs Aberrantes",
+    "consistencyCheck": "Vérification de Cohérence",
+    "completenessCheck": "Vérification de Complétude",
+    "aiAnalysis": "Analyse IA",
+    "sentiment": "Sentiment",
+    "transcription": "Transcription",
+    "translation": "Traduction"
+  },
+  "apps": {
+    "plugins": "Extensions",
+    "workflows": "Flux de Travail"
   },
   "dashboard": {
     "title": "Tableau de bord",
