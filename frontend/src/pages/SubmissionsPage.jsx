@@ -365,13 +365,13 @@ export function SubmissionsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="bg-card border border-border">
             <CardContent className="p-4">
-              <p className="text-sm text-muted-foreground">Total</p>
+              <p className="text-sm text-muted-foreground">{t('common.all', 'Total')}</p>
               <p className="text-2xl font-barlow font-bold">{submissions.length}</p>
             </CardContent>
           </Card>
           <Card className="bg-card border border-border">
             <CardContent className="p-4">
-              <p className="text-sm text-muted-foreground">Pending</p>
+              <p className="text-sm text-muted-foreground">{t('submissions.pending')}</p>
               <p className="text-2xl font-barlow font-bold text-yellow-500">
                 {submissions.filter(s => s.status === 'pending').length}
               </p>
@@ -379,7 +379,7 @@ export function SubmissionsPage() {
           </Card>
           <Card className="bg-card border border-border">
             <CardContent className="p-4">
-              <p className="text-sm text-muted-foreground">Approved</p>
+              <p className="text-sm text-muted-foreground">{t('submissions.approved')}</p>
               <p className="text-2xl font-barlow font-bold text-green-500">
                 {submissions.filter(s => s.status === 'approved').length}
               </p>
@@ -387,7 +387,7 @@ export function SubmissionsPage() {
           </Card>
           <Card className="bg-card border border-border">
             <CardContent className="p-4">
-              <p className="text-sm text-muted-foreground">Rejected</p>
+              <p className="text-sm text-muted-foreground">{t('submissions.rejected')}</p>
               <p className="text-2xl font-barlow font-bold text-red-500">
                 {submissions.filter(s => s.status === 'rejected').length}
               </p>
