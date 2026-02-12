@@ -261,13 +261,25 @@ async def create_collection_token(
     admin_token = authorization.replace("Bearer ", "")
     # In production, verify this is a valid admin/supervisor token
     
-    # Get enumerator info
-    enumerator = await db.enumerators.find_one({"_id": ObjectId(token_request.enumerator_id)})
-    if not enumerator:
-        enumerator = await db.users.find_one({"_id": ObjectId(token_request.enumerator_id)})
+    # Get enumerator info (optional - can use manual name)
+    enumerator = None
+    enumerator_name = token_request.enumerator_name
+    org_id = ""
     
-    if not enumerator:
-        raise HTTPException(status_code=404, detail="Enumerator not found")
+    if token_request.enumerator_id and token_request.enumerator_id != 'manual':
+        try:
+            enumerator = await db.enumerators.find_one({"_id": ObjectId(token_request.enumerator_id)})
+            if not enumerator:
+                enumerator = await db.users.find_one({"_id": ObjectId(token_request.enumerator_id)})
+            
+            if enumerator:
+                enumerator_name = enumerator.get("name", enumerator.get("full_name", enumerator_name))
+                org_id = str(enumerator.get("org_id", ""))
+        except:
+            pass
+    
+    if not enumerator_name:
+        enumerator_name = "Field Worker"
     
     # Generate token
     collect_token = generate_collect_token()
@@ -275,9 +287,9 @@ async def create_collection_token(
     # Store token
     token_doc = {
         "token": collect_token,
-        "enumerator_id": token_request.enumerator_id,
-        "enumerator_name": enumerator.get("name", enumerator.get("full_name")),
-        "org_id": str(enumerator.get("org_id", "")),
+        "enumerator_id": token_request.enumerator_id if token_request.enumerator_id != 'manual' else None,
+        "enumerator_name": enumerator_name,
+        "org_id": org_id,
         "form_ids": token_request.form_ids,
         "created_at": datetime.now(timezone.utc),
         "expires_at": datetime.now(timezone.utc) + timedelta(hours=token_request.expires_hours),
