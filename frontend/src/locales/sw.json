@@ -58,7 +58,43 @@
     "team": "Timu",
     "gpsMap": "Ramani ya GPS",
     "analytics": "Uchambuzi",
-    "reports": "Ripoti"
+    "reports": "Ripoti",
+    "templates": "Violezo",
+    "dataViz": "Studio ya DataViz"
+  },
+  "projects": {
+    "allProjects": "Miradi Yote",
+    "formFolders": "Folda za Fomu",
+    "newProject": "Mradi Mpya",
+    "createProject": "Unda Mradi",
+    "projectName": "Jina la Mradi",
+    "manageDescription": "Simamia miradi yako ya ukusanyaji data",
+    "addDescription": "Ongeza mradi mpya wa ukusanyaji data",
+    "descriptionPlaceholder": "Maelezo mafupi ya mradi",
+    "paused": "Imesimamishwa",
+    "completed": "Imekamilika"
+  },
+  "data": {
+    "cases": "Kesi",
+    "importCases": "Ingiza Kesi",
+    "datasets": "Seti za Data",
+    "exports": "Uhamishaji",
+    "scheduledExports": "Uhamishaji Uliopangwa",
+    "xlsformImport": "Ingiza XLSForm"
+  },
+  "fieldOps": {
+    "fieldCollection": "Ukusanyaji wa Uwandani",
+    "cati": "Kituo cha CATI",
+    "backcheck": "Ukaguzi wa Nyuma",
+    "tokenSurveys": "Tafiti za Tokeni",
+    "preload": "Kupakia Mapema/Kuandika",
+    "devices": "Vifaa",
+    "audioAudit": "Ukaguzi wa Sauti",
+    "reviewWorkflow": "Mtiririko wa Mapitio"
+  },
+  "apps": {
+    "plugins": "Programu-jalizi",
+    "workflows": "Mtiririko wa Kazi"
   },
   "dashboard": {
     "title": "Dashibodi",

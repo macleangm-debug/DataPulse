@@ -58,7 +58,43 @@
     "team": "الفريق",
     "gpsMap": "خريطة GPS",
     "analytics": "التحليلات",
-    "reports": "التقارير"
+    "reports": "التقارير",
+    "templates": "القوالب",
+    "dataViz": "استوديو DataViz"
+  },
+  "projects": {
+    "allProjects": "جميع المشاريع",
+    "formFolders": "مجلدات النماذج",
+    "newProject": "مشروع جديد",
+    "createProject": "إنشاء مشروع",
+    "projectName": "اسم المشروع",
+    "manageDescription": "إدارة مشاريع جمع البيانات الخاصة بك",
+    "addDescription": "إضافة مشروع جديد لجمع البيانات",
+    "descriptionPlaceholder": "وصف موجز للمشروع",
+    "paused": "متوقف مؤقتاً",
+    "completed": "مكتمل"
+  },
+  "data": {
+    "cases": "الحالات",
+    "importCases": "استيراد الحالات",
+    "datasets": "مجموعات البيانات",
+    "exports": "التصديرات",
+    "scheduledExports": "التصديرات المجدولة",
+    "xlsformImport": "استيراد XLSForm"
+  },
+  "fieldOps": {
+    "fieldCollection": "الجمع الميداني",
+    "cati": "مركز CATI",
+    "backcheck": "التحقق الخلفي",
+    "tokenSurveys": "استطلاعات الرمز",
+    "preload": "التحميل المسبق/الكتابة",
+    "devices": "الأجهزة",
+    "audioAudit": "تدقيق الصوت",
+    "reviewWorkflow": "سير المراجعة"
+  },
+  "apps": {
+    "plugins": "الإضافات",
+    "workflows": "سير العمل"
   },
   "dashboard": {
     "title": "لوحة التحكم",

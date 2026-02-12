@@ -58,7 +58,43 @@
     "team": "Equipe",
     "gpsMap": "Mapa GPS",
     "analytics": "Análises",
-    "reports": "Relatórios"
+    "reports": "Relatórios",
+    "templates": "Modelos",
+    "dataViz": "Estúdio DataViz"
+  },
+  "projects": {
+    "allProjects": "Todos os Projetos",
+    "formFolders": "Pastas de Formulários",
+    "newProject": "Novo Projeto",
+    "createProject": "Criar Projeto",
+    "projectName": "Nome do Projeto",
+    "manageDescription": "Gerencie seus projetos de coleta de dados",
+    "addDescription": "Adicionar um novo projeto de coleta de dados",
+    "descriptionPlaceholder": "Breve descrição do projeto",
+    "paused": "Pausado",
+    "completed": "Concluído"
+  },
+  "data": {
+    "cases": "Casos",
+    "importCases": "Importar Casos",
+    "datasets": "Conjuntos de Dados",
+    "exports": "Exportações",
+    "scheduledExports": "Exportações Agendadas",
+    "xlsformImport": "Importar XLSForm"
+  },
+  "fieldOps": {
+    "fieldCollection": "Coleta de Campo",
+    "cati": "Centro CATI",
+    "backcheck": "Verificação",
+    "tokenSurveys": "Pesquisas por Token",
+    "preload": "Pré-carga/Gravação",
+    "devices": "Dispositivos",
+    "audioAudit": "Auditoria de Áudio",
+    "reviewWorkflow": "Fluxo de Revisão"
+  },
+  "apps": {
+    "plugins": "Extensões",
+    "workflows": "Fluxos de Trabalho"
   },
   "dashboard": {
     "title": "Painel",
