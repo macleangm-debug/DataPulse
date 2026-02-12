@@ -12,7 +12,8 @@ import {
   Eye,
   Database,
   Calendar,
-  Edit3
+  Edit3,
+  Share2
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -49,8 +50,9 @@ import { useOrgStore, useProjectStore } from '../store';
 import { formAPI, projectAPI } from '../lib/api';
 import { formatDate, getStatusVariant } from '../lib/utils';
 import { toast } from 'sonner';
+import { ShareSurveyDialog } from '../components/ShareSurveyDialog';
 
-const FormCard = ({ form, onPublish, onDuplicate, onArchive }) => {
+const FormCard = ({ form, onPublish, onDuplicate, onArchive, onShare }) => {
   const navigate = useNavigate();
   
   return (
@@ -98,6 +100,12 @@ const FormCard = ({ form, onPublish, onDuplicate, onArchive }) => {
                   <Eye className="w-4 h-4 mr-2" />
                   Preview
                 </DropdownMenuItem>
+                {form.status === 'published' && (
+                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onShare(form); }}>
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Share Survey
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator />
                 {form.status === 'draft' && (
                   <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onPublish(form.id); }}>
