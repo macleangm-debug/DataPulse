@@ -111,6 +111,7 @@ const NAVIGATION = [
     label: 'Field Ops',
     icon: MapPin,
     items: [
+      { label: 'Field Collection', path: '/field-collection', icon: Share2 },
       { label: 'CATI Center', path: '/cati', icon: Phone },
       { label: 'Back-check', path: '/backcheck', icon: ClipboardCheck },
       { label: 'Token Surveys', path: '/token-surveys', icon: Link2 },
