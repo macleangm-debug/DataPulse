@@ -448,6 +448,7 @@ export function FormsPage() {
                 onPublish={handlePublish}
                 onDuplicate={handleDuplicate}
                 onArchive={handleArchive}
+                onShare={handleShare}
               />
             ))}
           </div>
