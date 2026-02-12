@@ -185,6 +185,7 @@ function findActiveGroup(pathname) {
 export function DashboardLayout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { user, logout } = useAuthStore();
   const { currentOrg, organizations, setCurrentOrg } = useOrgStore();
   const { theme, toggleTheme } = useUIStore();
