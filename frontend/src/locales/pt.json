@@ -209,7 +209,8 @@
     "attachments": "Anexos",
     "metadata": "Metadados",
     "history": "Histórico",
-    "corrections": "Correções"
+    "corrections": "Correções",
+    "viewAndReview": "Visualizar e revisar dados coletados"
   },
   "quality": {
     "title": "Qualidade dos Dados",

@@ -209,7 +209,8 @@
     "attachments": "المرفقات",
     "metadata": "البيانات الوصفية",
     "history": "السجل",
-    "corrections": "التصحيحات"
+    "corrections": "التصحيحات",
+    "viewAndReview": "عرض ومراجعة البيانات المجمعة"
   },
   "quality": {
     "title": "جودة البيانات",
