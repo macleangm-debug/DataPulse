@@ -36,9 +36,11 @@ Build a sophisticated data collection platform (DataPulse) with:
 - [x] Data aggregation API
 - [x] Time series charts
 - [x] Form field selection for charts
+- [x] **Data seeding script created** (Dec 2025) - 500 sample submissions across 2 forms
+- [x] **End-to-end tested** (Dec 2025) - All 13 API tests passed
 
 ### Reusable Components Shared
-- [x] ShareSurveyDialog - Survey sharing modal
+- [x] ShareSurveyDialog - Survey sharing modal with **QR code** (qrcode.react)
 - [x] OnboardingWizard - Interactive tour system
 - [x] DashboardHeader - Toolbar with theme, lang, notifications
 
