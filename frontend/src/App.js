@@ -54,6 +54,7 @@ import CollectFormPage from './pages/CollectFormPage';
 import DataVizStudioPage from './pages/DataVizStudioPage';
 import DashboardBuilderPage from './pages/DashboardBuilderPage';
 import DashboardViewPage from './pages/DashboardViewPage';
+import CollectionTokensPage from './pages/CollectionTokensPage';
 import { PWAInstallPrompt, NetworkStatus, SyncStatusToast, OfflineModePage } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import { NotificationCenter, NotificationProvider } from './components/NotificationCenter';
