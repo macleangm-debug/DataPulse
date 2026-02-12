@@ -383,7 +383,6 @@ function App() {
         
         {/* Help System */}
         <HelpPanel />
-        <ProTipBanner />
         
         {/* Command Palette */}
         <CommandPalette />
