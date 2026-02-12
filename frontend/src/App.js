@@ -50,6 +50,10 @@ import PricingPage from './pages/PricingPage';
 import MobileCollectPage from './pages/MobileCollectPage';
 import TokenCollectPage from './pages/TokenCollectPage';
 import CollectFormPage from './pages/CollectFormPage';
+// DataViz Studio Pages
+import DataVizStudioPage from './pages/DataVizStudioPage';
+import DashboardBuilderPage from './pages/DashboardBuilderPage';
+import DashboardViewPage from './pages/DashboardViewPage';
 import { PWAInstallPrompt, NetworkStatus, SyncStatusToast, OfflineModePage } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import { NotificationCenter, NotificationProvider } from './components/NotificationCenter';
