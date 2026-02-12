@@ -234,25 +234,8 @@
     "attachments": "Pièces jointes",
     "metadata": "Métadonnées",
     "history": "Historique",
-    "corrections": "Corrections"
-  },
-  "quality": {
-    "title": "Qualité des Données",
-    "qualityScore": "Score de Qualité",
-    "issues": "Problèmes",
-    "warnings": "Avertissements",
-    "passed": "Réussi",
-    "failed": "Échoué",
-    "speedCheck": "Vérification de Vitesse",
-    "gpsCheck": "Vérification GPS",
-    "duplicateCheck": "Détection de Doublons",
-    "outlierCheck": "Détection de Valeurs Aberrantes",
-    "consistencyCheck": "Vérification de Cohérence",
-    "completenessCheck": "Vérification de Complétude",
-    "aiAnalysis": "Analyse IA",
-    "sentiment": "Sentiment",
-    "transcription": "Transcription",
-    "translation": "Traduction"
+    "corrections": "Corrections",
+    "viewAndReview": "Voir et réviser les données collectées"
   },
   "team": {
     "title": "Équipe",
@@ -267,7 +250,9 @@
     "lastActive": "Dernière Activité",
     "assignedForms": "Formulaires Assignés",
     "submissions": "Soumissions",
-    "performance": "Performance"
+    "performance": "Performance",
+    "manageDescription": "Gérer les membres de l'équipe et les permissions",
+    "addMemberDescription": "Ajouter un utilisateur existant à votre organisation"
   },
   "settings": {
     "title": "Paramètres",
