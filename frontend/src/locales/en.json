@@ -234,25 +234,8 @@
     "attachments": "Attachments",
     "metadata": "Metadata",
     "history": "History",
-    "corrections": "Corrections"
-  },
-  "quality": {
-    "title": "Data Quality",
-    "qualityScore": "Quality Score",
-    "issues": "Issues",
-    "warnings": "Warnings",
-    "passed": "Passed",
-    "failed": "Failed",
-    "speedCheck": "Speed Check",
-    "gpsCheck": "GPS Verification",
-    "duplicateCheck": "Duplicate Detection",
-    "outlierCheck": "Outlier Detection",
-    "consistencyCheck": "Consistency Check",
-    "completenessCheck": "Completeness Check",
-    "aiAnalysis": "AI Analysis",
-    "sentiment": "Sentiment",
-    "transcription": "Transcription",
-    "translation": "Translation"
+    "corrections": "Corrections",
+    "viewAndReview": "View and review collected data"
   },
   "team": {
     "title": "Team",
