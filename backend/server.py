@@ -113,6 +113,8 @@ from routes.ai_services_routes import router as ai_services_router
 from routes.realtime_features_routes import router as realtime_features_router
 # Mobile Collection for Enumerators
 from routes.collect_routes import router as collect_router
+# DataViz Studio
+from routes.dataviz_routes import router as dataviz_router
 
 # Include all route modules
 api_router.include_router(auth_router)
