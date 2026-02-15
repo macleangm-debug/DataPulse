@@ -50,11 +50,12 @@ class TestDashboardTemplatesAPI:
         
         preset_templates = data["preset"]
         assert isinstance(preset_templates, list), "preset should be a list"
-        assert len(preset_templates) == 6, f"Expected 6 preset templates, got {len(preset_templates)}"
+        assert len(preset_templates) == 10, f"Expected 10 preset templates, got {len(preset_templates)}"
         
-        # Verify preset template structure
+        # Verify preset template structure - now includes more templates
         expected_preset_ids = ["preset_sales", "preset_marketing", "preset_customers", 
-                              "preset_operations", "preset_financial", "preset_blank"]
+                              "preset_operations", "preset_financial", "preset_analytics",
+                              "preset_executive", "preset_project", "preset_support", "preset_blank"]
         actual_ids = [t["id"] for t in preset_templates]
         
         for preset_id in expected_preset_ids:
@@ -79,12 +80,12 @@ class TestDashboardTemplatesAPI:
         data = response.json()
         preset_templates = data["preset"]
         
-        # Find Sales Overview template
+        # Find Sales Dashboard template
         sales_template = next((t for t in preset_templates if t["id"] == "preset_sales"), None)
-        assert sales_template is not None, "Sales Overview template should exist"
-        assert sales_template["name"] == "Sales Overview"
+        assert sales_template is not None, "Sales Dashboard template should exist"
+        assert sales_template["name"] == "Sales Dashboard"
         assert sales_template["icon"] == "DollarSign"
-        assert len(sales_template["widgets"]) == 4, "Sales template should have 4 widgets"
+        assert len(sales_template["widgets"]) == 9, "Sales template should have 9 widgets"
         
         # Find Blank Canvas template
         blank_template = next((t for t in preset_templates if t["id"] == "preset_blank"), None)
@@ -140,7 +141,7 @@ class TestDashboardTemplatesAPI:
         
         data = response.json()
         assert data["id"] == "preset_sales"
-        assert data["name"] == "Sales Overview"
+        assert data["name"] == "Sales Dashboard"
         assert data["is_preset"] == True
     
     def test_delete_custom_template(self):
@@ -194,7 +195,7 @@ class TestDashboardTemplatesAPI:
         data = response.json()
         assert "preset" in data
         assert "custom" in data
-        assert len(data["preset"]) == 6, "Should return 6 preset templates"
+        assert len(data["preset"]) == 10, "Should return 10 preset templates"
         # Custom should be empty without auth
         assert len(data["custom"]) == 0, "Custom templates should be empty without auth"
     
@@ -467,7 +468,7 @@ class TestPresetTemplateDetails:
         assert template["name"] == "Marketing Analytics"
         assert template["icon"] == "Target"
         assert "violet" in template["color"]
-        assert len(template["widgets"]) == 3
+        assert len(template["widgets"]) == 9, "Marketing template should have 9 widgets"
     
     def test_operations_template_details(self):
         """Verify Operations Monitor template details"""
