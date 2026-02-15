@@ -86,7 +86,6 @@ export function DashboardsPage() {
       toast.success(template ? `Created dashboard from "${template.name}" template` : 'Dashboard created');
       setShowCreateDialog(false);
       setShowTemplatesDialog(false);
-      setSelectedTemplate(null);
       setNewDashboard({ name: '', description: '' });
       navigate(`/dashboards/${response.data.id}`);
     } catch (error) {
@@ -94,9 +93,9 @@ export function DashboardsPage() {
     }
   };
 
-  const handleCreateFromTemplate = (template) => {
-    setSelectedTemplate(template);
-    if (template.id === 'blank') {
+  const handleSelectTemplate = (template) => {
+    if (template.id === 'preset_blank') {
+      // For blank canvas, show the create dialog instead
       setShowTemplatesDialog(false);
       setShowCreateDialog(true);
     } else {
