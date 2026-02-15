@@ -215,12 +215,18 @@ const DashboardTemplatesDialog = ({ isOpen, onClose, onSelectTemplate, token }) 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {templates.map(t => {
                 const Icon = ICONS[t.icon] || LayoutDashboard;
+                const isEditing = editingId === t.id;
+                
                 return (
                   <motion.div 
                     key={t.id} 
-                    whileHover={{ scale: 1.02, y: -2 }} 
-                    className="relative border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-600 cursor-pointer group transition-all bg-white dark:bg-gray-800"
-                    onClick={() => onSelectTemplate(t)}
+                    whileHover={isEditing ? {} : { scale: 1.02, y: -2 }} 
+                    className={`relative border rounded-xl overflow-hidden transition-all bg-white dark:bg-gray-800 ${
+                      isEditing 
+                        ? 'border-violet-500 ring-2 ring-violet-200 dark:ring-violet-800' 
+                        : 'border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-600 cursor-pointer group'
+                    }`}
+                    onClick={() => !isEditing && onSelectTemplate(t)}
                     data-testid={`template-card-${t.id}`}
                   >
                     <div className={`h-20 bg-gradient-to-br ${t.color} flex items-center justify-center relative`}>
@@ -232,22 +238,71 @@ const DashboardTemplatesDialog = ({ isOpen, onClose, onSelectTemplate, token }) 
                       )}
                     </div>
                     <div className="p-3">
-                      <h3 className="font-semibold text-sm text-gray-900 dark:text-white">{t.name}</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1 mt-0.5">{t.description}</p>
-                      <div className="flex items-center justify-between mt-2">
-                        <span className="text-xs text-gray-400 dark:text-gray-500">
-                          {t.widgets?.length || 0} widgets
-                        </span>
-                      </div>
+                      {isEditing ? (
+                        <div className="space-y-2" onClick={e => e.stopPropagation()}>
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none"
+                            placeholder="Template name"
+                            data-testid={`edit-name-input-${t.id}`}
+                            autoFocus
+                          />
+                          <textarea
+                            value={editDescription}
+                            onChange={(e) => setEditDescription(e.target.value)}
+                            className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none resize-none"
+                            placeholder="Description (optional)"
+                            rows={2}
+                            data-testid={`edit-description-input-${t.id}`}
+                          />
+                          <div className="flex gap-2 justify-end">
+                            <button
+                              onClick={handleCancelEdit}
+                              className="px-2 py-1 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                              data-testid={`cancel-edit-${t.id}`}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={handleSaveEdit}
+                              className="px-2 py-1 text-xs bg-violet-600 text-white rounded hover:bg-violet-700 transition-colors flex items-center gap-1"
+                              data-testid={`save-edit-${t.id}`}
+                            >
+                              <Check className="w-3 h-3" /> Save
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <h3 className="font-semibold text-sm text-gray-900 dark:text-white">{t.name}</h3>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1 mt-0.5">{t.description}</p>
+                          <div className="flex items-center justify-between mt-2">
+                            <span className="text-xs text-gray-400 dark:text-gray-500">
+                              {t.widgets?.length || 0} widgets
+                            </span>
+                          </div>
+                        </>
+                      )}
                     </div>
-                    {tab === 'custom' && (
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); handleDelete(t.id); }} 
-                        className="absolute top-2 right-2 p-1.5 bg-white/90 dark:bg-gray-800/90 rounded-lg shadow opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 dark:hover:bg-red-900/20"
-                        data-testid={`delete-template-${t.id}`}
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </button>
+                    {tab === 'custom' && !isEditing && (
+                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button 
+                          onClick={(e) => handleStartEdit(e, t)} 
+                          className="p-1.5 bg-white/90 dark:bg-gray-800/90 rounded-lg shadow hover:bg-violet-50 dark:hover:bg-violet-900/20"
+                          data-testid={`edit-template-${t.id}`}
+                        >
+                          <Pencil className="w-4 h-4 text-violet-500" />
+                        </button>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); handleDelete(t.id); }} 
+                          className="p-1.5 bg-white/90 dark:bg-gray-800/90 rounded-lg shadow hover:bg-red-50 dark:hover:bg-red-900/20"
+                          data-testid={`delete-template-${t.id}`}
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
                     )}
                   </motion.div>
                 );
