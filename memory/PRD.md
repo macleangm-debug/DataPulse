@@ -5,6 +5,7 @@ User requested to pull DataPulse from GitHub (https://github.com/macleangm-debug
 1. A comprehensive User Management module
 2. Integrate DataViz module from exported zip file to enhance existing functionality
 3. Dashboard Templates Library with 10 preset templates and 12 widget types
+4. **Connect data visualization to real-time data collection**
 
 ## Project Overview
 DataPulse is an enterprise-grade field data collection platform for research, M&E, and field surveys. It features offline-first data collection, real-time quality monitoring, and multi-language support.
@@ -18,79 +19,60 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 ## What's Been Implemented
 
 ### Session 1 - User Management Module (Feb 15, 2026)
-1. **Backend Routes** (`/app/backend/routes/user_management_routes.py`):
-   - User CRUD, search, filtering, pagination
-   - Activity tracking & login history
-   - User suspension/deactivation/reactivation
-   - Password policy configuration
-   - Session management (view, revoke)
-   - Bulk user actions
-   - Suspicious activity detection
-
-2. **Frontend Page** (`/app/frontend/src/pages/UserManagement/UserManagementPage.jsx`):
-   - Stats dashboard, User/Activity/Sessions tabs
-   - User details drawer, Edit user dialog
-   - Password policy settings dialog
+- Backend routes for user CRUD, activity tracking, sessions, password policies
+- Frontend page with stats dashboard, tabs, and dialogs
 
 ### Session 2 - DataViz Module Integration (Feb 15, 2026)
-1. **New Pages Added**:
-   - `ChartsPage.jsx` - Chart Studio with AI-powered suggestions
-   - `DashboardsPage.jsx` - Dashboard list and management
-   - `DashboardBuilderPage.jsx` - Drag-and-drop dashboard builder
-   - `ReportBuilderPage.jsx` - Professional infographic-style report builder
-   - `DataTransformPage.jsx` - Data transformation tools
-
-2. **Backend Routes Added**:
-   - `charts_routes.py` - Chart CRUD with query param support
-   - Updated `dashboard_builder_routes.py` - Added query param endpoint
-   - Updated `dataset_routes.py` - Added query param endpoint
+- New pages: ChartsPage, DashboardsPage, DashboardBuilderPage, ReportBuilderPage
+- Backend routes for charts, dashboards, datasets
 
 ### Session 3 - Dashboard Templates Library (Feb 15, 2026)
-1. **Backend Routes** (`/app/backend/routes/dashboard_templates_routes.py`):
-   - `GET /api/dashboard-templates` - List preset and custom templates
-   - `POST /api/dashboard-templates` - Create custom template
-   - `DELETE /api/dashboard-templates/{id}` - Delete custom template
-   - `POST /api/dashboard-templates/from-dashboard/{id}` - Save dashboard as template
-   - `GET /api/dashboard-templates/{id}` - Get specific template
+- 10 preset templates with 12 widget types
+- Category filtering
+- Save dashboard as template feature
 
-2. **10 Preset Templates**:
-   - Sales Dashboard (9 widgets, category: sales)
-   - Marketing Analytics (9 widgets, category: marketing)
-   - Customer Insights (9 widgets, category: customers)
-   - Operations Monitor (8 widgets, category: operations)
-   - Financial Summary (8 widgets, category: finance)
-   - Web Analytics (9 widgets, category: analytics)
-   - Executive Summary (9 widgets, category: executive)
-   - Project Tracker (9 widgets, category: project)
-   - Support Dashboard (9 widgets, category: support)
-   - Blank Canvas (0 widgets, category: custom)
+### Session 4 - Data Visualization Integration (Feb 15, 2026)
+**NEW Backend API** (`/app/backend/routes/data_sources_routes.py`):
+- `GET /api/data-sources` - List all available data sources (forms, datasets, snapshots)
+- `GET /api/data-sources/{id}/data` - Get data from a source
+- `GET /api/data-sources/{id}/aggregate` - Aggregate data for charts
+- `GET /api/data-sources/{id}/fields` - Get field schema
+- `GET /api/data-sources/{id}/stats` - Get statistics summary
 
-3. **12 Widget Types Supported**:
-   - stat - KPI card with number
-   - chart - Bar, line, pie, area, scatter
-   - table - Data table
-   - gauge - Circular gauge for percentages
-   - progress - Progress bar with target
-   - map - Geographic heatmap
-   - funnel - Conversion funnel
-   - heatmap - Activity/time heatmap
-   - scorecard - Metric vs target comparison
-   - list - Ranked list items
-   - timeline - Events/milestones
-   - sparkline - Mini trend line with value
+**Frontend Components Updated:**
+1. **DataSourceSelector** (`/app/frontend/src/components/DataSourceSelector.jsx`):
+   - Unified component for selecting forms, datasets, or snapshots
+   - Shows record counts, field counts, last updated
+   - Search and type filtering
+   - Used in all visualization pages
 
-4. **Frontend Components**:
-   - `DashboardTemplatesDialog.jsx` - Modal with tabs for Preset/My Templates + category filter
-   - `SaveAsTemplateButton.jsx` - Button to save current dashboard as template
+2. **DashboardsPage** - When creating from template:
+   - Shows DataSourceSelector after template selection
+   - Can connect to form submissions or datasets
+   - "Skip and use demo data" option
 
-5. **Bug Fix**:
-   - Added `GET /api/dashboards/by-id/{dashboard_id}` endpoint to fix dashboard loading
+3. **ChartsPage** - Chart Studio:
+   - Data source dropdown shows forms and datasets with type badges (FORM/DATA)
+   - Uses unified `/api/data-sources` API
+   - Creates charts from real submission data
 
-## User Personas
-- **Admin**: Full access to user management and dashboards
-- **Manager**: Team management, dashboard viewing
-- **Analyst**: Create charts, dashboards, reports
-- **Enumerator/Viewer**: Standard data access
+4. **ReportBuilderPage**:
+   - "Connect Data" button in header
+   - Auto-generates report sections from connected data
+   - Dynamic stat cards, pie charts, bar charts from data
+
+**Test Data Seeded:**
+- Form: "Customer Feedback Survey" with 50 submissions
+- Dataset: "Sales Data" with 18 records
+
+## Data Flow Architecture
+```
+[Forms] → [Submissions] ←→ [Data Sources API] ←→ [Chart Studio]
+                              ↓                    ↓
+[Datasets] → [Records] ←───────────────→ [Dashboard Builder]
+                              ↓                    ↓
+[Snapshots] ───────────────────────────→ [Report Builder]
+```
 
 ## Core Requirements Status
 - [x] Clone and set up DataPulse codebase
@@ -103,13 +85,28 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - [x] Dashboard Templates Library (10 presets + custom)
 - [x] Category filtering for templates
 - [x] 12 widget types support
+- [x] **Connect data visualization to real-time data collection** ✓
+
+## Key API Endpoints
+- `POST /api/auth/login` - User login
+- `GET /api/data-sources` - List all data sources
+- `GET /api/data-sources/{id}/data?source_type={type}` - Get data from source
+- `GET /api/data-sources/{id}/aggregate` - Aggregate data for charts
+- `GET /api/dashboard-templates` - List all templates
+- `POST /api/dashboard-templates` - Create custom template
+- `GET /api/dashboards/by-id/{id}` - Get dashboard by ID
+
+## Test Credentials
+- Email: demo@datapulse.io
+- Password: Test123!
 
 ## Prioritized Backlog
 
 ### P0 (Critical) - DONE
 - ✅ User Management module
 - ✅ DataViz module integration
-- ✅ Dashboard Templates Library (10 templates, 12 widget types)
+- ✅ Dashboard Templates Library
+- ✅ Data visualization connected to real-time data
 
 ### P1 (High Priority)
 - Help Center documentation
@@ -119,29 +116,10 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 ### P2 (Medium Priority)
 - User import/export (CSV)
 - Advanced audit logging
+- Real-time dashboard refresh (WebSocket)
 - Custom role creation UI
-- Real-time dashboard collaboration
 
 ### P3 (Nice to Have)
 - User onboarding wizard
 - AI-powered report generation
 - Dashboard embedding for external sites
-
-## Key API Endpoints
-- `POST /api/auth/login` - User login
-- `GET /api/dashboard-templates` - List all templates (10 preset + custom)
-- `POST /api/dashboard-templates` - Create custom template
-- `POST /api/dashboard-templates/from-dashboard/{id}` - Save dashboard as template
-- `DELETE /api/dashboard-templates/{id}` - Delete custom template
-- `GET /api/dashboards/by-id/{id}` - Get dashboard by ID
-- `GET /api/dashboards?org_id={id}` - List dashboards
-- `POST /api/dashboards` - Create dashboard
-
-## Test Credentials
-- Email: demo@datapulse.io
-- Password: Test123!
-
-## Next Steps
-1. Add comprehensive Help Center
-2. Implement email notifications
-3. Add 2FA support
