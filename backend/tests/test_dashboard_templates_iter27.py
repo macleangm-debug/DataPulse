@@ -30,7 +30,7 @@ class TestDashboardTemplatesAPI:
         })
         
         if response.status_code == 200:
-            token = response.json().get("token")
+            token = response.json().get("access_token") or response.json().get("token")
             self.session.headers.update({"Authorization": f"Bearer {token}"})
             self.token = token
         else:
@@ -231,7 +231,7 @@ class TestDashboardTemplatesFromDashboard:
         })
         
         if response.status_code == 200:
-            token = response.json().get("token")
+            token = response.json().get("access_token") or response.json().get("token")
             self.session.headers.update({"Authorization": f"Bearer {token}"})
             self.token = token
         else:
