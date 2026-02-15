@@ -288,7 +288,7 @@ async def aggregate_source_data(
     labels = grouped[group_by].fillna("Unknown").tolist()
     values = grouped['value'].fillna(0).tolist()
     
-    aggregated = [{"name": str(l), "value": float(v)} for l, v in zip(labels, values)]
+    aggregated = [{"name": str(label), "value": float(val)} for label, val in zip(labels, values)]
     
     return {
         "aggregated": aggregated,
