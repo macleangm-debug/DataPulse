@@ -76,6 +76,21 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - Cancel button exits edit mode without saving
 - Card border highlights in violet when in edit mode
 
+### Session 6 - Help Center with AI Assistant (Feb 15, 2026)
+**Backend API** (`/app/backend/routes/help_assistant_routes.py`):
+- `GET /api/help/articles` - List help articles with ?category and ?search filters
+- `GET /api/help/articles/{article_id}` - Get specific article content
+- `GET /api/help/categories` - List all help categories
+- `POST /api/help/chat` - AI chat using GPT-4o via Emergent LLM key
+- `POST /api/help/feedback` - Submit article feedback
+
+**Frontend Components:**
+- `HelpCenterPage.jsx` - Full help center with tabs: Browse, FAQ, Troubleshoot, Shortcuts, What's New
+- `HelpAssistant.jsx` - Floating AI chat assistant with GPT-4o integration
+- Search filtering, category browsing, FAQ accordion, troubleshooting guides
+
+**Integration:** GPT-4o via Emergent LLM key (emergentintegrations library)
+
 ## Data Flow Architecture
 ```
 [Forms] → [Submissions] ←→ [Data Sources API] ←→ [Chart Studio]
@@ -98,6 +113,7 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - [x] 12 widget types support
 - [x] **Connect data visualization to real-time data collection** ✓
 - [x] **Edit/Delete custom dashboard templates** ✓
+- [x] **Help Center with AI Assistant** ✓
 
 ## Key API Endpoints
 - `POST /api/auth/login` - User login
@@ -109,6 +125,9 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - `PUT /api/dashboard-templates/{template_id}` - Update custom template name/description
 - `DELETE /api/dashboard-templates/{template_id}` - Delete custom template
 - `GET /api/dashboards/by-id/{id}` - Get dashboard by ID
+- `GET /api/help/articles` - List help articles
+- `GET /api/help/categories` - List help categories
+- `POST /api/help/chat` - AI chat assistant
 
 ## Test Credentials
 - Email: demo@datapulse.io
@@ -122,9 +141,9 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - ✅ Dashboard Templates Library
 - ✅ Data visualization connected to real-time data
 - ✅ Edit/Delete custom dashboard templates
+- ✅ Help Center with AI Assistant
 
 ### P1 (High Priority)
-- Help Center documentation
 - Email notifications for user actions
 - Two-factor authentication (2FA)
 
