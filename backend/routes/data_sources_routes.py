@@ -238,8 +238,6 @@ async def aggregate_source_data(
     current_user: dict = Depends(get_optional_user)
 ):
     """Aggregate data for charts"""
-    db = request.app.state.db
-    
     # Get the raw data first
     data_response = await get_source_data(
         request=request,
