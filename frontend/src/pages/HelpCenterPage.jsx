@@ -194,7 +194,9 @@ const KEYBOARD_SHORTCUTS = [
   { keys: ['Ctrl', 'Y'], action: 'Redo last action' },
   { keys: ['Ctrl', '/'], action: 'Show keyboard shortcuts' },
   { keys: ['Esc'], action: 'Close dialogs/modals' },
-  { keys: ['Ctrl', 'K'], action: 'Quick search' }
+  { keys: ['Ctrl', 'K'], action: 'Quick search' },
+  { keys: ['Tab'], action: 'Move to next field' },
+  { keys: ['Shift', 'Tab'], action: 'Move to previous field' }
 ];
 
 // What's New section
