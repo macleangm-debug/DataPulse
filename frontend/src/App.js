@@ -39,6 +39,7 @@ import ChartsPage from './pages/ChartsPage';
 import DashboardsPage from './pages/DashboardsPage';
 import DashboardBuilderPage from './pages/DashboardBuilderPage';
 import DataTransformPage from './pages/DataTransformPage';
+import HelpCenterPage from './pages/HelpCenterPage';
 import { PWAInstallPrompt, NetworkStatus } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import '@/App.css';
@@ -304,6 +305,11 @@ function App() {
           <Route path="/datasets/:datasetId/transform" element={
             <ProtectedRoute>
               <DataTransformPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/help" element={
+            <ProtectedRoute>
+              <HelpCenterPage />
             </ProtectedRoute>
           } />
           {/* Public CAWI Survey Routes */}
