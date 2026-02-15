@@ -39,7 +39,6 @@ export function DashboardsPage() {
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showTemplatesDialog, setShowTemplatesDialog] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [deleteDialog, setDeleteDialog] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [newDashboard, setNewDashboard] = useState({
