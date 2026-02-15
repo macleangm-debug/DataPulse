@@ -74,6 +74,145 @@ const ReportBuilderPage = () => {
   const [showSettings, setShowSettings] = useState(true);
   const [customColors, setCustomColors] = useState({ primary: '#3B82F6', accent: '#EF4444' });
   
+  // Fetch data when a data source is connected
+  const handleConnectDataSource = async (source) => {
+    setConnectedDataSource(source);
+    setShowDataSourceSelector(false);
+    setLoadingData(true);
+    
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      
+      // Fetch data and stats
+      const [dataRes, statsRes] = await Promise.all([
+        axios.get(`${API_URL}/api/data-sources/${source.id}/data?source_type=${source.type}&limit=1000`, { headers }),
+        axios.get(`${API_URL}/api/data-sources/${source.id}/stats?source_type=${source.type}`, { headers })
+      ]);
+      
+      const data = dataRes.data.data || [];
+      const stats = statsRes.data;
+      
+      setSourceData(data);
+      setSourceStats(stats);
+      
+      // Auto-generate report sections from data
+      if (data.length > 0) {
+        generateReportFromData(data, stats, source);
+        toast.success(`Connected to "${source.name}" with ${data.length} records`);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast.error('Failed to load data from source');
+    } finally {
+      setLoadingData(false);
+    }
+  };
+  
+  // Generate report sections from real data
+  const generateReportFromData = (data, stats, source) => {
+    const fields = Object.keys(data[0] || {}).filter(f => !f.startsWith('_'));
+    const numericFields = fields.filter(f => {
+      const sample = data.slice(0, 10).map(d => d[f]);
+      return sample.some(v => typeof v === 'number' || !isNaN(parseFloat(v)));
+    });
+    const categoricalFields = fields.filter(f => !numericFields.includes(f));
+    
+    // Generate stat cards from numeric fields
+    const statCards = numericFields.slice(0, 4).map(field => {
+      const values = data.map(d => parseFloat(d[field]) || 0);
+      const sum = values.reduce((a, b) => a + b, 0);
+      const avg = sum / values.length;
+      return {
+        value: numericFields.indexOf(field) === 0 ? sum.toLocaleString() : avg.toFixed(1),
+        label: field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        iconType: ['percent', 'trending', 'users', 'cart'][numericFields.indexOf(field) % 4]
+      };
+    });
+    
+    // Update sections with real data
+    const newSections = [
+      {
+        id: 'sec_intro',
+        type: 'intro',
+        title: 'Introduction',
+        content: `This report analyzes data from "${source.name}" containing ${data.length} records across ${fields.length} fields.`,
+        width: 100
+      },
+      {
+        id: 'sec_stats',
+        type: 'stat_cards',
+        title: 'Key Metrics',
+        width: 100,
+        stats: statCards.length > 0 ? statCards : [
+          { value: data.length.toString(), label: 'Total Records', iconType: 'users' },
+          { value: fields.length.toString(), label: 'Data Fields', iconType: 'trending' },
+          { value: numericFields.length.toString(), label: 'Numeric Fields', iconType: 'percent' },
+          { value: categoricalFields.length.toString(), label: 'Categorical Fields', iconType: 'cart' }
+        ]
+      }
+    ];
+    
+    // Add charts for categorical fields
+    if (categoricalFields.length > 0) {
+      newSections.push({
+        id: 'sec_pie',
+        type: 'pie_chart',
+        title: `Distribution by ${categoricalFields[0].replace(/_/g, ' ')}`,
+        width: 50,
+        data: aggregateByField(data, categoricalFields[0])
+      });
+    }
+    
+    if (categoricalFields.length > 1) {
+      newSections.push({
+        id: 'sec_bar',
+        type: 'bar_chart',
+        title: `Breakdown by ${categoricalFields[1].replace(/_/g, ' ')}`,
+        width: 50,
+        data: aggregateByField(data, categoricalFields[1])
+      });
+    }
+    
+    // Add data table
+    newSections.push({
+      id: 'sec_table',
+      type: 'data_table',
+      title: 'Data Summary',
+      width: 100,
+      data: data.slice(0, 10),
+      columns: fields.slice(0, 5)
+    });
+    
+    // Add conclusion
+    newSections.push({
+      id: 'sec_conclusion',
+      type: 'conclusion',
+      title: 'Conclusions',
+      content: `This analysis covered ${data.length} records from the ${source.type} "${source.name}". Key insights can be drawn from the metrics and visualizations above.`,
+      width: 100
+    });
+    
+    setSections(newSections);
+    setReportConfig(prev => ({
+      ...prev,
+      title: `${source.name} Analysis Report`,
+      subtitle: `Generated from ${source.type} data`
+    }));
+  };
+  
+  // Helper to aggregate data by a field
+  const aggregateByField = (data, field) => {
+    const counts = {};
+    data.forEach(d => {
+      const key = String(d[field] || 'Unknown');
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 8);
+  };
+  
   // Helper to generate lighter shade
   const getLighterHex = (hex, opacity) => {
     const r = parseInt(hex.slice(1, 3), 16);
