@@ -101,18 +101,20 @@ PRESET_TEMPLATES = [
 @router.get("")
 async def list_templates(
     request: Request,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_optional_user)
 ):
     """List all preset and user-created templates"""
     db = request.app.state.db
     
-    try:
+    # If user is authenticated, get their custom templates
+    custom = []
+    if current_user:
         user_id = current_user.get("id") or current_user.get("user_id")
-        cursor = db.dashboard_templates.find({"user_id": user_id}, {"_id": 0})
-        custom = await cursor.to_list(length=100)
-        return {"preset": PRESET_TEMPLATES, "custom": custom}
-    except Exception:
-        return {"preset": PRESET_TEMPLATES, "custom": []}
+        if user_id:
+            cursor = db.dashboard_templates.find({"user_id": user_id}, {"_id": 0})
+            custom = await cursor.to_list(length=100)
+    
+    return {"preset": PRESET_TEMPLATES, "custom": custom}
 
 
 @router.post("")
