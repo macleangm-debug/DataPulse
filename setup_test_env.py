@@ -8,7 +8,7 @@ import sys
 from datetime import datetime
 import uuid
 
-API_URL = "https://pulse-metrics-2.preview.emergentagent.com"
+API_URL = "https://viz-enhance-1.preview.emergentagent.com"
 
 def create_test_user():
     """Create a new test user for our tests"""
