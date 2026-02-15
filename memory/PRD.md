@@ -105,6 +105,8 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - `GET /api/data-sources/{id}/aggregate` - Aggregate data for charts
 - `GET /api/dashboard-templates` - List all templates
 - `POST /api/dashboard-templates` - Create custom template
+- `PUT /api/dashboard-templates/{template_id}` - Update custom template name/description
+- `DELETE /api/dashboard-templates/{template_id}` - Delete custom template
 - `GET /api/dashboards/by-id/{id}` - Get dashboard by ID
 
 ## Test Credentials
