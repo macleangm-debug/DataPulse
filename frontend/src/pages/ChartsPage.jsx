@@ -59,7 +59,7 @@ import {
   DialogDescription,
 } from '../components/ui/dialog';
 import { Badge } from '../components/ui/badge';
-import { ScrollArea } from '../components/ui/scrollarea';
+import { ScrollArea } from '../components/ui/scroll-area';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { useOrgStore, useAuthStore } from '../store';
 import { toast } from 'sonner';
