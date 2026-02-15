@@ -616,7 +616,7 @@ async def get_all_active_sessions(request: Request, org_id: str):
 
 # ============= PASSWORD POLICY ENDPOINTS =============
 
-@router.get("/password-policy")
+@router.get("/config/password-policy")
 async def get_password_policy(request: Request, org_id: str):
     """Get password policy for the organization"""
     db = get_db(request)
@@ -632,7 +632,7 @@ async def get_password_policy(request: Request, org_id: str):
     return policy
 
 
-@router.put("/password-policy")
+@router.put("/config/password-policy")
 async def update_password_policy(request: Request, org_id: str, policy: PasswordPolicyModel):
     """Update password policy for the organization"""
     db = get_db(request)
