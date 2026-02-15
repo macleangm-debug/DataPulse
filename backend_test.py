@@ -91,8 +91,8 @@ class UserManagementAPITester:
             }
         )
         
-        if success and 'token' in response:
-            self.token = response['token']
+        if success and ('token' in response or 'access_token' in response):
+            self.token = response.get('token') or response.get('access_token')
             self.user_id = response.get('user', {}).get('id')
             self.log_test("Login Authentication", True, f"Token obtained for user: {response.get('user', {}).get('name', 'Unknown')}")
             return True
