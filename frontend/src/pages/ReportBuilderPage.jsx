@@ -27,6 +27,16 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 // ========================================
 
 const ReportBuilderPage = () => {
+  const { currentOrg } = useOrgStore();
+  const { token } = useAuthStore();
+  
+  // Data source state
+  const [showDataSourceSelector, setShowDataSourceSelector] = useState(false);
+  const [connectedDataSource, setConnectedDataSource] = useState(null);
+  const [sourceData, setSourceData] = useState(null);
+  const [sourceStats, setSourceStats] = useState(null);
+  const [loadingData, setLoadingData] = useState(false);
+  
   // Report configuration state
   const [reportConfig, setReportConfig] = useState({
     title: 'Survey Results Infographics',
