@@ -253,7 +253,7 @@ export function DashboardBuilderPage() {
       const headers = { Authorization: `Bearer ${token}` };
       
       const [dashboardRes, widgetsRes, datasetsRes] = await Promise.all([
-        axios.get(`${API_URL}/api/dashboards/${dashboardId}`, { headers }),
+        axios.get(`${API_URL}/api/dashboards/by-id/${dashboardId}`, { headers }),
         axios.get(`${API_URL}/api/dashboards/${dashboardId}/widgets`, { headers }),
         axios.get(`${API_URL}/api/datasets`, { headers })
       ]);
