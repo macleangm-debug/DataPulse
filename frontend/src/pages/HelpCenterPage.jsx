@@ -315,11 +315,11 @@ const HelpCenterPage = () => {
   };
 
   const filteredFaqs = searchQuery 
-    ? FAQ_DATA.filter(f => 
+    ? faqData.filter(f => 
         f.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
         f.answer.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : FAQ_DATA;
+    : faqData;
 
   return (
     <DashboardLayout>
