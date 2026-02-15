@@ -80,7 +80,7 @@ export function HelpAssistant({ isDark = true }) {
   const handleFeedback = async (messageId, isHelpful, question) => {
     setFeedback(prev => ({ ...prev, [messageId]: isHelpful ? 'helpful' : 'not-helpful' }));
     try {
-      await fetch(`${BACKEND_URL}/api/help-assistant/feedback`, {
+      await fetch(`${BACKEND_URL}/api/help/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session_id: sessionId, message_id: messageId, is_helpful: isHelpful, question })
@@ -104,7 +104,7 @@ export function HelpAssistant({ isDark = true }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/help-assistant/chat`, {
+      const response = await fetch(`${BACKEND_URL}/api/help/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage, session_id: sessionId })
