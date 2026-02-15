@@ -18,6 +18,8 @@ from typing import Optional
 
 API_URL = "https://pulse-metrics-2.preview.emergentagent.com"
 ORG_ID = "878035eb-5e4f-4305-8075-31eb8fd66580"
+TEST_EMAIL = "testuser_095957@datapulse.io"
+TEST_PASSWORD = "Test123!"
 
 class UserManagementAPITester:
     def __init__(self):
