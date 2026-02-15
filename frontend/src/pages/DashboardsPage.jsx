@@ -323,54 +323,13 @@ export function DashboardsPage() {
           </DialogContent>
         </Dialog>
 
-        {/* Templates Dialog */}
-        <Dialog open={showTemplatesDialog} onOpenChange={setShowTemplatesDialog}>
-          <DialogContent className="sm:max-w-3xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-violet-500" />
-                Dashboard Templates
-              </DialogTitle>
-              <DialogDescription>
-                Choose a pre-built template to get started quickly or create from scratch
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-              {DASHBOARD_TEMPLATES.map((template) => {
-                const Icon = template.icon;
-                return (
-                  <motion.div
-                    key={template.id}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Card
-                      className="cursor-pointer hover:shadow-lg hover:border-violet-300 transition-all"
-                      onClick={() => handleCreateFromTemplate(template)}
-                      data-testid={`template-${template.id}`}
-                    >
-                      <div className={`h-24 bg-gradient-to-br ${template.color} flex items-center justify-center rounded-t-lg`}>
-                        <Icon className="w-10 h-10 text-white" />
-                      </div>
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold text-foreground mb-1">{template.name}</h3>
-                        <p className="text-xs text-muted-foreground line-clamp-2">{template.description}</p>
-                        <p className="text-xs text-muted-foreground mt-2">
-                          {template.widgets.length === 0 ? 'Empty canvas' : `${template.widgets.length} widgets`}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                );
-              })}
-            </div>
-            <div className="flex justify-end mt-4">
-              <Button variant="outline" onClick={() => setShowTemplatesDialog(false)}>
-                Cancel
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        {/* Templates Dialog - Using new backend-connected component */}
+        <DashboardTemplatesDialog
+          isOpen={showTemplatesDialog}
+          onClose={() => setShowTemplatesDialog(false)}
+          onSelectTemplate={handleSelectTemplate}
+          token={token}
+        />
       </div>
     </DashboardLayout>
   );
