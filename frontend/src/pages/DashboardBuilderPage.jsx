@@ -41,7 +41,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-} from '../components/ui/sheet';
+} from '../components/ui/dialog';
 import { Badge } from '../components/ui/badge';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { useOrgStore, useAuthStore } from '../store';

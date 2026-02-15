@@ -3,7 +3,7 @@ import {
   FileText, Download, Settings, Eye, Plus, PieChart, RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import DashboardLayout from '../layouts/DashboardLayout';
+import { DashboardLayout } from '../layouts/DashboardLayout';
 import { toast } from 'sonner';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
