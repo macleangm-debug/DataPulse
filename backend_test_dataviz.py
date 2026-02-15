@@ -194,6 +194,15 @@ class DataVizAPITester:
         
         # Test GET /api/datasets - list datasets (needed for charts/dashboards)
         success, response = self.make_request('GET', '/datasets', params={'org_id': ORG_ID})
+        if response.get('detail') == 'Method Not Allowed':
+            self.log_test(
+                "GET /api/datasets - List Datasets", 
+                False,
+                "Datasets GET endpoint not properly implemented",
+                response
+            )
+            return
+        
         self.log_test(
             "GET /api/datasets - List Datasets", 
             success and 'datasets' in response,
