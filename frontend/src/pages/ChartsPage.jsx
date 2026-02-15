@@ -1275,15 +1275,37 @@ export function ChartsPage() {
       const headers = { Authorization: `Bearer ${token}` };
       const orgParam = currentOrg?.id ? `?org_id=${currentOrg.id}` : '';
       
-      const [chartsRes, datasetsRes] = await Promise.all([
+      const [chartsRes, dataSourcesRes] = await Promise.all([
         axios.get(`${API_URL}/api/charts${orgParam}`, { headers }),
-        axios.get(`${API_URL}/api/datasets${orgParam}`, { headers })
+        axios.get(`${API_URL}/api/data-sources${orgParam}`, { headers })
       ]);
       
       setCharts(chartsRes.data.charts || []);
-      setDatasets(datasetsRes.data.datasets || []);
+      
+      // Convert data sources to datasets format for compatibility
+      const sources = dataSourcesRes.data.sources || [];
+      const convertedDatasets = sources.map(source => ({
+        id: source.id,
+        name: source.name,
+        description: source.description,
+        source_type: source.type,  // 'form', 'dataset', 'snapshot'
+        row_count: source.record_count,
+        columns: source.fields || [],
+        last_updated: source.last_updated
+      }));
+      
+      setDatasets(convertedDatasets);
     } catch (error) {
       console.error('Error fetching data:', error);
+      // Fallback to old API if data-sources not available
+      try {
+        const headers = { Authorization: `Bearer ${token}` };
+        const orgParam = currentOrg?.id ? `?org_id=${currentOrg.id}` : '';
+        const datasetsRes = await axios.get(`${API_URL}/api/datasets${orgParam}`, { headers });
+        setDatasets(datasetsRes.data.datasets || []);
+      } catch (e) {
+        console.error('Fallback also failed:', e);
+      }
     } finally {
       setLoading(false);
     }
