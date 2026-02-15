@@ -1539,11 +1539,13 @@ export function ChartsPage() {
                 <TrendingUp className="w-5 h-5 text-amber-600" />
               </div>
               <div>
-                <p className="font-medium text-foreground">No datasets available</p>
+                <p className="font-medium text-foreground">No data sources available</p>
                 <p className="text-sm text-muted-foreground">
+                  Create forms with submissions or{' '}
                   <button onClick={() => navigate('/upload')} className="text-violet-600 hover:underline">
-                    Upload data
-                  </button> first to create charts
+                    upload datasets
+                  </button>{' '}
+                  to create charts
                 </p>
               </div>
             </CardContent>
