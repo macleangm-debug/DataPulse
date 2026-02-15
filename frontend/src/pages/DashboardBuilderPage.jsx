@@ -469,6 +469,11 @@ export function DashboardBuilderPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <SaveAsTemplateButton 
+              dashboardId={dashboardId} 
+              dashboardName={dashboard.name} 
+              token={token} 
+            />
             <Button variant="outline" onClick={() => setShowAddWidget(true)} data-testid="add-widget-btn">
               <Plus className="w-4 h-4 mr-2" />
               Add Widget
