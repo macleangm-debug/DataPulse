@@ -242,7 +242,15 @@ const HelpCenterPage = () => {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [showAssistant, setShowAssistant] = useState(false);
-  const [activeTab, setActiveTab] = useState('browse'); // browse, faq, shortcuts, troubleshoot, whats-new
+  const [activeTab, setActiveTab] = useState('browse');
+  const [faqData, setFaqData] = useState([]);
+  const [troubleshootingGuides, setTroubleshootingGuides] = useState([]);
+
+  useEffect(() => {
+    fetchArticles();
+    fetchFaq();
+    fetchTroubleshooting();
+  }, []);
 
   useEffect(() => {
     fetchArticles();
@@ -262,6 +270,26 @@ const HelpCenterPage = () => {
       setArticles([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchFaq = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/help/faq`);
+      setFaqData(response.data.faq || []);
+    } catch (error) {
+      console.error('Error fetching FAQ:', error);
+      setFaqData(FAQ_DATA); // Fallback to static data
+    }
+  };
+
+  const fetchTroubleshooting = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/help/troubleshooting`);
+      setTroubleshootingGuides(response.data.guides || []);
+    } catch (error) {
+      console.error('Error fetching troubleshooting:', error);
+      setTroubleshootingGuides(TROUBLESHOOTING_DATA); // Fallback to static data
     }
   };
 
