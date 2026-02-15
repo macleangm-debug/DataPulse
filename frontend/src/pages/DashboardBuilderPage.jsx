@@ -35,7 +35,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '../components/ui/sheet';
+} from '../components/ui/dialog';
 import {
   Sheet,
   SheetContent,
