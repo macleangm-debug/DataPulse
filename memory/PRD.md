@@ -152,6 +152,9 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - `GET /api/dashboards/by-id/{id}` - Get dashboard by ID
 - `GET /api/help/articles` - List help articles
 - `GET /api/help/categories` - List help categories
+- `GET /api/help/faq` - List all FAQ items
+- `GET /api/help/troubleshooting` - List troubleshooting guides
+- `GET /api/help/search?q=query` - Global search across help content
 - `POST /api/help/chat` - AI chat assistant
 
 ## Test Credentials
