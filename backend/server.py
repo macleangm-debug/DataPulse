@@ -144,6 +144,7 @@ api_router.include_router(audit_router)
 api_router.include_router(user_management_router)
 api_router.include_router(charts_router)
 api_router.include_router(dashboard_templates_router)
+api_router.include_router(data_sources_router)
 
 
 # Health check endpoint
