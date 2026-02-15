@@ -97,6 +97,7 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - [x] Category filtering for templates
 - [x] 12 widget types support
 - [x] **Connect data visualization to real-time data collection** ✓
+- [x] **Edit/Delete custom dashboard templates** ✓
 
 ## Key API Endpoints
 - `POST /api/auth/login` - User login
