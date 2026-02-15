@@ -57,6 +57,9 @@ const DashboardTemplatesDialog = ({ isOpen, onClose, onSelectTemplate, token }) 
   const [preset, setPreset] = useState([]);
   const [custom, setCustom] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState('');
+  const [editDescription, setEditDescription] = useState('');
 
   useEffect(() => { 
     if (isOpen) fetchTemplates(); 
