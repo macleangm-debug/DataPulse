@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
   Plus,
@@ -9,20 +9,10 @@ import {
   Eye,
   Search,
   Grid,
-  Copy,
-  BarChart3,
-  PieChart,
-  TrendingUp,
-  DollarSign,
-  Users,
-  ShoppingCart,
-  Activity,
-  Target,
-  Layers,
   Sparkles
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Card, CardContent } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
@@ -37,99 +27,9 @@ import { DashboardLayout } from '../layouts/DashboardLayout';
 import { useOrgStore, useAuthStore } from '../store';
 import { toast } from 'sonner';
 import axios from 'axios';
+import DashboardTemplatesDialog from '../components/DashboardTemplatesDialog';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
-
-// Dashboard Templates
-const DASHBOARD_TEMPLATES = [
-  {
-    id: 'sales_overview',
-    name: 'Sales Overview',
-    description: 'Track sales performance, revenue, and key metrics',
-    icon: DollarSign,
-    color: 'from-emerald-500 to-emerald-600',
-    widgets: [
-      { type: 'stat', title: 'Total Revenue', config: { aggregation: 'sum' }, position: { x: 0, y: 0, w: 3, h: 2 } },
-      { type: 'stat', title: 'Orders', config: { aggregation: 'count' }, position: { x: 3, y: 0, w: 3, h: 2 } },
-      { type: 'stat', title: 'Avg Order Value', config: { aggregation: 'mean' }, position: { x: 6, y: 0, w: 3, h: 2 } },
-      { type: 'stat', title: 'Customers', config: { aggregation: 'count' }, position: { x: 9, y: 0, w: 3, h: 2 } },
-      { type: 'chart', title: 'Revenue Trend', config: { chart_type: 'line' }, position: { x: 0, y: 2, w: 8, h: 4 } },
-      { type: 'chart', title: 'Sales by Category', config: { chart_type: 'pie' }, position: { x: 8, y: 2, w: 4, h: 4 } },
-      { type: 'table', title: 'Top Products', config: { limit: 5 }, position: { x: 0, y: 6, w: 6, h: 4 } },
-      { type: 'chart', title: 'Monthly Comparison', config: { chart_type: 'bar' }, position: { x: 6, y: 6, w: 6, h: 4 } },
-    ]
-  },
-  {
-    id: 'marketing_analytics',
-    name: 'Marketing Analytics',
-    description: 'Monitor campaigns, engagement, and conversion rates',
-    icon: Target,
-    color: 'from-violet-500 to-violet-600',
-    widgets: [
-      { type: 'stat', title: 'Visitors', config: { aggregation: 'sum' }, position: { x: 0, y: 0, w: 3, h: 2 } },
-      { type: 'stat', title: 'Conversion Rate', config: { aggregation: 'mean' }, position: { x: 3, y: 0, w: 3, h: 2 } },
-      { type: 'stat', title: 'Leads', config: { aggregation: 'count' }, position: { x: 6, y: 0, w: 3, h: 2 } },
-      { type: 'stat', title: 'Cost per Lead', config: { aggregation: 'mean' }, position: { x: 9, y: 0, w: 3, h: 2 } },
-      { type: 'chart', title: 'Traffic Sources', config: { chart_type: 'pie' }, position: { x: 0, y: 2, w: 4, h: 4 } },
-      { type: 'chart', title: 'Visitor Trend', config: { chart_type: 'area' }, position: { x: 4, y: 2, w: 8, h: 4 } },
-      { type: 'chart', title: 'Campaign Performance', config: { chart_type: 'bar' }, position: { x: 0, y: 6, w: 12, h: 4 } },
-    ]
-  },
-  {
-    id: 'customer_insights',
-    name: 'Customer Insights',
-    description: 'Understand customer behavior and demographics',
-    icon: Users,
-    color: 'from-blue-500 to-blue-600',
-    widgets: [
-      { type: 'stat', title: 'Total Customers', config: { aggregation: 'count' }, position: { x: 0, y: 0, w: 4, h: 2 } },
-      { type: 'stat', title: 'New Customers', config: { aggregation: 'count' }, position: { x: 4, y: 0, w: 4, h: 2 } },
-      { type: 'stat', title: 'Retention Rate', config: { aggregation: 'mean' }, position: { x: 8, y: 0, w: 4, h: 2 } },
-      { type: 'chart', title: 'Customer Segments', config: { chart_type: 'pie' }, position: { x: 0, y: 2, w: 6, h: 4 } },
-      { type: 'chart', title: 'Growth Over Time', config: { chart_type: 'line' }, position: { x: 6, y: 2, w: 6, h: 4 } },
-      { type: 'table', title: 'Top Customers', config: { limit: 10 }, position: { x: 0, y: 6, w: 12, h: 4 } },
-    ]
-  },
-  {
-    id: 'operations_monitor',
-    name: 'Operations Monitor',
-    description: 'Track inventory, orders, and operational KPIs',
-    icon: Activity,
-    color: 'from-amber-500 to-amber-600',
-    widgets: [
-      { type: 'stat', title: 'Pending Orders', config: { aggregation: 'count' }, position: { x: 0, y: 0, w: 3, h: 2 } },
-      { type: 'stat', title: 'In Stock Items', config: { aggregation: 'count' }, position: { x: 3, y: 0, w: 3, h: 2 } },
-      { type: 'stat', title: 'Low Stock Alerts', config: { aggregation: 'count' }, position: { x: 6, y: 0, w: 3, h: 2 } },
-      { type: 'stat', title: 'Fulfillment Rate', config: { aggregation: 'mean' }, position: { x: 9, y: 0, w: 3, h: 2 } },
-      { type: 'chart', title: 'Order Status', config: { chart_type: 'pie' }, position: { x: 0, y: 2, w: 4, h: 4 } },
-      { type: 'chart', title: 'Daily Orders', config: { chart_type: 'bar' }, position: { x: 4, y: 2, w: 8, h: 4 } },
-      { type: 'table', title: 'Recent Orders', config: { limit: 8 }, position: { x: 0, y: 6, w: 12, h: 4 } },
-    ]
-  },
-  {
-    id: 'financial_summary',
-    name: 'Financial Summary',
-    description: 'Monitor P&L, expenses, and financial health',
-    icon: TrendingUp,
-    color: 'from-rose-500 to-rose-600',
-    widgets: [
-      { type: 'stat', title: 'Total Revenue', config: { aggregation: 'sum' }, position: { x: 0, y: 0, w: 4, h: 2 } },
-      { type: 'stat', title: 'Total Expenses', config: { aggregation: 'sum' }, position: { x: 4, y: 0, w: 4, h: 2 } },
-      { type: 'stat', title: 'Net Profit', config: { aggregation: 'sum' }, position: { x: 8, y: 0, w: 4, h: 2 } },
-      { type: 'chart', title: 'Revenue vs Expenses', config: { chart_type: 'line' }, position: { x: 0, y: 2, w: 8, h: 4 } },
-      { type: 'chart', title: 'Expense Breakdown', config: { chart_type: 'pie' }, position: { x: 8, y: 2, w: 4, h: 4 } },
-      { type: 'chart', title: 'Monthly P&L', config: { chart_type: 'bar' }, position: { x: 0, y: 6, w: 12, h: 4 } },
-    ]
-  },
-  {
-    id: 'blank',
-    name: 'Blank Canvas',
-    description: 'Start from scratch with an empty dashboard',
-    icon: Layers,
-    color: 'from-gray-500 to-gray-600',
-    widgets: []
-  }
-];
 
 export function DashboardsPage() {
   const navigate = useNavigate();
