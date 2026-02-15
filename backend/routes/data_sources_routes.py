@@ -35,12 +35,12 @@ async def list_data_sources(
     sources = []
     
     # Get forms with submissions
-    # Note: We show all forms regardless of org for now to enable cross-org data access
+    # Return all forms - forms without org_id or matching the requested org_id
     if source_type in [None, 'all', 'form']:
         query = {}
-        # Only filter by org_id if explicitly requested AND org_id is not empty/None
+        # If org_id is provided, match either the org_id OR forms without org_id
         if org_id and org_id.strip():
-            query["org_id"] = org_id
+            query["$or"] = [{"org_id": org_id}, {"org_id": {"$exists": False}}, {"org_id": None}]
         
         forms_cursor = db.forms.find(query, {"_id": 0})
         forms = await forms_cursor.to_list(length=100)
