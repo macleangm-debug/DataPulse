@@ -213,6 +213,110 @@ class TestDashboardTemplatesAPI:
         
         # Should be unauthorized
         assert response.status_code in [401, 403], f"Expected 401/403, got {response.status_code}"
+    
+    def test_update_custom_template(self):
+        """PUT /api/dashboard-templates/{id} - Should update template name and description"""
+        # First create a template to update
+        template_data = {
+            "name": "TEST_Template To Update",
+            "description": "Original description",
+            "widgets": []
+        }
+        
+        create_response = self.session.post(f"{BASE_URL}/api/dashboard-templates", json=template_data)
+        assert create_response.status_code == 200, f"Create failed: {create_response.text}"
+        template_id = create_response.json()["id"]
+        
+        # Update the template
+        update_data = {
+            "name": "TEST_Updated Template Name",
+            "description": "Updated description"
+        }
+        
+        update_response = self.session.put(
+            f"{BASE_URL}/api/dashboard-templates/{template_id}",
+            json=update_data
+        )
+        
+        # Status assertion
+        assert update_response.status_code == 200, f"Expected 200, got {update_response.status_code}"
+        
+        # Data assertion
+        data = update_response.json()
+        assert data["message"] == "Template updated"
+        
+        # Verify persistence - GET to confirm update
+        get_response = self.session.get(f"{BASE_URL}/api/dashboard-templates/{template_id}")
+        assert get_response.status_code == 200
+        
+        updated_template = get_response.json()
+        assert updated_template["name"] == update_data["name"], "Name should be updated"
+        assert updated_template["description"] == update_data["description"], "Description should be updated"
+        assert "updated_at" in updated_template, "Should have updated_at timestamp"
+        
+        # Cleanup
+        self.session.delete(f"{BASE_URL}/api/dashboard-templates/{template_id}")
+    
+    def test_update_template_partial(self):
+        """PUT /api/dashboard-templates/{id} - Should allow partial updates"""
+        # First create a template
+        template_data = {
+            "name": "TEST_Partial Update",
+            "description": "Original description",
+            "widgets": []
+        }
+        
+        create_response = self.session.post(f"{BASE_URL}/api/dashboard-templates", json=template_data)
+        assert create_response.status_code == 200
+        template_id = create_response.json()["id"]
+        
+        # Update only name
+        update_response = self.session.put(
+            f"{BASE_URL}/api/dashboard-templates/{template_id}",
+            json={"name": "TEST_Only Name Updated"}
+        )
+        assert update_response.status_code == 200
+        
+        # Verify name changed but description unchanged
+        get_response = self.session.get(f"{BASE_URL}/api/dashboard-templates/{template_id}")
+        template = get_response.json()
+        assert template["name"] == "TEST_Only Name Updated"
+        assert template["description"] == "Original description"
+        
+        # Cleanup
+        self.session.delete(f"{BASE_URL}/api/dashboard-templates/{template_id}")
+    
+    def test_update_nonexistent_template(self):
+        """PUT /api/dashboard-templates/{id} - Should return 404 for non-existent template"""
+        update_response = self.session.put(
+            f"{BASE_URL}/api/dashboard-templates/nonexistent_template_id",
+            json={"name": "Should Fail"}
+        )
+        
+        assert update_response.status_code == 404, f"Expected 404, got {update_response.status_code}"
+    
+    def test_update_preset_template_returns_404(self):
+        """PUT /api/dashboard-templates/{id} - Should return 404 for preset templates (not owned by user)"""
+        update_response = self.session.put(
+            f"{BASE_URL}/api/dashboard-templates/preset_sales",
+            json={"name": "Should Fail"}
+        )
+        
+        # Preset templates are not owned by user, so should return 404
+        assert update_response.status_code == 404, f"Expected 404, got {update_response.status_code}"
+    
+    def test_update_template_without_auth(self):
+        """PUT /api/dashboard-templates/{id} - Should require authentication"""
+        session = requests.Session()
+        session.headers.update({"Content-Type": "application/json"})
+        
+        # Try to update without auth
+        response = session.put(
+            f"{BASE_URL}/api/dashboard-templates/some_template_id",
+            json={"name": "Should Fail"}
+        )
+        
+        assert response.status_code == 401, f"Expected 401, got {response.status_code}"
 
 
 class TestDashboardTemplatesFromDashboard:
