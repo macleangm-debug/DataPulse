@@ -605,7 +605,7 @@ const HelpCenterPage = () => {
                 Troubleshooting Guides
               </h2>
               <div className="space-y-4">
-                {TROUBLESHOOTING_DATA.map((guide, idx) => (
+                {troubleshootingGuides.map((guide, idx) => (
                   <motion.div
                     key={guide.id}
                     initial={{ opacity: 0, y: 10 }}
@@ -615,11 +615,36 @@ const HelpCenterPage = () => {
                     data-testid={`troubleshoot-${guide.id}`}
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
-                        <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                        guide.severity === 'high' 
+                          ? 'bg-red-100 dark:bg-red-900/30' 
+                          : guide.severity === 'medium'
+                            ? 'bg-amber-100 dark:bg-amber-900/30'
+                            : 'bg-blue-100 dark:bg-blue-900/30'
+                      }`}>
+                        <AlertCircle className={`w-5 h-5 ${
+                          guide.severity === 'high' 
+                            ? 'text-red-600 dark:text-red-400' 
+                            : guide.severity === 'medium'
+                              ? 'text-amber-600 dark:text-amber-400'
+                              : 'text-blue-600 dark:text-blue-400'
+                        }`} />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 dark:text-white mb-3">{guide.title}</h3>
+                        <div className="flex items-center gap-2 mb-3">
+                          <h3 className="font-semibold text-gray-900 dark:text-white">{guide.title}</h3>
+                          {guide.severity && (
+                            <span className={`text-xs px-2 py-0.5 rounded-full ${
+                              guide.severity === 'high' 
+                                ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' 
+                                : guide.severity === 'medium'
+                                  ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                                  : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                            }`}>
+                              {guide.severity}
+                            </span>
+                          )}
+                        </div>
                         <ol className="space-y-2">
                           {guide.steps.map((step, stepIdx) => (
                             <li key={stepIdx} className="flex items-start gap-3">
@@ -630,6 +655,18 @@ const HelpCenterPage = () => {
                             </li>
                           ))}
                         </ol>
+                        {guide.common_causes && (
+                          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Common causes:</p>
+                            <div className="flex flex-wrap gap-2">
+                              {guide.common_causes.map((cause, causeIdx) => (
+                                <span key={causeIdx} className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded">
+                                  {cause}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </motion.div>
