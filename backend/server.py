@@ -92,6 +92,7 @@ from routes.job_routes import router as job_router
 from routes.user_management_routes import router as user_management_router
 from routes.charts_routes import router as charts_router
 from routes.dashboard_templates_routes import router as dashboard_templates_router
+from routes.data_sources_routes import router as data_sources_router
 
 # Include all route modules
 api_router.include_router(auth_router)
