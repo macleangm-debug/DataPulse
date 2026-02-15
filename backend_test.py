@@ -86,8 +86,8 @@ class UserManagementAPITester:
             'POST', 
             '/auth/login',
             data={
-                "email": "demo@datapulse.io",
-                "password": "Test123!"
+                "email": TEST_EMAIL,
+                "password": TEST_PASSWORD
             }
         )
         
