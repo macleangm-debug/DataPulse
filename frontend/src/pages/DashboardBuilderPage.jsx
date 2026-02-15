@@ -35,13 +35,13 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '../components/ui/dialog';
+} from '../components/ui/sheet';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-} from '../components/ui/dialog';
+} from '../components/ui/sheet';
 import { Badge } from '../components/ui/badge';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { useOrgStore, useAuthStore } from '../store';
