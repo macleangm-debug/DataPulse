@@ -133,6 +133,7 @@ const NAVIGATION = [
     icon: Settings,
     items: [
       { label: 'Team', path: '/team', icon: Users },
+      { label: 'User Management', path: '/user-management', icon: Users },
       { label: 'Roles', path: '/rbac', icon: Shield },
       { label: 'Translations', path: '/translations', icon: Languages },
       { label: 'API Security', path: '/security', icon: Key },
