@@ -28,6 +28,7 @@ import { useOrgStore, useAuthStore } from '../store';
 import { toast } from 'sonner';
 import axios from 'axios';
 import DashboardTemplatesDialog from '../components/DashboardTemplatesDialog';
+import DataSourceSelector from '../components/DataSourceSelector';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -39,6 +40,8 @@ export function DashboardsPage() {
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showTemplatesDialog, setShowTemplatesDialog] = useState(false);
+  const [showDataSourceSelector, setShowDataSourceSelector] = useState(false);
+  const [pendingTemplate, setPendingTemplate] = useState(null);
   const [deleteDialog, setDeleteDialog] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [newDashboard, setNewDashboard] = useState({
@@ -63,7 +66,7 @@ export function DashboardsPage() {
     }
   };
 
-  const handleCreate = async (template = null) => {
+  const handleCreate = async (template = null, dataSource = null) => {
     const dashboardName = template ? `${template.name} Dashboard` : newDashboard.name;
     const dashboardDesc = template ? template.description : newDashboard.description;
     const dashboardWidgets = template ? template.widgets : [];
@@ -75,16 +78,40 @@ export function DashboardsPage() {
 
     try {
       const headers = { Authorization: `Bearer ${token}` };
-      const response = await axios.post(`${API_URL}/api/dashboards`, {
+      const payload = {
         name: dashboardName,
         description: dashboardDesc,
         org_id: currentOrg?.id,
         widgets: dashboardWidgets
-      }, { headers });
+      };
       
-      toast.success(template ? `Created dashboard from "${template.name}" template` : 'Dashboard created');
+      // Add data source if provided
+      if (dataSource) {
+        if (dataSource.type === 'form') {
+          payload.form_id = dataSource.id;
+        } else if (dataSource.type === 'dataset') {
+          payload.dataset_id = dataSource.id;
+        } else if (dataSource.type === 'snapshot') {
+          payload.snapshot_id = dataSource.id;
+        }
+        payload.data_source = {
+          id: dataSource.id,
+          type: dataSource.type,
+          name: dataSource.name
+        };
+      }
+      
+      const response = await axios.post(`${API_URL}/api/dashboards`, payload, { headers });
+      
+      const successMsg = dataSource 
+        ? `Created dashboard connected to "${dataSource.name}"` 
+        : (template ? `Created dashboard from "${template.name}" template` : 'Dashboard created');
+      toast.success(successMsg);
+      
       setShowCreateDialog(false);
       setShowTemplatesDialog(false);
+      setShowDataSourceSelector(false);
+      setPendingTemplate(null);
       setNewDashboard({ name: '', description: '' });
       navigate(`/dashboards/${response.data.id}`);
     } catch (error) {
@@ -98,8 +125,26 @@ export function DashboardsPage() {
       setShowTemplatesDialog(false);
       setShowCreateDialog(true);
     } else {
-      handleCreate(template);
+      // Show data source selector for templates with widgets
+      setPendingTemplate(template);
+      setShowTemplatesDialog(false);
+      setShowDataSourceSelector(true);
     }
+  };
+
+  const handleDataSourceSelect = (dataSource) => {
+    if (pendingTemplate) {
+      handleCreate(pendingTemplate, dataSource);
+    }
+  };
+
+  const handleSkipDataSource = () => {
+    // Create dashboard without data source (will use demo/static data)
+    if (pendingTemplate) {
+      handleCreate(pendingTemplate, null);
+    }
+    setShowDataSourceSelector(false);
+    setPendingTemplate(null);
   };
 
   const handleDelete = async (id) => {
