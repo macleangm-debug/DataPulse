@@ -1,12 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
-  FileText, Download, Settings, Eye, Plus, PieChart, RefreshCw
+  FileText, Download, Settings, Eye, Plus, PieChart, RefreshCw, Database
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DashboardLayout } from '../layouts/DashboardLayout';
 import { toast } from 'sonner';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import axios from 'axios';
+import { useOrgStore, useAuthStore } from '../store';
+import DataSourceSelector from '../components/DataSourceSelector';
 
 // Import refactored components
 import { 
@@ -16,6 +19,8 @@ import {
   SECTION_TYPES,
   AddSectionPanel 
 } from '../components/report';
+
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 // ========================================
 // MAIN COMPONENT
