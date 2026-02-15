@@ -266,6 +266,11 @@ function App() {
               <DataAnalysisPage />
             </ProtectedRoute>
           } />
+          <Route path="/user-management" element={
+            <ProtectedRoute>
+              <UserManagementPage />
+            </ProtectedRoute>
+          } />
           {/* Public CAWI Survey Routes */}
           <Route path="/survey/:formId" element={<CAWISurveyPage />} />
           <Route path="/survey/complete" element={<SurveyCompletePage />} />
