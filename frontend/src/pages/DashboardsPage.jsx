@@ -375,6 +375,30 @@ export function DashboardsPage() {
           onSelectTemplate={handleSelectTemplate}
           token={token}
         />
+
+        {/* Data Source Selector Dialog */}
+        <DataSourceSelector
+          isOpen={showDataSourceSelector}
+          onClose={() => {
+            setShowDataSourceSelector(false);
+            setPendingTemplate(null);
+          }}
+          onSelect={handleDataSourceSelect}
+          token={token}
+          orgId={currentOrg?.id}
+        />
+
+        {/* Skip Data Source Option Dialog */}
+        {showDataSourceSelector && (
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[60]">
+            <button
+              onClick={handleSkipDataSource}
+              className="px-4 py-2 bg-gray-800 text-white text-sm rounded-full shadow-lg hover:bg-gray-700 transition-colors"
+            >
+              Skip and use demo data instead
+            </button>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );
