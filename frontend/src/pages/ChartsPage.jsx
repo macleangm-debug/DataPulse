@@ -755,7 +755,7 @@ const ChartStudio = ({
 
               {/* Dataset Selection */}
               <div className="space-y-2">
-                <Label>Dataset *</Label>
+                <Label>Data Source *</Label>
                 <Select value={selectedDataset} onValueChange={(v) => {
                   setSelectedDataset(v);
                   setXField('');
@@ -763,12 +763,24 @@ const ChartStudio = ({
                   setSuggestions([]);
                 }}>
                   <SelectTrigger data-testid="dataset-select">
-                    <SelectValue placeholder="Select a dataset" />
+                    <SelectValue placeholder="Select a data source" />
                   </SelectTrigger>
                   <SelectContent>
                     {datasets.map((dataset) => (
                       <SelectItem key={dataset.id} value={dataset.id}>
-                        {dataset.name} ({dataset.row_count} rows)
+                        <div className="flex items-center gap-2">
+                          <span className={`px-1.5 py-0.5 text-[10px] rounded font-medium ${
+                            dataset.source_type === 'form' 
+                              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' 
+                              : dataset.source_type === 'snapshot'
+                              ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300'
+                              : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
+                          }`}>
+                            {dataset.source_type === 'form' ? 'FORM' : dataset.source_type === 'snapshot' ? 'SNAP' : 'DATA'}
+                          </span>
+                          <span>{dataset.name}</span>
+                          <span className="text-muted-foreground text-xs">({dataset.row_count} rows)</span>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
