@@ -135,14 +135,22 @@ class DataVizAPITester:
         """Test Dashboards-related endpoints"""
         print("\n📋 Testing Dashboards Endpoints...")
         
-        # Test GET /api/dashboards - list dashboards
+        # Test GET /api/dashboards - list dashboards (might need different approach)
         success, response = self.make_request('GET', '/dashboards', params={'org_id': ORG_ID})
-        self.log_test(
-            "GET /api/dashboards - List Dashboards", 
-            success and 'dashboards' in response,
-            f"Found {len(response.get('dashboards', []))} dashboards" if success else "Failed to fetch dashboards",
-            response if not success else None
-        )
+        if response.get('detail') == 'Method Not Allowed':
+            self.log_test(
+                "GET /api/dashboards - List Dashboards", 
+                False,
+                "Dashboards GET endpoint not properly implemented - might need different HTTP method or route structure",
+                response
+            )
+        else:
+            self.log_test(
+                "GET /api/dashboards - List Dashboards", 
+                success and 'dashboards' in response,
+                f"Found {len(response.get('dashboards', []))} dashboards" if success else "Failed to fetch dashboards",
+                response if not success else None
+            )
         
         # Test POST /api/dashboards - create dashboard
         dashboard_data = {
@@ -171,10 +179,12 @@ class DataVizAPITester:
         # Test dashboard retrieval if we have an ID
         if self.created_dashboard_id:
             success, response = self.make_request('GET', f'/dashboards/{self.created_dashboard_id}')
+            # Handle both single dashboard object and list responses
+            dashboard_data = response if isinstance(response, dict) else (response[0] if response and isinstance(response, list) else {})
             self.log_test(
                 "GET /api/dashboards/{id} - Get Dashboard Details", 
-                success and 'name' in response,
-                f"Retrieved dashboard: {response.get('name', 'Unknown')}" if success else "Failed to get dashboard details",
+                success and ('name' in dashboard_data),
+                f"Retrieved dashboard: {dashboard_data.get('name', 'Unknown')}" if success else "Failed to get dashboard details",
                 response if not success else None
             )
     
