@@ -73,9 +73,9 @@ async def list_data_sources(
     # Get datasets
     if source_type in [None, 'all', 'dataset']:
         query = {}
-        # Only filter by org_id if explicitly requested AND org_id is not empty/None
+        # If org_id is provided, match either the org_id OR datasets without org_id
         if org_id and org_id.strip():
-            query["org_id"] = org_id
+            query["$or"] = [{"org_id": org_id}, {"org_id": {"$exists": False}}, {"org_id": None}]
         
         datasets_cursor = db.datasets.find(query, {"_id": 0})
         datasets = await datasets_cursor.to_list(length=100)
