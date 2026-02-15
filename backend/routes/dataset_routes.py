@@ -115,6 +115,36 @@ async def create_dataset(
     }
 
 
+@router.get("")
+async def list_datasets_query(
+    request: Request,
+    org_id: str = Query(None),
+    dataset_type: Optional[str] = None,
+    include_inactive: bool = False
+):
+    """List all datasets for an organization (query param version)"""
+    db = request.app.state.db
+    
+    if not org_id:
+        return {"datasets": [], "total": 0}
+    
+    query = {"org_id": org_id}
+    if dataset_type:
+        query["dataset_type"] = dataset_type
+    if not include_inactive:
+        query["is_active"] = True
+    
+    datasets = await db.lookup_datasets.find(query, {"_id": 0}).to_list(100)
+    
+    for d in datasets:
+        if d.get("created_at"):
+            d["created_at"] = d["created_at"].isoformat() if hasattr(d["created_at"], 'isoformat') else str(d["created_at"])
+        if d.get("updated_at"):
+            d["updated_at"] = d["updated_at"].isoformat() if hasattr(d["updated_at"], 'isoformat') else str(d["updated_at"])
+    
+    return {"datasets": datasets, "total": len(datasets)}
+
+
 @router.get("/{org_id}")
 async def list_datasets(
     request: Request,
