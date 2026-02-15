@@ -91,6 +91,7 @@ from routes.audit_routes import router as audit_router
 from routes.job_routes import router as job_router
 from routes.user_management_routes import router as user_management_router
 from routes.charts_routes import router as charts_router
+from routes.dashboard_templates_routes import router as dashboard_templates_router
 
 # Include all route modules
 api_router.include_router(auth_router)
@@ -141,6 +142,7 @@ api_router.include_router(dashboard_builder_router)
 api_router.include_router(audit_router)
 api_router.include_router(user_management_router)
 api_router.include_router(charts_router)
+api_router.include_router(dashboard_templates_router)
 
 
 # Health check endpoint
