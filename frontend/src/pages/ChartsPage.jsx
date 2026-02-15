@@ -535,8 +535,14 @@ const ChartStudio = ({
     setLoading(true);
     try {
       const headers = { Authorization: `Bearer ${token}` };
+      
+      // Find the selected data source to get its type
+      const selectedSource = datasets.find(d => d.id === selectedDataset);
+      const sourceType = selectedSource?.source_type || 'dataset';
+      
+      // Use unified data-sources API
       const response = await axios.get(
-        `${API_URL}/api/datasets/${selectedDataset}/data?limit=1000`,
+        `${API_URL}/api/data-sources/${selectedDataset}/data?source_type=${sourceType}&limit=1000`,
         { headers }
       );
       
@@ -581,6 +587,39 @@ const ChartStudio = ({
       setPreviewData(chartData.slice(0, 20));
     } catch (error) {
       console.error('Error fetching preview data:', error);
+      // Fallback to old API
+      try {
+        const headers = { Authorization: `Bearer ${token}` };
+        const response = await axios.get(
+          `${API_URL}/api/datasets/${selectedDataset}/data?limit=1000`,
+          { headers }
+        );
+        
+        const data = response.data.data || [];
+        const grouped = {};
+        data.forEach(row => {
+          const key = String(row[xField] || 'Unknown');
+          if (!grouped[key]) {
+            grouped[key] = { values: [], count: 0 };
+          }
+          grouped[key].count++;
+          if (yField && row[yField] !== undefined) {
+            grouped[key].values.push(Number(row[yField]) || 0);
+          }
+        });
+        
+        const chartData = Object.entries(grouped).map(([name, group]) => {
+          let value = aggregation === 'count' || !yField 
+            ? group.count 
+            : group.values.reduce((a, b) => a + b, 0) / (aggregation === 'mean' ? group.values.length : 1);
+          return { name, value: Math.round(value * 100) / 100 };
+        });
+        
+        chartData.sort((a, b) => b.value - a.value);
+        setPreviewData(chartData.slice(0, 20));
+      } catch (e) {
+        console.error('Fallback also failed:', e);
+      }
     } finally {
       setLoading(false);
     }
