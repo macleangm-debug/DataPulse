@@ -73,7 +73,8 @@ async def list_data_sources(
     # Get datasets
     if source_type in [None, 'all', 'dataset']:
         query = {}
-        if org_id:
+        # Only filter by org_id if explicitly requested AND org_id is not empty/None
+        if org_id and org_id.strip():
             query["org_id"] = org_id
         
         datasets_cursor = db.datasets.find(query, {"_id": 0})
