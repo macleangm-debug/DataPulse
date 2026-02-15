@@ -9,8 +9,13 @@ import {
   TrendingUp, 
   Layers, 
   LayoutDashboard, 
+  BarChart3,
+  Briefcase,
+  FolderKanban,
+  Headphones,
   Trash2, 
-  X 
+  X,
+  Filter
 } from 'lucide-react';
 import { toast } from 'sonner';
 import axios from 'axios';
@@ -24,11 +29,29 @@ const ICONS = {
   Activity, 
   TrendingUp, 
   Layers, 
-  LayoutDashboard 
+  LayoutDashboard,
+  BarChart3,
+  Briefcase,
+  FolderKanban,
+  Headphones
 };
+
+const CATEGORIES = [
+  { id: 'all', name: 'All Templates' },
+  { id: 'sales', name: 'Sales' },
+  { id: 'marketing', name: 'Marketing' },
+  { id: 'customers', name: 'Customers' },
+  { id: 'operations', name: 'Operations' },
+  { id: 'finance', name: 'Finance' },
+  { id: 'analytics', name: 'Analytics' },
+  { id: 'executive', name: 'Executive' },
+  { id: 'project', name: 'Projects' },
+  { id: 'support', name: 'Support' },
+];
 
 const DashboardTemplatesDialog = ({ isOpen, onClose, onSelectTemplate, token }) => {
   const [tab, setTab] = useState('preset');
+  const [category, setCategory] = useState('all');
   const [preset, setPreset] = useState([]);
   const [custom, setCustom] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,20 +89,29 @@ const DashboardTemplatesDialog = ({ isOpen, onClose, onSelectTemplate, token }) 
 
   if (!isOpen) return null;
   
-  const templates = tab === 'preset' ? preset : custom;
+  // Filter templates by category
+  let templates = tab === 'preset' ? preset : custom;
+  if (tab === 'preset' && category !== 'all') {
+    templates = templates.filter(t => t.category === category);
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }} 
         animate={{ opacity: 1, scale: 1 }} 
-        className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden"
+        className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden"
       >
         {/* Header */}
         <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-violet-500" />
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Dashboard Templates</h2>
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-violet-100 dark:bg-violet-900/30 rounded-lg">
+              <Sparkles className="w-5 h-5 text-violet-500" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">Dashboard Templates</h2>
+              <span className="text-sm text-gray-400">10 presets • 12 widget types</span>
+            </div>
           </div>
           <button 
             onClick={onClose}
@@ -90,62 +122,90 @@ const DashboardTemplatesDialog = ({ isOpen, onClose, onSelectTemplate, token }) 
           </button>
         </div>
         
-        {/* Tabs */}
-        <div className="px-6 pt-4 flex gap-2 border-b border-gray-200 dark:border-gray-700">
-          <button 
-            onClick={() => setTab('preset')} 
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              tab === 'preset' 
-                ? 'text-violet-700 dark:text-violet-400 border-b-2 border-violet-500' 
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-            }`}
-            data-testid="preset-tab"
-          >
-            Preset ({preset.length})
-          </button>
-          <button 
-            onClick={() => setTab('custom')} 
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              tab === 'custom' 
-                ? 'text-violet-700 dark:text-violet-400 border-b-2 border-violet-500' 
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-            }`}
-            data-testid="custom-tab"
-          >
-            My Templates ({custom.length})
-          </button>
+        {/* Tabs and Filter */}
+        <div className="px-6 pt-4 flex gap-4 border-b border-gray-200 dark:border-gray-700 items-center">
+          <div className="flex gap-2">
+            <button 
+              onClick={() => setTab('preset')} 
+              className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${
+                tab === 'preset' 
+                  ? 'text-violet-700 dark:text-violet-400 border-b-2 border-violet-500 bg-violet-50 dark:bg-violet-900/20' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+              data-testid="preset-tab"
+            >
+              Preset ({preset.length})
+            </button>
+            <button 
+              onClick={() => setTab('custom')} 
+              className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${
+                tab === 'custom' 
+                  ? 'text-violet-700 dark:text-violet-400 border-b-2 border-violet-500 bg-violet-50 dark:bg-violet-900/20' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+              data-testid="custom-tab"
+            >
+              My Templates ({custom.length})
+            </button>
+          </div>
+          
+          {/* Category Filter - only for preset */}
+          {tab === 'preset' && (
+            <div className="ml-auto flex items-center gap-2">
+              <Filter className="w-4 h-4 text-gray-400" />
+              <select 
+                value={category} 
+                onChange={e => setCategory(e.target.value)} 
+                className="text-sm border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none"
+                data-testid="category-filter"
+              >
+                {CATEGORIES.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
         
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[55vh]">
+        <div className="p-6 overflow-y-auto max-h-[60vh]">
           {loading ? (
-            <div className="text-center py-8 text-gray-500">Loading...</div>
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600"></div>
+            </div>
           ) : templates.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {templates.map(t => {
                 const Icon = ICONS[t.icon] || LayoutDashboard;
                 return (
                   <motion.div 
                     key={t.id} 
-                    whileHover={{ scale: 1.02 }} 
-                    className="relative border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-600 cursor-pointer group transition-all"
+                    whileHover={{ scale: 1.02, y: -2 }} 
+                    className="relative border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-600 cursor-pointer group transition-all bg-white dark:bg-gray-800"
                     onClick={() => onSelectTemplate(t)}
                     data-testid={`template-card-${t.id}`}
                   >
-                    <div className={`h-20 bg-gradient-to-br ${t.color} flex items-center justify-center`}>
+                    <div className={`h-20 bg-gradient-to-br ${t.color} flex items-center justify-center relative`}>
                       <Icon className="w-8 h-8 text-white" />
+                      {t.category && t.category !== 'custom' && (
+                        <span className="absolute top-2 left-2 text-xs px-2 py-0.5 bg-white/20 backdrop-blur-sm rounded-full text-white font-medium">
+                          {t.category}
+                        </span>
+                      )}
                     </div>
-                    <div className="p-3 bg-white dark:bg-gray-900">
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{t.name}</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">{t.description}</p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                        {t.widgets?.length || 0} widgets
-                      </p>
+                    <div className="p-3">
+                      <h3 className="font-semibold text-sm text-gray-900 dark:text-white">{t.name}</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1 mt-0.5">{t.description}</p>
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-xs text-gray-400 dark:text-gray-500">
+                          {t.widgets?.length || 0} widgets
+                        </span>
+                      </div>
                     </div>
                     {tab === 'custom' && (
                       <button 
                         onClick={(e) => { e.stopPropagation(); handleDelete(t.id); }} 
-                        className="absolute top-2 right-2 p-1 bg-white dark:bg-gray-800 rounded shadow opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 dark:hover:bg-red-900/20"
+                        className="absolute top-2 right-2 p-1.5 bg-white/90 dark:bg-gray-800/90 rounded-lg shadow opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 dark:hover:bg-red-900/20"
                         data-testid={`delete-template-${t.id}`}
                       >
                         <Trash2 className="w-4 h-4 text-red-500" />
@@ -156,19 +216,27 @@ const DashboardTemplatesDialog = ({ isOpen, onClose, onSelectTemplate, token }) 
               })}
             </div>
           ) : (
-            <div className="text-center py-12 text-gray-400 dark:text-gray-500">
-              {tab === 'custom' ? 'No custom templates yet. Save a dashboard as a template to see it here.' : 'No templates available'}
+            <div className="text-center py-12">
+              <LayoutDashboard className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+              <p className="text-gray-500 dark:text-gray-400">
+                {tab === 'custom' 
+                  ? 'No custom templates yet. Save a dashboard as a template to see it here.' 
+                  : 'No templates found in this category'}
+              </p>
             </div>
           )}
         </div>
         
         {/* Footer */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Widget types: Stat, Chart, Table, Gauge, Progress, Map, Funnel, Heatmap, Scorecard, List, Timeline, Sparkline
+          </p>
           <button 
             onClick={onClose} 
-            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
-            Cancel
+            Close
           </button>
         </div>
       </motion.div>
