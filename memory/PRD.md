@@ -121,6 +121,7 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - ✅ DataViz module integration
 - ✅ Dashboard Templates Library
 - ✅ Data visualization connected to real-time data
+- ✅ Edit/Delete custom dashboard templates
 
 ### P1 (High Priority)
 - Help Center documentation
