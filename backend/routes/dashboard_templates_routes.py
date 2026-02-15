@@ -351,6 +351,41 @@ async def save_dashboard_as_template(
     return {"id": template_id, "message": "Dashboard saved as template"}
 
 
+class TemplateUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+
+
+@router.put("/{template_id}")
+async def update_template(
+    template_id: str,
+    update: TemplateUpdate,
+    request: Request,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update a custom template (name/description only)"""
+    db = request.app.state.db
+    
+    user_id = current_user.get("id") or current_user.get("user_id")
+    
+    # Build update document
+    update_doc = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    if update.name is not None:
+        update_doc["name"] = update.name
+    if update.description is not None:
+        update_doc["description"] = update.description
+    
+    result = await db.dashboard_templates.update_one(
+        {"id": template_id, "user_id": user_id},
+        {"$set": update_doc}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Template not found or not owned by user")
+    
+    return {"message": "Template updated"}
+
+
 @router.delete("/{template_id}")
 async def delete_template(
     template_id: str,

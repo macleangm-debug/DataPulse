@@ -13,7 +13,9 @@ import {
   Briefcase,
   FolderKanban,
   Headphones,
-  Trash2, 
+  Trash2,
+  Pencil,
+  Check,
   X,
   Filter
 } from 'lucide-react';
