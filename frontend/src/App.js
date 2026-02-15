@@ -276,6 +276,36 @@ function App() {
               <UserManagementPage />
             </ProtectedRoute>
           } />
+          <Route path="/report-builder" element={
+            <ProtectedRoute>
+              <ReportBuilderPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/charts" element={
+            <ProtectedRoute>
+              <ChartsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/charts/new" element={
+            <ProtectedRoute>
+              <ChartsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboards" element={
+            <ProtectedRoute>
+              <DashboardsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboards/:dashboardId" element={
+            <ProtectedRoute>
+              <DashboardBuilderPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/datasets/:datasetId/transform" element={
+            <ProtectedRoute>
+              <DataTransformPage />
+            </ProtectedRoute>
+          } />
           {/* Public CAWI Survey Routes */}
           <Route path="/survey/:formId" element={<CAWISurveyPage />} />
           <Route path="/survey/complete" element={<SurveyCompletePage />} />
