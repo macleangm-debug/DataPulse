@@ -207,16 +207,28 @@ const WHATS_NEW = [
     items: [
       "Dashboard Templates Library with 10 presets",
       "Real-time data integration for DataViz",
-      "Edit/Delete custom templates"
+      "Edit/Delete custom templates",
+      "Comprehensive Help Center with AI Assistant"
     ]
   },
   {
     version: "2.4.0",
     date: "Jan 2026",
     items: [
-      "AI-powered Help Center Assistant",
-      "Enhanced User Management",
-      "Improved form builder performance"
+      "Enhanced User Management module",
+      "Improved form builder performance",
+      "New Chart Studio with AI suggestions",
+      "Report Builder with PDF export"
+    ]
+  },
+  {
+    version: "2.3.0",
+    date: "Dec 2025",
+    items: [
+      "Quality AI for automated data checks",
+      "Offline-first architecture improvements",
+      "Multi-language support (EN/SW)",
+      "GPS accuracy enhancements"
     ]
   }
 ];
