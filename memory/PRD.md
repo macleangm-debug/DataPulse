@@ -65,6 +65,17 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - Form: "Customer Feedback Survey" with 50 submissions
 - Dataset: "Sales Data" with 18 records
 
+### Session 5 - Dashboard Template Edit Feature (Feb 15, 2026)
+**Backend API** (`/app/backend/routes/dashboard_templates_routes.py`):
+- `PUT /api/dashboard-templates/{template_id}` - Update custom template name/description
+
+**Frontend Update** (`/app/frontend/src/components/DashboardTemplatesDialog.jsx`):
+- Edit button (pencil icon) appears on hover over custom template cards
+- Inline edit mode with name input (autofocused) and description textarea
+- Save button calls PUT API, shows success toast, updates UI immediately
+- Cancel button exits edit mode without saving
+- Card border highlights in violet when in edit mode
+
 ## Data Flow Architecture
 ```
 [Forms] → [Submissions] ←→ [Data Sources API] ←→ [Chart Studio]
