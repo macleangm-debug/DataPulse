@@ -17,7 +17,7 @@ from datetime import datetime
 from typing import Optional
 
 API_URL = "https://pulse-metrics-2.preview.emergentagent.com"
-ORG_ID = "878035eb-5e4f-4305-8075-31eb8fd66580"
+ORG_ID = "6fcd0e42-e56c-47e1-999a-32a52e94c677"
 TEST_EMAIL = "testuser_095957@datapulse.io"
 TEST_PASSWORD = "Test123!"
 
