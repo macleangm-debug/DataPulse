@@ -102,6 +102,22 @@ async def list_dashboards_query(request: Request, org_id: str = Query(None)):
     return {"dashboards": dashboards, "total": len(dashboards)}
 
 
+@router.get("/by-id/{dashboard_id}")
+async def get_dashboard_by_id(request: Request, dashboard_id: str):
+    """Get a specific dashboard by ID (without org_id)"""
+    db = request.app.state.db
+    
+    dashboard = await db.dashboards.find_one(
+        {"id": dashboard_id},
+        {"_id": 0}
+    )
+    
+    if not dashboard:
+        raise HTTPException(status_code=404, detail="Dashboard not found")
+    
+    return dashboard
+
+
 @router.get("/{org_id}")
 async def list_dashboards(request: Request, org_id: str):
     """List all dashboards for an organization"""
