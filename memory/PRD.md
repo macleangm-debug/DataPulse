@@ -91,6 +91,31 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 
 **Integration:** GPT-4o via Emergent LLM key (emergentintegrations library)
 
+### Session 7 - Comprehensive Help Center Expansion (Feb 15, 2026)
+**Massively expanded Help Center content:**
+
+**Articles (22 total):**
+- Getting Started, Form Builder Guide, Skip Logic, Dashboards, Dashboard Templates
+- Offline Collection, User Management, Data Export, Quality Checks, Report Builder
+- Chart Studio, GPS Map, CATI/CAWI, Case Management, Datasets, Workflows
+- Security Best Practices, Translations, Media Capture, Calculated Fields
+- Plugins, API Documentation
+
+**FAQ (20 items):** Covering forms, offline, dashboards, users, quality, exports, API, and more
+
+**Troubleshooting Guides (10 guides with severity levels):**
+- Data Not Syncing (high), Form Submission Errors (high), Cannot Log In (medium)
+- GPS Not Working (medium), Media Upload Failing (medium), Submissions Missing (high)
+- Export Not Working (medium), Dashboard Not Showing Data (medium)
+- Application Running Slow (low), Form Builder Problems (medium)
+
+**AI Knowledge Base:** Comprehensive documentation covering:
+- All DataPulse features and navigation
+- Step-by-step guides for common tasks
+- Troubleshooting procedures
+- Best practices and tips
+- Keyboard shortcuts reference
+
 ## Data Flow Architecture
 ```
 [Forms] → [Submissions] ←→ [Data Sources API] ←→ [Chart Studio]
