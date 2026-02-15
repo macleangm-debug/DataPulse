@@ -92,6 +92,39 @@ const DashboardTemplatesDialog = ({ isOpen, onClose, onSelectTemplate, token }) 
     }
   };
 
+  const handleStartEdit = (e, template) => {
+    e.stopPropagation();
+    setEditingId(template.id);
+    setEditName(template.name);
+    setEditDescription(template.description || '');
+  };
+
+  const handleCancelEdit = (e) => {
+    e.stopPropagation();
+    setEditingId(null);
+    setEditName('');
+    setEditDescription('');
+  };
+
+  const handleSaveEdit = async (e) => {
+    e.stopPropagation();
+    if (!editName.trim()) {
+      toast.error('Template name is required');
+      return;
+    }
+    try {
+      await axios.put(`${API_URL}/api/dashboard-templates/${editingId}`, 
+        { name: editName.trim(), description: editDescription.trim() },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success('Template updated');
+      setEditingId(null);
+      fetchTemplates();
+    } catch {
+      toast.error('Failed to update template');
+    }
+  };
+
   if (!isOpen) return null;
   
   // Filter templates by category
