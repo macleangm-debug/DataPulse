@@ -90,7 +90,10 @@ const NAVIGATION = [
       { label: 'Cases', path: '/cases', icon: Briefcase },
       { label: 'Import Cases', path: '/cases/import', icon: Plus },
       { label: 'Datasets', path: '/datasets', icon: Table2 },
-      { label: 'Exports', path: '/exports', icon: Download }
+      { label: 'Exports', path: '/exports', icon: Download },
+      { label: 'Charts', path: '/charts', icon: BarChart4 },
+      { label: 'Dashboards', path: '/dashboards', icon: LayoutDashboard },
+      { label: 'Report Builder', path: '/report-builder', icon: FileText }
     ]
   },
   {
