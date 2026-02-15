@@ -1,282 +1,219 @@
+/**
+ * HelpAssistant Component - AI Chat Widget
+ */
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MessageCircle, 
-  X, 
-  Send, 
-  Bot, 
-  User, 
-  Loader2,
-  Sparkles,
-  ChevronDown,
-  Minimize2,
-  Maximize2
-} from 'lucide-react';
-import axios from 'axios';
+import { X, Send, Bot, User, Loader2, Sparkles, ExternalLink, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-// Suggested questions for quick start
 const SUGGESTED_QUESTIONS = [
-  "How do I create a new form?",
+  "How do I get started?",
+  "How do I create a form?",
   "How do I build a dashboard?",
-  "How does offline collection work?",
   "How do I export my data?",
-  "What are dashboard templates?"
+  "How do I add team members?",
+  "What features are available?",
 ];
 
-const HelpAssistant = ({ isOpen, onClose, onToggle }) => {
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: "Hi! I'm the DataPulse AI Assistant. How can I help you today?",
-      timestamp: new Date().toISOString()
+function cn(...classes) {
+  return classes.filter(Boolean).join(' ');
+}
+
+function MessageContent({ content, isDark, onLinkClick }) {
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const parts = [];
+  let lastIndex = 0;
+  let match;
+  
+  while ((match = linkRegex.exec(content)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push({ type: 'text', content: content.slice(lastIndex, match.index) });
     }
+    parts.push({ type: 'link', text: match[1], url: match[2] });
+    lastIndex = match.index + match[0].length;
+  }
+  
+  if (lastIndex < content.length) {
+    parts.push({ type: 'text', content: content.slice(lastIndex) });
+  }
+  
+  if (parts.length === 0) {
+    return <p className="whitespace-pre-wrap">{content}</p>;
+  }
+  
+  return (
+    <div className="whitespace-pre-wrap">
+      {parts.map((part, idx) => {
+        if (part.type === 'text') return <span key={idx}>{part.content}</span>;
+        return (
+          <button
+            key={idx}
+            onClick={() => onLinkClick(part.url)}
+            className="inline-flex items-center gap-1 text-teal-400 hover:text-teal-300 underline underline-offset-2 transition-colors"
+          >
+            {part.text}
+            <ExternalLink className="w-3 h-3" />
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+export function HelpAssistant({ isDark = true }) {
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { role: 'assistant', content: "Hi! I'm the DataPulse AI Assistant. How can I help you today?", id: 'welcome' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [feedback, setFeedback] = useState({});
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const handleLinkClick = (url) => { setIsOpen(false); navigate(url); };
+
+  const handleFeedback = async (messageId, isHelpful, question) => {
+    setFeedback(prev => ({ ...prev, [messageId]: isHelpful ? 'helpful' : 'not-helpful' }));
+    try {
+      await fetch(`${BACKEND_URL}/api/help-assistant/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: sessionId, message_id: messageId, is_helpful: isHelpful, question })
+      });
+    } catch (error) { console.error('Failed to submit feedback:', error); }
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+  useEffect(() => { if (isOpen && inputRef.current) inputRef.current.focus(); }, [isOpen]);
 
-  useEffect(() => {
-    if (isOpen && !isMinimized && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isOpen, isMinimized]);
+  const sendMessage = async (messageText = null) => {
+    const userMessage = (messageText || input).trim();
+    if (!userMessage || isLoading) return;
 
-  const sendMessage = async (messageText) => {
-    if (!messageText.trim() || isLoading) return;
-
-    const userMessage = {
-      role: 'user',
-      content: messageText.trim(),
-      timestamp: new Date().toISOString()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
+    const userMsgId = `user-${Date.now()}`;
+    const assistantMsgId = `assistant-${Date.now()}`;
+    
     setInput('');
+    setShowSuggestions(false);
+    setMessages(prev => [...prev, { role: 'user', content: userMessage, id: userMsgId }]);
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${API_URL}/api/help/chat`, {
-        message: messageText.trim(),
-        session_id: sessionId,
-        conversation_history: messages.map(m => ({ role: m.role, content: m.content }))
+      const response = await fetch(`${BACKEND_URL}/api/help-assistant/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage, session_id: sessionId })
       });
-
-      const assistantMessage = {
-        role: 'assistant',
-        content: response.data.response,
-        timestamp: new Date().toISOString()
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
-      setSessionId(response.data.session_id);
+      if (!response.ok) throw new Error('Failed');
+      const data = await response.json();
+      setSessionId(data.session_id);
+      setMessages(prev => [...prev, { role: 'assistant', content: data.response, id: assistantMsgId, question: userMessage }]);
     } catch (error) {
-      console.error('Chat error:', error);
-      const errorMessage = {
-        role: 'assistant',
-        content: "I'm sorry, I couldn't process your request. Please try again or contact support@datapulse.io for help.",
-        timestamp: new Date().toISOString()
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
+      setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again.", id: assistantMsgId }]);
+    } finally { setIsLoading(false); }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    sendMessage(input);
-  };
+  const handleKeyDown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
 
-  const handleSuggestionClick = (suggestion) => {
-    sendMessage(suggestion);
-  };
-
-  if (!isOpen) {
-    return (
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={onToggle}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-full shadow-lg flex items-center justify-center text-white z-50 hover:shadow-xl transition-shadow"
-        data-testid="help-assistant-fab"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </motion.button>
-    );
-  }
+  const bgPrimary = isDark ? 'bg-[#0a1628]' : 'bg-gray-50';
+  const bgSecondary = isDark ? 'bg-[#0f1d32]' : 'bg-white';
+  const borderColor = isDark ? 'border-white/10' : 'border-gray-200';
+  const textPrimary = isDark ? 'text-white' : 'text-gray-900';
+  const textSecondary = isDark ? 'text-gray-400' : 'text-gray-600';
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ 
-        opacity: 1, 
-        y: 0, 
-        scale: 1,
-        height: isMinimized ? 'auto' : 500
-      }}
-      exit={{ opacity: 0, y: 20, scale: 0.95 }}
-      className="fixed bottom-6 right-6 w-96 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-gray-200 dark:border-gray-700"
-      data-testid="help-assistant-panel"
-    >
-      {/* Header */}
-      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-            <Bot className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h3 className="text-white font-semibold">DataPulse Assistant</h3>
-            <p className="text-white/70 text-xs">AI-powered help</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setIsMinimized(!isMinimized)}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-            data-testid="minimize-assistant"
-          >
-            {isMinimized ? (
-              <Maximize2 className="w-4 h-4 text-white" />
-            ) : (
-              <Minimize2 className="w-4 h-4 text-white" />
-            )}
-          </button>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-            data-testid="close-assistant"
-          >
-            <X className="w-4 h-4 text-white" />
-          </button>
-        </div>
-      </div>
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className={cn(
+          "fixed bottom-24 right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50 transition-all hover:scale-105",
+          "bg-gradient-to-r from-teal-500 to-teal-600 text-white",
+          isOpen && "hidden"
+        )}
+        data-testid="help-assistant-btn"
+      >
+        <Sparkles className="w-6 h-6" />
+      </button>
 
-      <AnimatePresence>
-        {!isMinimized && (
-          <motion.div
-            initial={{ height: 0 }}
-            animate={{ height: 'auto' }}
-            exit={{ height: 0 }}
-            className="flex flex-col flex-1 overflow-hidden"
-          >
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-80">
-              {messages.map((msg, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
-                >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    msg.role === 'user' 
-                      ? 'bg-violet-100 dark:bg-violet-900/30' 
-                      : 'bg-indigo-100 dark:bg-indigo-900/30'
-                  }`}>
-                    {msg.role === 'user' ? (
-                      <User className="w-4 h-4 text-violet-600 dark:text-violet-400" />
-                    ) : (
-                      <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                    )}
-                  </div>
-                  <div className={`max-w-[75%] rounded-2xl px-4 py-2 ${
-                    msg.role === 'user'
-                      ? 'bg-violet-600 text-white rounded-br-md'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md'
-                  }`}>
-                    <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
-                  </div>
-                </motion.div>
-              ))}
-              
-              {isLoading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex gap-2"
-                >
-                  <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                  </div>
-                  <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-bl-md px-4 py-3">
-                    <div className="flex gap-1">
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-              
-              <div ref={messagesEndRef} />
+      {isOpen && (
+        <div className={cn("fixed bottom-24 right-6 w-96 h-[500px] rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden", bgSecondary, borderColor, "border")}>
+          <div className={cn("flex items-center justify-between px-4 py-3 border-b", borderColor, "bg-gradient-to-r from-teal-500/10 to-teal-600/10")}>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-teal-500 to-teal-600 flex items-center justify-center">
+                <Bot className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <h3 className={cn("font-semibold text-sm", textPrimary)}>DataPulse Assistant</h3>
+                <p className={cn("text-xs", textSecondary)}>Powered by AI</p>
+              </div>
             </div>
+            <button onClick={() => setIsOpen(false)} className={cn("p-1 rounded-lg hover:bg-white/10", textSecondary)}>
+              <X className="w-5 h-5" />
+            </button>
+          </div>
 
-            {/* Suggestions */}
-            {messages.length <= 2 && (
-              <div className="px-4 pb-2">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Quick questions:</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {SUGGESTED_QUESTIONS.slice(0, 3).map((q, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => handleSuggestionClick(q)}
-                      className="text-xs px-2.5 py-1 bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 rounded-full hover:bg-violet-100 dark:hover:bg-violet-900/40 transition-colors"
-                      data-testid={`suggestion-${idx}`}
-                    >
-                      {q}
-                    </button>
+          <div className={cn("flex-1 overflow-y-auto p-4 space-y-4", bgPrimary)}>
+            {messages.map((msg, idx) => (
+              <div key={msg.id || idx} className={cn("flex gap-3", msg.role === 'user' ? "flex-row-reverse" : "")}>
+                <div className={cn("w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0", msg.role === 'user' ? "bg-blue-500/20" : "bg-gradient-to-r from-teal-500 to-teal-600")}>
+                  {msg.role === 'user' ? <User className="w-3.5 h-3.5 text-blue-400" /> : <Bot className="w-3.5 h-3.5 text-white" />}
+                </div>
+                <div className="flex flex-col gap-1 max-w-[80%]">
+                  <div className={cn("rounded-2xl px-4 py-2.5 text-sm", msg.role === 'user' ? "bg-blue-500 text-white rounded-br-md" : cn(bgSecondary, textPrimary, "rounded-bl-md border", borderColor))}>
+                    {msg.role === 'user' ? <p className="whitespace-pre-wrap">{msg.content}</p> : <MessageContent content={msg.content} isDark={isDark} onLinkClick={handleLinkClick} />}
+                  </div>
+                  {msg.role === 'assistant' && msg.id !== 'welcome' && (
+                    <div className="flex items-center gap-2 mt-1 ml-1">
+                      {feedback[msg.id] ? (
+                        <span className={cn("text-xs", textSecondary)}>{feedback[msg.id] === 'helpful' ? 'Thanks!' : "We'll improve!"}</span>
+                      ) : (
+                        <>
+                          <span className={cn("text-xs", textSecondary)}>Helpful?</span>
+                          <button onClick={() => handleFeedback(msg.id, true, msg.question)} className={cn("p-1 rounded hover:bg-white/10", textSecondary, "hover:text-green-400")}><ThumbsUp className="w-3.5 h-3.5" /></button>
+                          <button onClick={() => handleFeedback(msg.id, false, msg.question)} className={cn("p-1 rounded hover:bg-white/10", textSecondary, "hover:text-red-400")}><ThumbsDown className="w-3.5 h-3.5" /></button>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+            
+            {showSuggestions && messages.length === 1 && !isLoading && (
+              <div className="mt-2">
+                <p className={cn("text-xs mb-2", textSecondary)}>Try asking:</p>
+                <div className="flex flex-wrap gap-2">
+                  {SUGGESTED_QUESTIONS.map((question, idx) => (
+                    <button key={idx} onClick={() => sendMessage(question)} className={cn("text-xs px-3 py-1.5 rounded-full border transition-colors", borderColor, isDark ? "bg-white/5 hover:bg-white/10" : "bg-gray-100 hover:bg-gray-200", "text-teal-400 hover:text-teal-300")}>{question}</button>
                   ))}
                 </div>
               </div>
             )}
-
-            {/* Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex gap-2">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask a question..."
-                  className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-                  disabled={isLoading}
-                  data-testid="assistant-input"
-                />
-                <button
-                  type="submit"
-                  disabled={!input.trim() || isLoading}
-                  className="w-10 h-10 bg-violet-600 rounded-full flex items-center justify-center text-white hover:bg-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  data-testid="assistant-send"
-                >
-                  {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </button>
+            
+            {isLoading && (
+              <div className="flex gap-3">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-r from-teal-500 to-teal-600 flex items-center justify-center"><Bot className="w-3.5 h-3.5 text-white" /></div>
+                <div className={cn(bgSecondary, "rounded-2xl rounded-bl-md px-4 py-3 border", borderColor)}><Loader2 className="w-4 h-4 animate-spin text-teal-500" /></div>
               </div>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className={cn("p-3 border-t", borderColor)}>
+            <div className={cn("flex items-center gap-2 rounded-xl px-3 py-2", isDark ? "bg-white/5" : "bg-gray-100")}>
+              <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Ask me anything..." className={cn("flex-1 bg-transparent outline-none text-sm", textPrimary, "placeholder-gray-500")} disabled={isLoading} />
+              <button onClick={() => sendMessage()} disabled={!input.trim() || isLoading} className={cn("p-2 rounded-lg transition-colors", input.trim() && !isLoading ? "bg-teal-500 text-white hover:bg-teal-600" : "text-gray-500 cursor-not-allowed")}><Send className="w-4 h-4" /></button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
-};
+}
 
 export default HelpAssistant;
