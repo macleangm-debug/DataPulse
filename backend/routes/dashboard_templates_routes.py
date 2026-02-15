@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pydantic import BaseModel
 from bson import ObjectId
 
-from auth import get_current_user
+from auth import get_current_user, get_optional_user
 
 router = APIRouter(prefix="/dashboard-templates", tags=["Dashboard Templates"])
 
