@@ -986,7 +986,7 @@ export const UserManagementPage = () => {
     
     try {
       const response = await fetch(
-        `${API_URL}/api/users/password-policy?org_id=${currentOrg.id}`,
+        `${API_URL}/api/users/config/password-policy?org_id=${currentOrg.id}`,
         { headers: getAuthHeaders() }
       );
       
@@ -1097,7 +1097,7 @@ export const UserManagementPage = () => {
   const handleSavePasswordPolicy = async (policy) => {
     try {
       const response = await fetch(
-        `${API_URL}/api/users/password-policy?org_id=${currentOrg.id}`,
+        `${API_URL}/api/users/config/password-policy?org_id=${currentOrg.id}`,
         {
           method: 'PUT',
           headers: getAuthHeaders(),
