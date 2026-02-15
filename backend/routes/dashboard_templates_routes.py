@@ -290,6 +290,7 @@ async def create_template(
         "widgets": template.widgets,
         "icon": template.icon,
         "color": template.color,
+        "category": template.category,
         "is_preset": False,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
