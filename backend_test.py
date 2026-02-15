@@ -16,7 +16,7 @@ import json
 from datetime import datetime
 from typing import Optional
 
-API_URL = "https://viz-enhance-1.preview.emergentagent.com"
+API_URL = "https://datapulse-dash.preview.emergentagent.com"
 ORG_ID = "6fcd0e42-e56c-47e1-999a-32a52e94c677"
 TEST_EMAIL = "testuser_095957@datapulse.io"
 TEST_PASSWORD = "Test123!"
