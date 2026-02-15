@@ -8,7 +8,7 @@ import sys
 from datetime import datetime
 import uuid
 
-API_URL = "https://datapulse-dash.preview.emergentagent.com"
+API_URL = "https://dashboard-assist.preview.emergentagent.com"
 
 def create_test_user():
     """Create a new test user for our tests"""
