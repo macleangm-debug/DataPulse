@@ -141,7 +141,7 @@ async def get_source_data(
     if filters:
         try:
             filter_dict = json_lib.loads(filters)
-        except:
+        except (json_lib.JSONDecodeError, ValueError):
             pass
     
     if source_type == "form":
