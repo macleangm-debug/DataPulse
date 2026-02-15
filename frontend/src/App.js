@@ -33,6 +33,7 @@ import { CAWISurveyPage, SurveyCompletePage } from './pages/CAWISurveyPage';
 import { SimulationPage } from './pages/SimulationPage';
 import { DeviceManagementPage } from './pages/DeviceManagementPage';
 import { DataAnalysisPage } from './pages/DataAnalysisPage';
+import { UserManagementPage } from './pages/UserManagementPage';
 import { PWAInstallPrompt, NetworkStatus } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import '@/App.css';
