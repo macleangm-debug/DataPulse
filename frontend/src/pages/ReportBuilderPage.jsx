@@ -626,6 +626,15 @@ const ReportBuilderPage = () => {
             </p>
           </div>
         </div>
+        
+        {/* Data Source Selector Dialog */}
+        <DataSourceSelector
+          isOpen={showDataSourceSelector}
+          onClose={() => setShowDataSourceSelector(false)}
+          onSelect={handleConnectDataSource}
+          token={token}
+          orgId={currentOrg?.id}
+        />
       </div>
     </DashboardLayout>
   );
