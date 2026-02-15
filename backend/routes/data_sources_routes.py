@@ -353,8 +353,6 @@ async def get_source_stats(
     current_user: dict = Depends(get_optional_user)
 ):
     """Get statistics summary for a data source"""
-    db = request.app.state.db
-    
     # Get data
     data_response = await get_source_data(
         request=request,
