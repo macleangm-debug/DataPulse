@@ -431,6 +431,21 @@ const ReportBuilderPage = () => {
               <p className="text-gray-500 text-sm">Design professional infographic-style reports</p>
             </div>
             <div className="flex items-center gap-3">
+              {/* Connect Data Button */}
+              <button
+                onClick={() => setShowDataSourceSelector(true)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                  connectedDataSource 
+                    ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' 
+                    : 'bg-white border hover:bg-gray-50'
+                }`}
+                data-testid="connect-data-btn"
+              >
+                <Database size={18} />
+                <span className="font-medium">
+                  {loadingData ? 'Loading...' : connectedDataSource ? connectedDataSource.name : 'Connect Data'}
+                </span>
+              </button>
               <ThemeSelector
                 selectedTheme={reportConfig.theme}
                 onSelect={(t) => setReportConfig({ ...reportConfig, theme: t })}
