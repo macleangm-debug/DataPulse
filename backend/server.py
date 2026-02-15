@@ -89,6 +89,7 @@ from routes.advanced_models_routes import router as advanced_models_router
 from routes.dashboard_builder_routes import router as dashboard_builder_router
 from routes.audit_routes import router as audit_router
 from routes.job_routes import router as job_router
+from routes.user_management_routes import router as user_management_router
 
 # Include all route modules
 api_router.include_router(auth_router)
