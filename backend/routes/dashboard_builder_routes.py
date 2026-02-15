@@ -86,6 +86,22 @@ async def create_dashboard(request: Request, req: CreateDashboardRequest):
     return {"id": dashboard_id, "message": "Dashboard created"}
 
 
+@router.get("")
+async def list_dashboards_query(request: Request, org_id: str = Query(None)):
+    """List all dashboards for an organization (query param version)"""
+    db = request.app.state.db
+    
+    if not org_id:
+        return {"dashboards": [], "total": 0}
+    
+    dashboards = await db.dashboards.find(
+        {"org_id": org_id},
+        {"_id": 0, "widgets": 0}
+    ).sort("updated_at", -1).to_list(100)
+    
+    return {"dashboards": dashboards, "total": len(dashboards)}
+
+
 @router.get("/{org_id}")
 async def list_dashboards(request: Request, org_id: str):
     """List all dashboards for an organization"""
