@@ -33,6 +33,8 @@ import {
   Smartphone,
   Brain,
   Route,
+  BarChart4,
+  LayoutDashboard,
   BarChart3,
   Puzzle,
   Workflow,
