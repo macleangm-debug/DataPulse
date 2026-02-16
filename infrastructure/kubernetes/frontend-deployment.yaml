@@ -1,0 +1,131 @@
+# DataPulse Frontend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datapulse-frontend
+  namespace: datapulse
+  labels:
+    app: datapulse
+    component: frontend
+    version: v1
+spec:
+  replicas: 5  # Starting replicas, HPA will scale 5-20
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 10%
+  selector:
+    matchLabels:
+      app: datapulse
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: datapulse
+        component: frontend
+        version: v1
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: component
+                  operator: In
+                  values:
+                  - frontend
+              topologyKey: kubernetes.io/hostname
+      
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            component: frontend
+      
+      terminationGracePeriodSeconds: 30
+      
+      containers:
+      - name: frontend
+        image: datapulse/frontend:latest
+        imagePullPolicy: Always
+        
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        
+        env:
+        - name: REACT_APP_BACKEND_URL
+          value: "https://api.datapulse.io"
+        
+        resources:
+          requests:
+            cpu: "200m"
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 512Mi
+        
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 101  # nginx user
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+        
+        volumeMounts:
+        - name: nginx-cache
+          mountPath: /var/cache/nginx
+        - name: nginx-run
+          mountPath: /var/run
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+      
+      volumes:
+      - name: nginx-cache
+        emptyDir: {}
+      - name: nginx-run
+        emptyDir: {}
+      - name: nginx-config
+        configMap:
+          name: nginx-config
+      
+      imagePullSecrets:
+      - name: regcred
+---
+# Pod Disruption Budget for Frontend
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: datapulse-frontend-pdb
+  namespace: datapulse
+spec:
+  minAvailable: 80%
+  selector:
+    matchLabels:
+      app: datapulse
+      component: frontend
