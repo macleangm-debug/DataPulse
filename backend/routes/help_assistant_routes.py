@@ -2692,7 +2692,7 @@ Access DataPulse data and features programmatically.
 
 ### API Base URL
 ```
-https://dashboard-assist.preview.emergentagent.com/api
+https://chat-persist-4.preview.emergentagent.com/api
 ```
 
 ### Authentication

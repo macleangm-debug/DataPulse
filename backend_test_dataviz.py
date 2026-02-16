@@ -12,7 +12,7 @@ import json
 from datetime import datetime
 from typing import Optional
 
-API_URL = "https://dashboard-assist.preview.emergentagent.com"
+API_URL = "https://chat-persist-4.preview.emergentagent.com"
 ORG_ID = "878035eb-5e4f-4305-8075-31eb8fd66580"
 TEST_EMAIL = "demo@datapulse.io"
 TEST_PASSWORD = "Test123!"
