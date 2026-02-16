@@ -3225,7 +3225,7 @@ FAQ_DATA = [
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat_with_assistant(request: ChatRequest, req: Request):
-    """Chat with the AI Help Assistant - GPT-4o powered"""
+    """Chat with the AI Help Assistant - GPT-4o powered with persistent sessions"""
     try:
         from emergentintegrations.llm.chat import LlmChat, UserMessage
         
@@ -3233,7 +3233,14 @@ async def chat_with_assistant(request: ChatRequest, req: Request):
         if not api_key:
             raise HTTPException(status_code=500, detail="LLM API key not configured")
         
+        # Get database connection
+        db = get_db(req)
+        
+        # Generate or use existing session ID
         session_id = request.session_id or str(uuid.uuid4())
+        
+        # Retrieve chat history from database if session exists
+        chat_history = await get_chat_history(db, session_id, limit=10)
         
         chat = LlmChat(
             api_key=api_key,
@@ -3255,13 +3262,28 @@ Guidelines:
         
         chat.with_model("openai", "gpt-4o")
         
-        if request.conversation_history:
+        # Load persisted chat history into LLM context
+        if chat_history:
+            for msg in chat_history[-5:]:
+                if msg.get("role") == "user":
+                    await chat.send_message(UserMessage(text=msg.get("content", "")))
+        # Also include any conversation history from request (for backwards compatibility)
+        elif request.conversation_history:
             for msg in request.conversation_history[-5:]:
                 if msg.get("role") == "user":
                     await chat.send_message(UserMessage(text=msg.get("content", "")))
         
         user_msg = UserMessage(text=request.message)
         response = await chat.send_message(user_msg)
+        
+        # Persist the conversation to database
+        await create_or_update_chat_session(
+            db=db,
+            session_id=session_id,
+            user_message=request.message,
+            assistant_response=response,
+            user_id=None  # Could be extracted from auth token if available
+        )
         
         return ChatResponse(response=response, session_id=session_id)
         
