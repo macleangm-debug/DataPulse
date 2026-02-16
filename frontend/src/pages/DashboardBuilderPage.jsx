@@ -223,6 +223,34 @@ function DashboardWidget({ widget, data, onEdit, onDelete, onResize }) {
           <span className="font-medium text-sm text-foreground truncate">{widget.title}</span>
         </div>
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          {/* Size Preset Buttons */}
+          <div className="relative">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-6 w-6"
+              onClick={() => setShowSizeMenu(!showSizeMenu)}
+              data-testid="widget-resize-btn"
+            >
+              <Maximize2 className="w-3 h-3" />
+            </Button>
+            {showSizeMenu && (
+              <div className="absolute right-0 top-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-2 z-50 min-w-[120px]">
+                <p className="text-xs text-muted-foreground px-2 pb-2">Quick Resize</p>
+                {SIZE_PRESETS.map((preset) => (
+                  <button
+                    key={preset.label}
+                    onClick={() => handleSizePreset(preset)}
+                    className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-muted transition-colors flex items-center justify-between"
+                    data-testid={`size-preset-${preset.label.toLowerCase()}`}
+                  >
+                    <span className="font-medium">{preset.label}</span>
+                    <span className="text-xs text-muted-foreground">{preset.desc}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => onEdit(widget)}>
             <Settings className="w-3 h-3" />
           </Button>
