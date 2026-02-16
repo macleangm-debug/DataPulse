@@ -3338,7 +3338,23 @@ async def get_article(article_id: str):
     if not article:
         raise HTTPException(status_code=404, detail="Article not found")
     
-    return article
+    # Map screenshot paths to actual image URLs
+    screenshot_mapping = {
+        "/dashboard": "/help-screenshots/dashboard.jpeg",
+        "/forms": "/help-screenshots/forms.jpeg",
+        "/dashboards": "/help-screenshots/dashboards.jpeg",
+        "/charts": "/help-screenshots/charts.jpeg",
+        "/user-management": "/help-screenshots/user-management.jpeg",
+        "/help-center": "/help-screenshots/help-center.jpeg",
+    }
+    
+    # Create response with screenshot URL
+    result = {**article}
+    if article.get("screenshot"):
+        screenshot_path = article["screenshot"]
+        result["screenshot_url"] = screenshot_mapping.get(screenshot_path)
+    
+    return result
 
 
 @router.get("/categories")
