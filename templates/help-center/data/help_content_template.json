@@ -1,0 +1,173 @@
+{
+  "_comment": "Help Center Content Template - Customize for your app",
+  
+  "app_config": {
+    "app_name": "YourApp",
+    "support_email": "support@yourapp.com",
+    "help_center_path": "/help"
+  },
+  
+  "categories": [
+    {
+      "id": "basics",
+      "name": "Getting Started",
+      "icon": "Zap",
+      "description": "Learn the fundamentals"
+    },
+    {
+      "id": "features",
+      "name": "Features",
+      "icon": "FileText",
+      "description": "Explore all features"
+    },
+    {
+      "id": "data",
+      "name": "Data & Reports",
+      "icon": "BarChart3",
+      "description": "Analytics and exports"
+    },
+    {
+      "id": "admin",
+      "name": "Administration",
+      "icon": "Settings",
+      "description": "Settings and users"
+    },
+    {
+      "id": "integrations",
+      "name": "Integrations",
+      "icon": "Plug",
+      "description": "Connect with other tools"
+    }
+  ],
+  
+  "articles": [
+    {
+      "id": "getting-started",
+      "title": "Getting Started",
+      "category": "basics",
+      "summary": "Learn the basics and get up and running quickly.",
+      "content": "# Getting Started\n\nWelcome! This guide will help you get started.\n\n## Quick Start\n\n1. Sign Up\n2. Set Up\n3. Explore",
+      "tags": ["basics", "introduction", "popular"],
+      "read_time": "3 min"
+    },
+    {
+      "id": "dashboard-overview",
+      "title": "Dashboard Overview",
+      "category": "basics",
+      "summary": "Understand your main dashboard and its components.",
+      "content": "# Dashboard Overview\n\nYour dashboard is the central hub for all activities.",
+      "tags": ["dashboard", "navigation"],
+      "read_time": "4 min"
+    }
+  ],
+  
+  "faq": [
+    {
+      "question": "How do I get started?",
+      "answer": "Visit the Dashboard and follow the setup wizard. You can also check our Getting Started guide for detailed instructions.",
+      "category": "basics"
+    },
+    {
+      "question": "How do I reset my password?",
+      "answer": "Click 'Forgot Password' on the login page, enter your email, and follow the reset link sent to you.",
+      "category": "admin"
+    },
+    {
+      "question": "Can I export my data?",
+      "answer": "Yes! Go to Data > Export, select your format (CSV, Excel, JSON), apply any filters, and click Export.",
+      "category": "data"
+    }
+  ],
+  
+  "troubleshooting": [
+    {
+      "id": "login-issues",
+      "title": "Cannot Log In",
+      "icon": "Shield",
+      "severity": "medium",
+      "steps": [
+        "Verify your email address is correct",
+        "Check caps lock is off",
+        "Use 'Forgot Password' to reset",
+        "Clear browser cookies and cache",
+        "Try incognito/private browsing mode",
+        "Contact support if issue persists"
+      ],
+      "common_causes": [
+        "Incorrect password",
+        "Caps lock enabled",
+        "Account locked after failed attempts",
+        "Session cookie issues"
+      ]
+    },
+    {
+      "id": "sync-issues",
+      "title": "Data Not Syncing",
+      "icon": "AlertCircle",
+      "severity": "high",
+      "steps": [
+        "Check internet connection",
+        "Verify you're logged in",
+        "Refresh the page",
+        "Check browser console for errors",
+        "Clear cache and retry",
+        "Contact support if issue persists"
+      ],
+      "common_causes": [
+        "Network connectivity issues",
+        "Session expired",
+        "Browser cache issues",
+        "Server maintenance"
+      ]
+    }
+  ],
+  
+  "shortcuts": [
+    {
+      "category": "Navigation",
+      "shortcuts": [
+        { "keys": ["Ctrl", "K"], "action": "Open search" },
+        { "keys": ["Ctrl", "D"], "action": "Go to Dashboard" },
+        { "keys": ["Esc"], "action": "Close modal/dialog" }
+      ]
+    },
+    {
+      "category": "Actions",
+      "shortcuts": [
+        { "keys": ["Ctrl", "S"], "action": "Save" },
+        { "keys": ["Ctrl", "Z"], "action": "Undo" },
+        { "keys": ["Ctrl", "Y"], "action": "Redo" }
+      ]
+    },
+    {
+      "category": "General",
+      "shortcuts": [
+        { "keys": ["?"], "action": "Open help" },
+        { "keys": ["Ctrl", "/"], "action": "Show shortcuts" }
+      ]
+    }
+  ],
+  
+  "releases": [
+    {
+      "version": "1.2.0",
+      "date": "February 2026",
+      "highlights": [
+        { "type": "feature", "title": "Help Center", "description": "Comprehensive documentation and AI assistant" },
+        { "type": "feature", "title": "New Dashboard", "description": "Redesigned dashboard with better analytics" },
+        { "type": "improvement", "title": "Performance", "description": "50% faster page load times" }
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "January 2026",
+      "highlights": [
+        { "type": "feature", "title": "Team Collaboration", "description": "Invite team members and collaborate" },
+        { "type": "improvement", "title": "Export Options", "description": "New export formats available" },
+        { "type": "bugfix", "title": "Login Issues", "description": "Fixed session timeout problems" }
+      ]
+    }
+  ],
+  
+  "ai_context_template": "You are the {app_name} AI Assistant.\n\n## Available Help Links:\n- Getting Started: [{help_path}?article=getting-started]\n- FAQ: [{help_path}?tab=faq]\n- Troubleshooting: [{help_path}?tab=troubleshooting]\n\n## Your App Overview:\n{app_description}\n\n## Key Features:\n1. Feature 1\n2. Feature 2\n3. Feature 3\n\n## Guidelines:\n1. Be helpful, friendly, and concise\n2. Include relevant links when helpful\n3. For technical issues, suggest checking Troubleshooting\n4. For account issues, suggest contacting {support_email}"
+}
