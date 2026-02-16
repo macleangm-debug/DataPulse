@@ -1,0 +1,163 @@
+# DataPulse ConfigMap - Application Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: datapulse-config
+  namespace: datapulse
+  labels:
+    app: datapulse
+data:
+  # Application Settings
+  APP_ENV: "production"
+  APP_DEBUG: "false"
+  LOG_LEVEL: "INFO"
+  
+  # API Settings
+  API_VERSION: "v1"
+  API_RATE_LIMIT: "1000/minute"
+  API_TIMEOUT: "30"
+  
+  # CORS Settings
+  CORS_ORIGINS: "https://datapulse.io,https://app.datapulse.io,https://api.datapulse.io"
+  
+  # MongoDB Settings (connection string in secrets)
+  MONGO_MIN_POOL_SIZE: "10"
+  MONGO_MAX_POOL_SIZE: "100"
+  MONGO_MAX_IDLE_TIME_MS: "45000"
+  MONGO_CONNECT_TIMEOUT_MS: "10000"
+  MONGO_SOCKET_TIMEOUT_MS: "30000"
+  MONGO_READ_PREFERENCE: "primaryPreferred"
+  
+  # Redis Settings
+  REDIS_MAX_CONNECTIONS: "50"
+  REDIS_SOCKET_TIMEOUT: "5"
+  REDIS_HEALTH_CHECK_INTERVAL: "30"
+  
+  # Cache Settings
+  CACHE_DEFAULT_TTL: "300"
+  CACHE_SESSION_TTL: "3600"
+  CACHE_QUERY_TTL: "60"
+  
+  # Bulk Operation Settings
+  BULK_MAX_SUBMISSIONS: "1000"
+  BULK_BATCH_SIZE: "100"
+  
+  # File Upload Settings
+  MAX_UPLOAD_SIZE_MB: "50"
+  ALLOWED_FILE_TYPES: "image/jpeg,image/png,image/webp,application/pdf"
+  
+  # Frontend Settings
+  REACT_APP_API_URL: "https://api.datapulse.io"
+  REACT_APP_WS_URL: "wss://api.datapulse.io/ws"
+---
+# ConfigMap for nginx configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: datapulse
+data:
+  nginx.conf: |
+    worker_processes auto;
+    worker_rlimit_nofile 65535;
+    
+    events {
+        worker_connections 65535;
+        use epoll;
+        multi_accept on;
+    }
+    
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+        
+        # Logging
+        log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for" '
+                        'rt=$request_time uct="$upstream_connect_time" '
+                        'uht="$upstream_header_time" urt="$upstream_response_time"';
+        
+        access_log /var/log/nginx/access.log main buffer=16k flush=5s;
+        error_log /var/log/nginx/error.log warn;
+        
+        # Performance
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        keepalive_requests 10000;
+        
+        # Compression
+        gzip on;
+        gzip_vary on;
+        gzip_proxied any;
+        gzip_comp_level 6;
+        gzip_types text/plain text/css text/xml application/json application/javascript 
+                   application/xml application/xml+rss text/javascript application/x-javascript;
+        gzip_min_length 256;
+        
+        # Rate limiting
+        limit_req_zone $binary_remote_addr zone=api_limit:10m rate=100r/s;
+        limit_conn_zone $binary_remote_addr zone=conn_limit:10m;
+        
+        # Upstream for backend
+        upstream backend {
+            least_conn;
+            keepalive 100;
+            
+            server datapulse-backend:8001 weight=1 max_fails=3 fail_timeout=30s;
+        }
+        
+        server {
+            listen 80;
+            server_name _;
+            
+            # Security headers
+            add_header X-Frame-Options "SAMEORIGIN" always;
+            add_header X-Content-Type-Options "nosniff" always;
+            add_header X-XSS-Protection "1; mode=block" always;
+            add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+            
+            # Health check
+            location /health {
+                access_log off;
+                return 200 'healthy';
+                add_header Content-Type text/plain;
+            }
+            
+            # API routes
+            location /api/ {
+                limit_req zone=api_limit burst=50 nodelay;
+                limit_conn conn_limit 100;
+                
+                proxy_pass http://backend;
+                proxy_http_version 1.1;
+                proxy_set_header Connection "";
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                
+                proxy_connect_timeout 10s;
+                proxy_send_timeout 60s;
+                proxy_read_timeout 60s;
+                
+                proxy_buffering on;
+                proxy_buffer_size 4k;
+                proxy_buffers 8 4k;
+            }
+            
+            # Static files
+            location / {
+                root /usr/share/nginx/html;
+                try_files $uri $uri/ /index.html;
+                
+                # Cache static assets
+                location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {
+                    expires 1y;
+                    add_header Cache-Control "public, immutable";
+                }
+            }
+        }
+    }
