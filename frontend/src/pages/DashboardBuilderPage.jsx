@@ -581,6 +581,7 @@ export function DashboardBuilderPage() {
                     data={widgetData[widget.id]}
                     onEdit={setEditingWidget}
                     onDelete={deleteWidget}
+                    onResize={handleWidgetResize}
                   />
                 </div>
               ))}
