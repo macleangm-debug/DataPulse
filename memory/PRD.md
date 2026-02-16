@@ -103,6 +103,12 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - `GET /api/help/articles` - List help articles (supports ?category, ?search filters)
 - `GET /api/help/articles/{article_id}` - Get specific article
 - `GET /api/help/categories` - List 8 help categories
+- `GET /api/help/categories-full` - Categories with full article lists
+- `GET /api/help/faq` - Get 20 FAQ items
+- `GET /api/help/troubleshooting` - Get 10 troubleshooting guides
+- `GET /api/help/shortcuts` - Get keyboard shortcuts (5 categories)
+- `GET /api/help/whats-new` - Get release notes (4 versions)
+- `GET /api/help/search?q={term}` - Global search
 - `POST /api/help/chat` - AI chat assistant (GPT-4o)
 - `POST /api/help/feedback` - Submit feedback
 
