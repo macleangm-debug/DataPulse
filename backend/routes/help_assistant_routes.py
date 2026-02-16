@@ -3336,3 +3336,191 @@ async def search_help(q: str):
             })
     
     return results
+
+
+# =============================================================================
+# KEYBOARD SHORTCUTS DATA
+# =============================================================================
+
+KEYBOARD_SHORTCUTS = [
+    {
+        "category": "Navigation",
+        "shortcuts": [
+            {"keys": ["Ctrl", "K"], "action": "Open search"},
+            {"keys": ["Ctrl", "D"], "action": "Go to Dashboard"},
+            {"keys": ["Ctrl", "/"], "action": "Show keyboard shortcuts"},
+            {"keys": ["Esc"], "action": "Close modal/dialog"}
+        ]
+    },
+    {
+        "category": "Forms",
+        "shortcuts": [
+            {"keys": ["Ctrl", "S"], "action": "Save form"},
+            {"keys": ["Ctrl", "P"], "action": "Preview form"},
+            {"keys": ["Ctrl", "Z"], "action": "Undo"},
+            {"keys": ["Ctrl", "Y"], "action": "Redo"},
+            {"keys": ["Delete"], "action": "Remove selected field"}
+        ]
+    },
+    {
+        "category": "Data Entry",
+        "shortcuts": [
+            {"keys": ["Tab"], "action": "Next field"},
+            {"keys": ["Shift", "Tab"], "action": "Previous field"},
+            {"keys": ["Enter"], "action": "Submit/Confirm"},
+            {"keys": ["Space"], "action": "Toggle checkbox"}
+        ]
+    },
+    {
+        "category": "Dashboards",
+        "shortcuts": [
+            {"keys": ["Ctrl", "N"], "action": "New widget"},
+            {"keys": ["Ctrl", "E"], "action": "Edit selected widget"},
+            {"keys": ["Ctrl", "G"], "action": "Grid snap toggle"},
+            {"keys": ["R"], "action": "Refresh data"}
+        ]
+    },
+    {
+        "category": "General",
+        "shortcuts": [
+            {"keys": ["?"], "action": "Open help center"},
+            {"keys": ["Ctrl", "B"], "action": "Toggle sidebar"},
+            {"keys": ["F11"], "action": "Fullscreen mode"},
+            {"keys": ["Ctrl", ","], "action": "Open settings"}
+        ]
+    }
+]
+
+WHATS_NEW_DATA = [
+    {
+        "version": "2.5.0",
+        "date": "February 2026",
+        "highlights": [
+            {"type": "feature", "title": "Comprehensive Help Center", "description": "22 articles, 20 FAQs, 10 troubleshooting guides, AI-powered assistant"},
+            {"type": "feature", "title": "Dashboard Templates", "description": "10 preset templates for Sales, Marketing, Operations, and more"},
+            {"type": "feature", "title": "AI Assistant", "description": "Get instant help with GPT-4o powered chat support"},
+            {"type": "improvement", "title": "Real-time Data Integration", "description": "Connect visualizations directly to form submissions"}
+        ]
+    },
+    {
+        "version": "2.4.0",
+        "date": "January 2026",
+        "highlights": [
+            {"type": "feature", "title": "User Management Module", "description": "Complete user, role, and permission management"},
+            {"type": "feature", "title": "DataViz Studio", "description": "Chart Studio, Dashboard Builder, Report Builder"},
+            {"type": "feature", "title": "Template Library", "description": "Save and reuse custom dashboard templates"},
+            {"type": "improvement", "title": "Quality AI", "description": "AI-powered data quality checks and anomaly detection"}
+        ]
+    },
+    {
+        "version": "2.3.0",
+        "date": "December 2025",
+        "highlights": [
+            {"type": "feature", "title": "Offline-First Architecture", "description": "Collect data without internet connection"},
+            {"type": "feature", "title": "Multi-language Support", "description": "English and Swahili built-in, more languages configurable"},
+            {"type": "improvement", "title": "GPS Enhancements", "description": "Improved accuracy and indoor positioning support"},
+            {"type": "bugfix", "title": "Sync Reliability", "description": "Fixed background sync issues on mobile devices"}
+        ]
+    },
+    {
+        "version": "2.2.0",
+        "date": "November 2025",
+        "highlights": [
+            {"type": "feature", "title": "CATI Module", "description": "Computer-Assisted Telephone Interviewing support"},
+            {"type": "feature", "title": "Back-check System", "description": "Quality verification through re-interviews"},
+            {"type": "improvement", "title": "Form Builder UX", "description": "Drag-and-drop improvements and field grouping"}
+        ]
+    }
+]
+
+
+@router.get("/shortcuts")
+async def get_keyboard_shortcuts():
+    """Get keyboard shortcuts reference"""
+    return {"shortcuts": KEYBOARD_SHORTCUTS}
+
+
+@router.get("/whats-new")
+async def get_whats_new():
+    """Get release notes and what's new"""
+    return {"releases": WHATS_NEW_DATA}
+
+
+@router.get("/categories-full")
+async def get_categories_full():
+    """Get all help categories with their articles"""
+    categories = [
+        {
+            "id": "getting-started",
+            "title": "Getting Started",
+            "icon": "Zap",
+            "description": "Learn the basics and set up your first project",
+            "color": "teal",
+            "articles": [a for a in HELP_ARTICLES.values() if a["category"] == "basics"]
+        },
+        {
+            "id": "forms",
+            "title": "Forms & Data Collection",
+            "icon": "FileText",
+            "description": "Build forms and collect data",
+            "color": "blue",
+            "articles": [a for a in HELP_ARTICLES.values() if a["category"] == "forms"]
+        },
+        {
+            "id": "dataviz",
+            "title": "DataViz Studio",
+            "icon": "BarChart3",
+            "description": "Charts, dashboards, and reports",
+            "color": "violet",
+            "articles": [a for a in HELP_ARTICLES.values() if a["category"] == "dataviz"]
+        },
+        {
+            "id": "data",
+            "title": "Data Management",
+            "icon": "Database",
+            "description": "Import, export, and manage data",
+            "color": "amber",
+            "articles": [a for a in HELP_ARTICLES.values() if a["category"] == "data"]
+        },
+        {
+            "id": "mobile",
+            "title": "Mobile & Offline",
+            "icon": "Smartphone",
+            "description": "Offline collection and mobile features",
+            "color": "cyan",
+            "articles": [a for a in HELP_ARTICLES.values() if a["category"] == "mobile"]
+        },
+        {
+            "id": "team",
+            "title": "Team & Users",
+            "icon": "Users",
+            "description": "Manage your team and permissions",
+            "color": "pink",
+            "articles": [a for a in HELP_ARTICLES.values() if a["category"] == "admin"]
+        },
+        {
+            "id": "quality",
+            "title": "Quality Control",
+            "icon": "Shield",
+            "description": "Ensure data quality",
+            "color": "rose",
+            "articles": [a for a in HELP_ARTICLES.values() if a["category"] == "quality"]
+        },
+        {
+            "id": "settings",
+            "title": "Account & Settings",
+            "icon": "Settings",
+            "description": "Configure your account",
+            "color": "gray",
+            "articles": [a for a in HELP_ARTICLES.values() if a["category"] == "integrations"]
+        }
+    ]
+    
+    # Simplify articles to just id, title, readTime
+    for cat in categories:
+        cat["articles"] = [
+            {"id": a["id"], "title": a["title"], "readTime": a.get("read_time", "5 min"), "popular": a.get("tags", []).__contains__("popular")}
+            for a in cat["articles"]
+        ]
+    
+    return {"categories": categories}
