@@ -279,7 +279,7 @@ export function TourTooltip() {
             {steps.map((_, index) => (
               <button
                 key={index}
-                onClick={() => useTour().goToStep(index)}
+                onClick={() => goToStep(index)}
                 className={`w-2 h-2 rounded-full transition-colors ${
                   index === currentStep
                     ? 'bg-teal-500'
