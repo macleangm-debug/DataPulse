@@ -131,6 +131,8 @@ from routes.help_assistant_routes import router as help_assistant_router
 from routes.bulk_routes import router as bulk_router
 from routes.performance_routes import router as performance_router
 from routes.widgets_crud_routes import router as widgets_crud_router
+from routes.pricing_routes import router as pricing_router
+from routes.webhook_routes import router as webhook_router
 
 # Include all route modules
 api_router.include_router(auth_router)
@@ -187,6 +189,8 @@ api_router.include_router(help_assistant_router)
 api_router.include_router(bulk_router)
 api_router.include_router(performance_router)
 api_router.include_router(widgets_crud_router)
+api_router.include_router(pricing_router)
+api_router.include_router(webhook_router)
 
 
 # Health check endpoint
