@@ -392,7 +392,30 @@ async def startup_db_client():
         await db.chat_sessions.create_index([("user_id", 1), ("created_at", -1)])
         await db.chat_sessions.create_index([("updated_at", -1)])
         
+        # Bulk Operation Logs
+        await db.bulk_operation_logs.create_index("batch_id", unique=True)
+        await db.bulk_operation_logs.create_index([("user_id", 1), ("created_at", -1)])
+        
+        # Performance Indexes for High-Volume Queries
+        # Compound indexes for common dashboard queries
+        await db.submissions.create_index([("org_id", 1), ("form_id", 1), ("status", 1), ("submitted_at", -1)])
+        await db.submissions.create_index([("form_id", 1), ("quality_score", 1)])
+        await db.submissions.create_index([("batch_id", 1)])  # For bulk operations
+        await db.submissions.create_index([("submitted_by", 1), ("submitted_at", -1)])
+        
         logger.info("Database indexes created successfully")
+        
+        # Initialize Redis connection (non-blocking)
+        try:
+            from utils.cache import get_redis_client
+            redis = get_redis_client()
+            if redis:
+                logger.info("Redis cache connected successfully")
+            else:
+                logger.info("Redis not available - using in-memory cache fallback")
+        except Exception as e:
+            logger.warning(f"Redis initialization skipped: {e}")
+        
     except Exception as e:
         logger.error(f"Error creating indexes: {e}")
 
