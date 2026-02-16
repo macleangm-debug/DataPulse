@@ -1,11 +1,12 @@
 /**
- * HelpAssistant Component - AI Chat Widget
+ * HelpAssistant Component - AI Chat Widget with Persistent Sessions
  */
-import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Bot, User, Loader2, Sparkles, ExternalLink, ThumbsUp, ThumbsDown } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { X, Send, Bot, User, Loader2, Sparkles, ExternalLink, ThumbsUp, ThumbsDown, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const SESSION_STORAGE_KEY = 'datapulse_chat_session_id';
 
 const SUGGESTED_QUESTIONS = [
   "How do I get started?",
@@ -72,6 +73,7 @@ export function HelpAssistant({ isDark = true }) {
   const [sessionId, setSessionId] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [feedback, setFeedback] = useState({});
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -87,6 +89,60 @@ export function HelpAssistant({ isDark = true }) {
       });
     } catch (error) { console.error('Failed to submit feedback:', error); }
   };
+
+  // Load chat history from backend when component mounts or opens
+  const loadChatHistory = useCallback(async (sid) => {
+    if (!sid || historyLoaded) return;
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/help/chat/sessions/${sid}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.messages && data.messages.length > 0) {
+          // Convert backend messages to frontend format
+          const loadedMessages = data.messages.map((msg, idx) => ({
+            role: msg.role,
+            content: msg.content,
+            id: `loaded-${idx}-${Date.now()}`,
+            timestamp: msg.timestamp
+          }));
+          
+          // Add welcome message at the start, then loaded messages
+          setMessages([
+            { role: 'assistant', content: "Hi! I'm the DataPulse AI Assistant. How can I help you today?", id: 'welcome' },
+            ...loadedMessages
+          ]);
+          setShowSuggestions(false);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load chat history:', error);
+    } finally {
+      setHistoryLoaded(true);
+    }
+  }, [historyLoaded]);
+
+  // Load session ID from localStorage on mount
+  useEffect(() => {
+    const storedSessionId = localStorage.getItem(SESSION_STORAGE_KEY);
+    if (storedSessionId) {
+      setSessionId(storedSessionId);
+    }
+  }, []);
+
+  // Load chat history when session ID is available and chat opens
+  useEffect(() => {
+    if (isOpen && sessionId && !historyLoaded) {
+      loadChatHistory(sessionId);
+    }
+  }, [isOpen, sessionId, historyLoaded, loadChatHistory]);
+
+  // Save session ID to localStorage when it changes
+  useEffect(() => {
+    if (sessionId) {
+      localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+    }
+  }, [sessionId]);
 
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
   useEffect(() => { if (isOpen && inputRef.current) inputRef.current.focus(); }, [isOpen]);
@@ -116,6 +172,26 @@ export function HelpAssistant({ isDark = true }) {
     } catch (error) {
       setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again.", id: assistantMsgId }]);
     } finally { setIsLoading(false); }
+  };
+
+  const clearChatHistory = async () => {
+    if (!sessionId) return;
+    
+    try {
+      await fetch(`${BACKEND_URL}/api/help/chat/sessions/${sessionId}`, { method: 'DELETE' });
+    } catch (error) {
+      console.error('Failed to clear chat history:', error);
+    }
+    
+    // Reset local state
+    localStorage.removeItem(SESSION_STORAGE_KEY);
+    setSessionId(null);
+    setMessages([
+      { role: 'assistant', content: "Hi! I'm the DataPulse AI Assistant. How can I help you today?", id: 'welcome' }
+    ]);
+    setShowSuggestions(true);
+    setHistoryLoaded(false);
+    setFeedback({});
   };
 
   const handleKeyDown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
@@ -152,9 +228,21 @@ export function HelpAssistant({ isDark = true }) {
                 <p className={cn("text-xs", textSecondary)}>Powered by AI</p>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className={cn("p-1 rounded-lg hover:bg-white/10", textSecondary)}>
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-1">
+              {messages.length > 1 && (
+                <button 
+                  onClick={clearChatHistory} 
+                  className={cn("p-1.5 rounded-lg hover:bg-white/10", textSecondary)}
+                  title="Clear chat history"
+                  data-testid="clear-chat-btn"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                </button>
+              )}
+              <button onClick={() => setIsOpen(false)} className={cn("p-1 rounded-lg hover:bg-white/10", textSecondary)}>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           <div className={cn("flex-1 overflow-y-auto p-4 space-y-4", bgPrimary)}>
@@ -167,7 +255,7 @@ export function HelpAssistant({ isDark = true }) {
                   <div className={cn("rounded-2xl px-4 py-2.5 text-sm", msg.role === 'user' ? "bg-blue-500 text-white rounded-br-md" : cn(bgSecondary, textPrimary, "rounded-bl-md border", borderColor))}>
                     {msg.role === 'user' ? <p className="whitespace-pre-wrap">{msg.content}</p> : <MessageContent content={msg.content} isDark={isDark} onLinkClick={handleLinkClick} />}
                   </div>
-                  {msg.role === 'assistant' && msg.id !== 'welcome' && (
+                  {msg.role === 'assistant' && msg.id !== 'welcome' && !msg.id?.startsWith('loaded-') && (
                     <div className="flex items-center gap-2 mt-1 ml-1">
                       {feedback[msg.id] ? (
                         <span className={cn("text-xs", textSecondary)}>{feedback[msg.id] === 'helpful' ? 'Thanks!' : "We'll improve!"}</span>
@@ -206,8 +294,8 @@ export function HelpAssistant({ isDark = true }) {
 
           <div className={cn("p-3 border-t", borderColor)}>
             <div className={cn("flex items-center gap-2 rounded-xl px-3 py-2", isDark ? "bg-white/5" : "bg-gray-100")}>
-              <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Ask me anything..." className={cn("flex-1 bg-transparent outline-none text-sm", textPrimary, "placeholder-gray-500")} disabled={isLoading} />
-              <button onClick={() => sendMessage()} disabled={!input.trim() || isLoading} className={cn("p-2 rounded-lg transition-colors", input.trim() && !isLoading ? "bg-teal-500 text-white hover:bg-teal-600" : "text-gray-500 cursor-not-allowed")}><Send className="w-4 h-4" /></button>
+              <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Ask me anything..." className={cn("flex-1 bg-transparent outline-none text-sm", textPrimary, "placeholder-gray-500")} disabled={isLoading} data-testid="chat-input" />
+              <button onClick={() => sendMessage()} disabled={!input.trim() || isLoading} className={cn("p-2 rounded-lg transition-colors", input.trim() && !isLoading ? "bg-teal-500 text-white hover:bg-teal-600" : "text-gray-500 cursor-not-allowed")} data-testid="send-message-btn"><Send className="w-4 h-4" /></button>
             </div>
           </div>
         </div>
