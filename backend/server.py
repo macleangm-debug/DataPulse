@@ -128,6 +128,8 @@ from routes.charts_routes import router as charts_router
 from routes.dashboard_templates_routes import router as dashboard_templates_router
 from routes.data_sources_routes import router as data_sources_router
 from routes.help_assistant_routes import router as help_assistant_router
+from routes.bulk_routes import router as bulk_router
+from routes.performance_routes import router as performance_router
 
 # Include all route modules
 api_router.include_router(auth_router)
