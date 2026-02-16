@@ -79,6 +79,18 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - Article content loads dynamically with loading spinners
 - Test results: 100% pass rate (33/33 backend tests, all frontend features)
 
+### Session 8 - Interactive Demo Page (Feb 16, 2026)
+**New no-login demo experience:**
+- `/demo` route accessible without authentication
+- Industry selector with 4 options: Healthcare, Agriculture, NGO, Market Research
+- 6 interactive tabs: Dashboard, Forms, Submissions, Team, Map, Media
+- Guided Tour with 6 steps (overlay, step navigation, progress dots)
+- Demo banner with "Sign Up Free" CTA
+- Locked buttons for features requiring signup (Create Form, Export, etc.)
+- Sample data from `frontend/src/data/demoData.js`
+- "Try Interactive Demo" button added to login page
+- Test results: 100% pass rate (17/17 frontend tests)
+
 ## Core Requirements Status
 - [x] Clone and set up DataPulse codebase
 - [x] User Management module with all features
