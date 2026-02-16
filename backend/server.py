@@ -186,6 +186,7 @@ api_router.include_router(data_sources_router)
 api_router.include_router(help_assistant_router)
 api_router.include_router(bulk_router)
 api_router.include_router(performance_router)
+api_router.include_router(widgets_crud_router)
 
 
 # Health check endpoint
