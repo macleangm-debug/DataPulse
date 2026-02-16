@@ -1,0 +1,201 @@
+# DataPulse Backend Deployment
+# Designed for horizontal scaling to handle 500K concurrent users
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datapulse-backend
+  namespace: datapulse
+  labels:
+    app: datapulse
+    component: backend
+    version: v1
+spec:
+  replicas: 20  # Starting replicas, HPA will scale 20-100
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 10%
+  selector:
+    matchLabels:
+      app: datapulse
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: datapulse
+        component: backend
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8001"
+        prometheus.io/path: "/api/metrics"
+    spec:
+      # Pod anti-affinity to spread across nodes
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: component
+                  operator: In
+                  values:
+                  - backend
+              topologyKey: kubernetes.io/hostname
+        # Prefer spreading across availability zones
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - us-east-1a
+                - us-east-1b
+                - us-east-1c
+      
+      # Topology spread for even distribution
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            component: backend
+      
+      terminationGracePeriodSeconds: 30
+      
+      containers:
+      - name: backend
+        image: datapulse/backend:latest
+        imagePullPolicy: Always
+        
+        ports:
+        - name: http
+          containerPort: 8001
+          protocol: TCP
+        
+        # Environment variables from ConfigMap and Secrets
+        envFrom:
+        - configMapRef:
+            name: datapulse-config
+        - secretRef:
+            name: datapulse-secrets
+        
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        
+        # Resource limits optimized for FastAPI
+        resources:
+          requests:
+            cpu: "1"
+            memory: 2Gi
+          limits:
+            cpu: "4"
+            memory: 8Gi
+        
+        # Startup probe - allow time for initial startup
+        startupProbe:
+          httpGet:
+            path: /api/health
+            port: 8001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 30  # 30 * 5 = 150 seconds max startup
+        
+        # Liveness probe - restart if unhealthy
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8001
+          initialDelaySeconds: 0
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        # Readiness probe - remove from service if not ready
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8001
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        # Lifecycle hooks
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 10"]  # Allow time for connection draining
+        
+        # Security context
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        
+        # Volume mounts
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: cache
+          mountPath: /app/.cache
+      
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: cache
+        emptyDir:
+          sizeLimit: 1Gi
+      
+      # Image pull secrets
+      imagePullSecrets:
+      - name: regcred
+      
+      # Service account
+      serviceAccountName: datapulse-backend
+---
+# Service Account for Backend
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: datapulse-backend
+  namespace: datapulse
+  labels:
+    app: datapulse
+    component: backend
+---
+# Pod Disruption Budget - ensure availability during updates
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: datapulse-backend-pdb
+  namespace: datapulse
+spec:
+  minAvailable: 80%
+  selector:
+    matchLabels:
+      app: datapulse
+      component: backend
