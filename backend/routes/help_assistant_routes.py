@@ -2774,7 +2774,7 @@ Access DataPulse data and features programmatically.
 
 ### API Base URL
 ```
-https://chat-persist-4.preview.emergentagent.com/api
+https://subscription-hub-89.preview.emergentagent.com/api
 ```
 
 ### Authentication
