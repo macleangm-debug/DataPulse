@@ -3401,6 +3401,37 @@ async def submit_feedback(
     return {"message": "Thank you for your feedback!"}
 
 
+@router.get("/chat/sessions/{session_id}")
+async def get_session_history(session_id: str, request: Request):
+    """Get chat history for a specific session"""
+    db = get_db(request)
+    
+    session = await get_chat_session(db, session_id)
+    
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    return {
+        "session_id": session["session_id"],
+        "messages": session.get("messages", []),
+        "created_at": session.get("created_at"),
+        "updated_at": session.get("updated_at")
+    }
+
+
+@router.delete("/chat/sessions/{session_id}")
+async def clear_session_history(session_id: str, request: Request):
+    """Clear chat history for a specific session"""
+    db = get_db(request)
+    
+    result = await db.chat_sessions.delete_one({"session_id": session_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    return {"message": "Chat session cleared successfully"}
+
+
 @router.get("/search")
 async def search_help(q: str):
     """Global search across articles, FAQ, and troubleshooting"""
