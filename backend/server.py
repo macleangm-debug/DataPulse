@@ -183,23 +183,43 @@ api_router.include_router(charts_router)
 api_router.include_router(dashboard_templates_router)
 api_router.include_router(data_sources_router)
 api_router.include_router(help_assistant_router)
+api_router.include_router(bulk_router)
+api_router.include_router(performance_router)
 
 
 # Health check endpoint
 @api_router.get("/")
 async def root():
-    return {"message": "DataPulse API is running", "version": "1.0.0"}
+    return {"message": "DataPulse API is running", "version": "1.0.0", "optimized": True}
 
 
 @api_router.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    """Health check endpoint with performance metrics"""
+    from utils.cache import get_redis_client
+    
     try:
         # Test database connection
         await db.command("ping")
-        return {"status": "healthy", "database": "connected"}
+        db_status = "connected"
     except Exception as e:
-        return {"status": "unhealthy", "database": str(e)}
+        db_status = f"error: {e}"
+    
+    # Check Redis
+    redis = get_redis_client()
+    redis_status = "connected" if redis else "unavailable"
+    
+    return {
+        "status": "healthy" if db_status == "connected" else "degraded",
+        "database": db_status,
+        "cache": redis_status,
+        "optimizations": {
+            "compression": "gzip",
+            "connection_pool": "100 connections",
+            "bulk_operations": "enabled",
+            "query_caching": redis_status == "connected"
+        }
+    }
 
 
 # Include the router in the main app
