@@ -106,6 +106,9 @@ function App() {
             </PublicRoute>
           } />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          
+          {/* Interactive Demo - No login required */}
+          <Route path="/demo" element={<InteractiveDemoPage />} />
 
           {/* Protected Routes */}
           <Route path="/dashboard" element={
