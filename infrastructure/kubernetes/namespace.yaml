@@ -1,0 +1,39 @@
+# DataPulse Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: datapulse
+  labels:
+    app: datapulse
+    environment: production
+---
+# Resource Quotas for the namespace
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: datapulse-quota
+  namespace: datapulse
+spec:
+  hard:
+    requests.cpu: "200"
+    requests.memory: 400Gi
+    limits.cpu: "400"
+    limits.memory: 800Gi
+    pods: "500"
+    services: "50"
+---
+# Limit Range for default pod resources
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: datapulse-limits
+  namespace: datapulse
+spec:
+  limits:
+  - default:
+      cpu: "2"
+      memory: 4Gi
+    defaultRequest:
+      cpu: "500m"
+      memory: 1Gi
+    type: Container
