@@ -13,7 +13,8 @@ User requested to build a full-featured SaaS application called DataPulse with:
 9. Persistent AI chat sessions stored in MongoDB
 10. Performance optimizations for high-concurrency handling
 11. Infrastructure configuration for 500K users scale
-12. **NEW: Resizable widget functionality for dashboards and data visualization**
+12. Resizable widget functionality for dashboards and data visualization
+13. **NEW: Pricing & Billing System with 4 tiers and Stripe integration**
 
 ## Architecture Overview
 
@@ -36,49 +37,54 @@ User requested to build a full-featured SaaS application called DataPulse with:
 
 ## What's Been Implemented
 
-### Session 12 - Resizable Widget System (Feb 16, 2026)
+### Session 13 - Pricing & Billing System (Feb 16, 2026)
 
-**1. Core Hook (`/app/frontend/src/hooks/useResizable.js`)**
-- Drag-to-resize functionality with mouse and touch support
-- Configurable snap points (25%, 33%, 50%, 66%, 75%, 100%)
-- Min/max width constraints
-- Preview during drag
-- Horizontal, vertical, or both direction support
+**1. Pricing Configuration (`/app/backend/config/pricing.py`)**
+- 4 pricing tiers: Free, Starter ($29/mo), Professional ($79/mo), Enterprise ($249/mo)
+- 20% discount for annual billing
+- Feature limits per tier (users, storage, submissions, emails)
+- Feature flags for advanced capabilities
+- Overage pricing for exceeding limits
 
-**2. Reusable Components (`/app/frontend/src/components/ui/ResizableContainer.jsx`)**
-- `ResizableContainer` - Base wrapper component
-- `ResizablePanel` - Styled panel with header
-- `ResizableWidget` - Dashboard-optimized widget with actions
+**2. Backend Routes (`/app/backend/routes/pricing_routes.py`)**
+- `GET /api/pricing/plans` - Get all pricing tiers
+- `GET /api/pricing/plans/{tier_id}` - Get specific plan details
+- `POST /api/pricing/checkout/create` - Create Stripe checkout session
+- `GET /api/pricing/checkout/status/{session_id}` - Check payment status
+- `POST /api/pricing/subscribe/free` - Subscribe to free tier
+- `GET /api/pricing/subscription` - Get current subscription
+- `GET /api/pricing/subscription/{id}` - Get subscription by ID
+- `POST /api/pricing/subscription/cancel` - Cancel subscription
+- `GET /api/pricing/usage` - Get usage statistics
+- `GET /api/pricing/billing/history` - Get payment history
 
-**3. Dashboard Builder Integration**
-- Added SIZE_PRESETS for quick resize:
-  - S (Small): 3 columns / 25%
-  - M (Medium): 6 columns / 50%
-  - L (Large): 9 columns / 75%
-  - XL (Full): 12 columns / 100%
-- Resize button appears on widget hover
-- Quick resize menu with percentage labels
+**3. Webhook Handler (`/app/backend/routes/webhook_routes.py`)**
+- `POST /api/webhooks/stripe` - Handle Stripe webhook events
+- Processes checkout.session.completed and expired events
 
-**4. Usage Examples (`/app/frontend/src/examples/ResizableExamples.jsx`)**
-- Basic hook usage
-- Component-based usage
-- Dashboard grid example
-- Data visualization module example
-- Vertical resizing example
-- Minimal copy-paste example
+**4. Frontend (`/app/frontend/src/pages/PricingPage.jsx`)**
+- Responsive pricing grid with 4 tier cards
+- Monthly/Annual billing toggle with "Save 20%" badge
+- Feature lists with included/excluded indicators
+- Current plan indicator for logged-in users
+- Stripe checkout redirect for paid tiers
+- Payment status polling on return from Stripe
+- FAQ section
+- Enterprise contact CTA
 
-**5. Documentation (`/app/frontend/src/docs/RESIZABLE_COMPONENTS.md`)**
-- Complete API reference
-- Usage examples
-- Props documentation
-- Accessibility features
-- Styling guide
-- Troubleshooting
+**5. Database Collections**
+- `payment_transactions` - Track checkout sessions and payments
+- `subscriptions` - Active subscription records
+- `webhook_logs` - Stripe webhook event logs
 
-**6. Backend Endpoints (Fixed by Testing Agent)**
-- `GET /api/dashboards/{id}/widgets` - Get widgets for dashboard
-- `PUT /api/dashboards/{id}/layout` - Update layout
-- `POST/GET/PUT/DELETE /api/widgets` - Widget CRUD
+### Pricing Tiers
+
+| Tier | Monthly | Annual | Users | Storage | Submissions |
+|------|---------|--------|-------|---------|-------------|
+| Free | $0 | $0 | 2 | 0.5 GB | 100/mo |
+| Starter | $29 | $278 | 5 | 10 GB | 2,000/mo |
+| Professional | $79 | $758 | 25 | 100 GB | 20,000/mo |
+| Enterprise | $249 | $2,390 | Unlimited | 1 TB | 100,000/mo |
 
 ## Core Requirements Status
 - [x] All core features implemented
@@ -88,33 +94,8 @@ User requested to build a full-featured SaaS application called DataPulse with:
 - [x] Persistent AI chat sessions
 - [x] Performance optimizations
 - [x] Kubernetes infrastructure (500K scale)
-- [x] **Resizable widget system** - TESTED 100%
-
-## Resizable Widget Quick Start
-
-### Using the Hook
-```jsx
-const { width, isDragging, dragHandleProps } = useResizable({
-  initialWidth: 50,
-  snapPoints: [25, 50, 75, 100],
-  onResize: ({ width }) => console.log(width)
-});
-```
-
-### Using the Component
-```jsx
-<ResizableContainer initialWidth={50} onResize={setWidth}>
-  <YourContent />
-</ResizableContainer>
-```
-
-### Size Presets (Dashboard Builder)
-| Preset | Grid | Width |
-|--------|------|-------|
-| S | 3 cols | 25% |
-| M | 6 cols | 50% |
-| L | 9 cols | 75% |
-| XL | 12 cols | 100% |
+- [x] Resizable widget system
+- [x] **Pricing & Billing System** - TESTED 100%
 
 ## Test Credentials
 - Email: demo@datapulse.io
@@ -122,42 +103,56 @@ const { width, isDragging, dragHandleProps } = useResizable({
 
 ## Backlog
 
+### P1 (High Priority)
+- [ ] Email notifications with Resend (playbook available)
+- [ ] Guided Tour on Demo page
+
 ### P2 (Nice to Have)
 - [ ] Step-by-step tutorials in Help Center
-- [ ] Guided Tour on Demo page
-- [ ] Email notifications
 - [ ] Two-factor authentication (2FA)
+- [ ] Subscription upgrade/downgrade flow
 
 ### P3 (Future)
 - [ ] CI/CD pipeline (GitHub Actions)
 - [ ] Terraform for cloud infrastructure
 - [ ] Service mesh (Istio)
 - [ ] Distributed tracing (Jaeger)
-- [ ] Add route for ResizableExamples (/examples/resizable)
 
 ## Recent Test Results
-- **Iteration 11**: Resizable Widgets - 100% pass (all tests green)
+- **Iteration 12**: Pricing & Billing - 100% pass (21/21 backend, all frontend)
+- **Iteration 11**: Resizable Widgets - 100% pass
 - **Iteration 10**: Performance Optimizations - 100% pass
 - **Iteration 9**: Chat Persistence & Screenshots - 100% pass
 
 ## Files Created in This Session
 ```
-/app/frontend/src/
-├── hooks/
-│   └── useResizable.js              # Core resize hook
-├── components/ui/
-│   └── ResizableContainer.jsx       # Component wrappers
-├── examples/
-│   └── ResizableExamples.jsx        # Usage examples
-├── docs/
-│   └── RESIZABLE_COMPONENTS.md      # Documentation
-└── pages/
-    └── DashboardBuilderPage.jsx     # Updated with size presets
+/app/backend/routes/
+├── pricing_routes.py       # Pricing API endpoints
+└── webhook_routes.py       # Stripe webhook handler
+
+/app/frontend/src/pages/
+└── PricingPage.jsx         # Pricing page UI
 ```
 
-## Key Features
-- **Drag Handle** - Visual grip icon for resize
-- **Snap Points** - Automatic snapping to preset widths
-- **Preview Tooltip** - Shows width percentage during drag
-- **Touch Support** - Works on mobile devices
-- **Accessible** - ARIA attributes and keyboard support
+## Key API Endpoints (Pricing)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/pricing/plans | Get all pricing tiers |
+| POST | /api/pricing/checkout/create | Create Stripe checkout |
+| GET | /api/pricing/checkout/status/{id} | Check payment status |
+| POST | /api/pricing/subscribe/free | Subscribe to free tier |
+| GET | /api/pricing/subscription | Get current subscription |
+
+## 3rd Party Integrations
+- **Stripe** - Payment processing via emergentintegrations library
+- **OpenAI** - AI Assistant via Emergent LLM Key
+- **Redis** - Caching (optional, with fallback)
+
+## Environment Variables
+```
+MONGO_URL=mongodb://localhost:27017
+DB_NAME=test_database
+EMERGENT_LLM_KEY=sk-emergent-...
+STRIPE_API_KEY=sk_test_emergent
+REDIS_URL=redis://localhost:6379/0
+```
