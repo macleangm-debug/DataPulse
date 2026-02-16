@@ -1,0 +1,173 @@
+# DataPulse Redis Cluster Configuration
+# 6-node cluster: 3 masters + 3 replicas for high availability
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-cluster-config
+  namespace: datapulse
+data:
+  redis.conf: |
+    # Network
+    bind 0.0.0.0
+    port 6379
+    tcp-backlog 511
+    timeout 0
+    tcp-keepalive 300
+    
+    # General
+    daemonize no
+    supervised no
+    loglevel notice
+    databases 16
+    
+    # Snapshotting
+    save 900 1
+    save 300 10
+    save 60 10000
+    stop-writes-on-bgsave-error yes
+    rdbcompression yes
+    rdbchecksum yes
+    
+    # Replication
+    replica-serve-stale-data yes
+    replica-read-only yes
+    repl-diskless-sync no
+    repl-disable-tcp-nodelay no
+    replica-priority 100
+    
+    # Memory
+    maxmemory 8gb
+    maxmemory-policy allkeys-lru
+    
+    # Cluster
+    cluster-enabled yes
+    cluster-config-file nodes.conf
+    cluster-node-timeout 5000
+    cluster-require-full-coverage no
+    
+    # Append only mode
+    appendonly yes
+    appendfilename "appendonly.aof"
+    appendfsync everysec
+    no-appendfsync-on-rewrite no
+    auto-aof-rewrite-percentage 100
+    auto-aof-rewrite-min-size 64mb
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-cluster
+  namespace: datapulse
+spec:
+  serviceName: redis-cluster
+  replicas: 6
+  selector:
+    matchLabels:
+      app: redis-cluster
+  template:
+    metadata:
+      labels:
+        app: redis-cluster
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - redis-cluster
+            topologyKey: kubernetes.io/hostname
+      
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        command:
+        - redis-server
+        - /etc/redis/redis.conf
+        ports:
+        - containerPort: 6379
+          name: client
+        - containerPort: 16379
+          name: gossip
+        
+        resources:
+          requests:
+            cpu: "500m"
+            memory: 4Gi
+          limits:
+            cpu: "2"
+            memory: 8Gi
+        
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: config
+          mountPath: /etc/redis
+        
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+      
+      volumes:
+      - name: config
+        configMap:
+          name: redis-cluster-config
+  
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: gp3  # AWS EBS gp3
+      resources:
+        requests:
+          storage: 50Gi
+---
+# Redis Cluster Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cluster
+  namespace: datapulse
+spec:
+  type: ClusterIP
+  clusterIP: None  # Headless service for StatefulSet
+  ports:
+  - port: 6379
+    targetPort: 6379
+    name: client
+  - port: 16379
+    targetPort: 16379
+    name: gossip
+  selector:
+    app: redis-cluster
+---
+# Redis Sentinel for HA (alternative to cluster mode)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-sentinel-config
+  namespace: datapulse
+data:
+  sentinel.conf: |
+    sentinel monitor datapulse-master redis-master 6379 2
+    sentinel down-after-milliseconds datapulse-master 5000
+    sentinel failover-timeout datapulse-master 60000
+    sentinel parallel-syncs datapulse-master 1
