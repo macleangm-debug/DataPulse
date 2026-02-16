@@ -376,6 +376,53 @@ def compute_table_widget(df, config):
     }
 
 
+# ============ Layout Update ============
+
+class LayoutUpdateRequest(BaseModel):
+    widgets: List[Dict[str, Any]]  # [{id, x, y, w, h}, ...]
+
+
+@router.put("/{dashboard_id}/layout")
+async def update_dashboard_layout(request: Request, dashboard_id: str, req: LayoutUpdateRequest):
+    """Update widget positions in a dashboard layout"""
+    db = request.app.state.db
+    
+    # Get the dashboard
+    dashboard = await db.dashboards.find_one({"id": dashboard_id}, {"_id": 0})
+    if not dashboard:
+        raise HTTPException(status_code=404, detail="Dashboard not found")
+    
+    # Update each widget's position
+    widgets = dashboard.get("widgets", [])
+    for widget_layout in req.widgets:
+        widget_id = widget_layout.get("id")
+        for widget in widgets:
+            if widget.get("id") == widget_id:
+                widget["position"] = {
+                    "x": widget_layout.get("x", 0),
+                    "y": widget_layout.get("y", 0),
+                    "w": widget_layout.get("w", 4),
+                    "h": widget_layout.get("h", 3)
+                }
+                break
+    
+    # Save updated widgets
+    result = await db.dashboards.update_one(
+        {"id": dashboard_id},
+        {
+            "$set": {
+                "widgets": widgets,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Dashboard not found")
+    
+    return {"message": "Layout updated"}
+
+
 # ============ Sharing ============
 
 @router.post("/{dashboard_id}/share")
