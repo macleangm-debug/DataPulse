@@ -1,0 +1,250 @@
+# DataPulse Helm Values
+# Override these values for different environments
+
+# ============================================================================
+# GLOBAL SETTINGS
+# ============================================================================
+global:
+  environment: production
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+# ============================================================================
+# BACKEND CONFIGURATION
+# ============================================================================
+backend:
+  enabled: true
+  
+  image:
+    repository: datapulse/backend
+    tag: latest
+    pullPolicy: Always
+  
+  replicaCount: 20
+  
+  resources:
+    requests:
+      cpu: "1"
+      memory: 2Gi
+    limits:
+      cpu: "4"
+      memory: 8Gi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 20
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  service:
+    type: ClusterIP
+    port: 8001
+  
+  # Environment variables
+  env:
+    APP_ENV: production
+    LOG_LEVEL: INFO
+    MONGO_MIN_POOL_SIZE: "10"
+    MONGO_MAX_POOL_SIZE: "100"
+    REDIS_MAX_CONNECTIONS: "50"
+    BULK_MAX_SUBMISSIONS: "1000"
+  
+  # Secrets (use external secret management in production)
+  secrets:
+    mongoUrl: ""  # Set via --set or external secrets
+    redisUrl: ""
+    jwtSecretKey: ""
+    emergentLlmKey: ""
+  
+  # Probes
+  livenessProbe:
+    path: /api/health
+    initialDelaySeconds: 10
+    periodSeconds: 15
+  
+  readinessProbe:
+    path: /api/health
+    initialDelaySeconds: 5
+    periodSeconds: 5
+  
+  # Pod disruption budget
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 80%
+  
+  # Node selector
+  nodeSelector: {}
+  
+  # Tolerations
+  tolerations: []
+  
+  # Affinity
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                component: backend
+            topologyKey: kubernetes.io/hostname
+
+# ============================================================================
+# FRONTEND CONFIGURATION
+# ============================================================================
+frontend:
+  enabled: true
+  
+  image:
+    repository: datapulse/frontend
+    tag: latest
+    pullPolicy: Always
+  
+  replicaCount: 5
+  
+  resources:
+    requests:
+      cpu: "200m"
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 5
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 70
+  
+  service:
+    type: ClusterIP
+    port: 80
+  
+  env:
+    REACT_APP_BACKEND_URL: "https://api.datapulse.io"
+
+# ============================================================================
+# INGRESS CONFIGURATION
+# ============================================================================
+ingress:
+  enabled: true
+  className: nginx
+  
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+  
+  hosts:
+    - host: app.datapulse.io
+      paths:
+        - path: /
+          pathType: Prefix
+          service: frontend
+    - host: api.datapulse.io
+      paths:
+        - path: /
+          pathType: Prefix
+          service: backend
+  
+  tls:
+    - secretName: datapulse-tls
+      hosts:
+        - app.datapulse.io
+        - api.datapulse.io
+
+# ============================================================================
+# REDIS CONFIGURATION (Bitnami subchart)
+# ============================================================================
+redis:
+  enabled: true
+  architecture: replication
+  
+  auth:
+    enabled: true
+    password: ""  # Set via --set
+  
+  master:
+    resources:
+      requests:
+        cpu: "500m"
+        memory: 2Gi
+      limits:
+        cpu: "2"
+        memory: 4Gi
+    persistence:
+      enabled: true
+      size: 20Gi
+  
+  replica:
+    replicaCount: 2
+    resources:
+      requests:
+        cpu: "250m"
+        memory: 1Gi
+      limits:
+        cpu: "1"
+        memory: 2Gi
+
+# ============================================================================
+# MONGODB CONFIGURATION (Bitnami subchart)
+# ============================================================================
+mongodb:
+  enabled: false  # Use external MongoDB Atlas for production
+  architecture: replicaset
+  
+  auth:
+    enabled: true
+    rootPassword: ""
+    username: datapulse
+    password: ""
+    database: datapulse
+  
+  replicaCount: 3
+  
+  resources:
+    requests:
+      cpu: "2"
+      memory: 8Gi
+    limits:
+      cpu: "4"
+      memory: 16Gi
+  
+  persistence:
+    enabled: true
+    size: 100Gi
+
+# ============================================================================
+# EXTERNAL MONGODB (MongoDB Atlas)
+# ============================================================================
+externalMongodb:
+  enabled: true
+  # Connection string format for Atlas:
+  # mongodb+srv://user:pass@cluster.mongodb.net/datapulse?retryWrites=true&w=majority
+  connectionString: ""
+
+# ============================================================================
+# SERVICE ACCOUNT
+# ============================================================================
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# ============================================================================
+# NETWORK POLICIES
+# ============================================================================
+networkPolicy:
+  enabled: true
+
+# ============================================================================
+# MONITORING
+# ============================================================================
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 30s
