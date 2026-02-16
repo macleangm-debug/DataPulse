@@ -82,8 +82,25 @@ const CHART_TYPES = [
 
 const COLORS = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1', '#14b8a6'];
 
+// Widget Size Presets
+const SIZE_PRESETS = [
+  { label: 'S', w: 3, h: 2, desc: 'Small (25%)' },
+  { label: 'M', w: 6, h: 3, desc: 'Medium (50%)' },
+  { label: 'L', w: 9, h: 4, desc: 'Large (75%)' },
+  { label: 'XL', w: 12, h: 5, desc: 'Full Width (100%)' }
+];
+
 // Widget Component
-function DashboardWidget({ widget, data, onEdit, onDelete }) {
+function DashboardWidget({ widget, data, onEdit, onDelete, onResize }) {
+  const [showSizeMenu, setShowSizeMenu] = useState(false);
+  
+  const handleSizePreset = (preset) => {
+    if (onResize) {
+      onResize(widget.id, { w: preset.w, h: preset.h });
+    }
+    setShowSizeMenu(false);
+  };
+  
   const renderContent = () => {
     if (!data) {
       return (
