@@ -184,6 +184,17 @@ export function LoginPage() {
                 Continue with Software Galaxy SSO
               </Button>
 
+              <Link to="/demo" className="block mt-3">
+                <Button 
+                  variant="ghost" 
+                  className="w-full bg-gradient-to-r from-teal-500/10 to-cyan-500/10 hover:from-teal-500/20 hover:to-cyan-500/20 border border-teal-500/30"
+                  data-testid="demo-btn"
+                >
+                  <Activity className="w-4 h-4 mr-2 text-teal-500" />
+                  Try Interactive Demo
+                </Button>
+              </Link>
+
               <p className="text-center text-sm text-muted-foreground mt-6">
                 Don&apos;t have an account?{' '}
                 <Link to="/register" className="text-primary hover:underline font-medium" data-testid="register-link">
