@@ -49,6 +49,12 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 - `GET /api/help/articles` - List help articles with ?category and ?search filters
 - `GET /api/help/articles/{article_id}` - Get specific article content
 - `GET /api/help/categories` - List all 8 help categories
+- `GET /api/help/categories-full` - Categories with full article lists
+- `GET /api/help/faq` - Get all 20 FAQ items
+- `GET /api/help/troubleshooting` - Get all 10 troubleshooting guides
+- `GET /api/help/shortcuts` - Get keyboard shortcuts (5 categories)
+- `GET /api/help/whats-new` - Get release notes (4 versions)
+- `GET /api/help/search?q={term}` - Global search across all content
 - `POST /api/help/chat` - AI chat using GPT-4o via Emergent LLM key
 - `POST /api/help/feedback` - Submit article/chat feedback
 
@@ -58,12 +64,20 @@ DataPulse is an enterprise-grade field data collection platform for research, M&
 
 **Features:**
 - 8 help categories (Getting Started, Forms, DataViz, Data Management, Mobile, Team, Quality, Settings)
-- 12+ FAQ items grouped by category with expandable accordions
-- 5 troubleshooting guides with severity levels (high/medium)
-- Keyboard shortcuts reference grouped by Navigation, Forms, Data Entry, General
-- What's New section with version releases (v2.5.0, v2.4.0, v2.3.0)
-- Real-time search filtering with dropdown results
+- 20 FAQ items grouped by category with expandable accordions
+- 10 troubleshooting guides with severity levels (high/medium)
+- Keyboard shortcuts reference grouped by Navigation, Forms, Data Entry, Dashboards, General
+- What's New section with version releases (v2.5.0, v2.4.0, v2.3.0, v2.2.0)
+- Real-time search filtering with dropdown results (300ms debounce)
 - AI Assistant chat widget with suggested questions and feedback buttons
+
+### Session 7 - Help Center Dynamic Content Migration (Feb 16, 2026)
+**Migration from static to dynamic content:**
+- Frontend now fetches all content from backend APIs instead of hardcoded data
+- Added new backend endpoints: `/shortcuts`, `/whats-new`, `/categories-full`
+- Search uses API with 300ms debounce for better UX
+- Article content loads dynamically with loading spinners
+- Test results: 100% pass rate (33/33 backend tests, all frontend features)
 
 ## Core Requirements Status
 - [x] Clone and set up DataPulse codebase
