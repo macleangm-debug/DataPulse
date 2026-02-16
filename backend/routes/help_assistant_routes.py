@@ -13,6 +13,88 @@ load_dotenv()
 
 router = APIRouter(prefix="/help", tags=["Help Center"])
 
+
+# =============================================================================
+# HELPER FUNCTION TO GET DATABASE
+# =============================================================================
+
+def get_db(request: Request):
+    """Get database instance from app state"""
+    return request.app.state.db
+
+
+# =============================================================================
+# CHAT SESSION PERSISTENCE FUNCTIONS
+# =============================================================================
+
+async def get_chat_session(db, session_id: str) -> Optional[Dict]:
+    """Retrieve a chat session from the database"""
+    session = await db.chat_sessions.find_one(
+        {"session_id": session_id},
+        {"_id": 0}
+    )
+    return session
+
+
+async def create_or_update_chat_session(
+    db, 
+    session_id: str, 
+    user_message: str, 
+    assistant_response: str,
+    user_id: Optional[str] = None
+) -> Dict:
+    """Create or update a chat session with new messages"""
+    now = datetime.now(timezone.utc).isoformat()
+    
+    # Check if session exists
+    existing = await db.chat_sessions.find_one({"session_id": session_id})
+    
+    if existing:
+        # Append new messages to existing session
+        await db.chat_sessions.update_one(
+            {"session_id": session_id},
+            {
+                "$push": {
+                    "messages": {
+                        "$each": [
+                            {"role": "user", "content": user_message, "timestamp": now},
+                            {"role": "assistant", "content": assistant_response, "timestamp": now}
+                        ]
+                    }
+                },
+                "$set": {"updated_at": now}
+            }
+        )
+    else:
+        # Create new session
+        session_doc = {
+            "session_id": session_id,
+            "user_id": user_id,
+            "messages": [
+                {"role": "user", "content": user_message, "timestamp": now},
+                {"role": "assistant", "content": assistant_response, "timestamp": now}
+            ],
+            "created_at": now,
+            "updated_at": now
+        }
+        await db.chat_sessions.insert_one(session_doc)
+    
+    return {"session_id": session_id, "updated_at": now}
+
+
+async def get_chat_history(db, session_id: str, limit: int = 10) -> List[Dict]:
+    """Get recent chat history for a session"""
+    session = await db.chat_sessions.find_one(
+        {"session_id": session_id},
+        {"_id": 0, "messages": 1}
+    )
+    
+    if session and session.get("messages"):
+        # Return the last 'limit' messages
+        return session["messages"][-limit:]
+    
+    return []
+
 # =============================================================================
 # COMPREHENSIVE AI KNOWLEDGE BASE
 # =============================================================================
