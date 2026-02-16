@@ -44,7 +44,8 @@ import {
   Key,
   Crown,
   Plus,
-  HelpCircle
+  HelpCircle,
+  CreditCard
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
@@ -144,6 +145,7 @@ const NAVIGATION = [
       { label: 'Translations', path: '/translations', icon: Languages },
       { label: 'API Security', path: '/security', icon: Key },
       { label: 'Settings', path: '/settings', icon: Settings },
+      { label: 'Pricing', path: '/pricing', icon: CreditCard },
       { label: 'Help Center', path: '/help', icon: HelpCircle },
       { label: 'Super Admin', path: '/admin', icon: Crown }
     ]
