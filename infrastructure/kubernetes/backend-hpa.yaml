@@ -1,0 +1,96 @@
+# DataPulse Backend Horizontal Pod Autoscaler
+# Scales from 20 to 100 pods based on CPU/Memory and custom metrics
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: datapulse-backend-hpa
+  namespace: datapulse
+  labels:
+    app: datapulse
+    component: backend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: datapulse-backend
+  
+  minReplicas: 20
+  maxReplicas: 100
+  
+  metrics:
+  # Scale based on CPU utilization
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  
+  # Scale based on Memory utilization
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  
+  # Scale based on requests per second (requires metrics-server + custom metrics)
+  # Uncomment if using Prometheus Adapter
+  # - type: Pods
+  #   pods:
+  #     metric:
+  #       name: http_requests_per_second
+  #     target:
+  #       type: AverageValue
+  #       averageValue: "1000"
+  
+  behavior:
+    # Scale up quickly during traffic spikes
+    scaleUp:
+      stabilizationWindowSeconds: 60  # Wait 60s before scaling up again
+      policies:
+      - type: Percent
+        value: 100  # Can double pods
+        periodSeconds: 60
+      - type: Pods
+        value: 10  # Or add 10 pods
+        periodSeconds: 60
+      selectPolicy: Max
+    
+    # Scale down slowly to avoid flapping
+    scaleDown:
+      stabilizationWindowSeconds: 300  # Wait 5 minutes before scaling down
+      policies:
+      - type: Percent
+        value: 10  # Remove 10% of pods
+        periodSeconds: 120
+      - type: Pods
+        value: 5  # Or remove 5 pods
+        periodSeconds: 120
+      selectPolicy: Min
+---
+# Vertical Pod Autoscaler (optional - for automatic resource recommendations)
+# Requires VPA to be installed in the cluster
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: datapulse-backend-vpa
+  namespace: datapulse
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: datapulse-backend
+  updatePolicy:
+    updateMode: "Off"  # Just recommendations, don't auto-update
+  resourcePolicy:
+    containerPolicies:
+    - containerName: backend
+      minAllowed:
+        cpu: "500m"
+        memory: 1Gi
+      maxAllowed:
+        cpu: "8"
+        memory: 16Gi
+      controlledResources: ["cpu", "memory"]
