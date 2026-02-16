@@ -127,6 +127,7 @@ python-dotenv==1.2.1
 python-jose==3.5.0
 python-multipart==0.0.22
 python-pptx==1.0.2
+python-snappy==0.7.3
 pytokens==0.4.1
 PyYAML==6.0.3
 redis==7.1.0
@@ -179,3 +180,4 @@ xlsxwriter==3.2.9
 yarl==1.22.0
 zipp==3.23.0
 zopfli==0.4.0
+zstandard==0.25.0
