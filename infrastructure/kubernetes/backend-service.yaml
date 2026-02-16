@@ -1,0 +1,44 @@
+# DataPulse Backend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: datapulse-backend
+  namespace: datapulse
+  labels:
+    app: datapulse
+    component: backend
+  annotations:
+    # For AWS Network Load Balancer (internal)
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+spec:
+  type: ClusterIP
+  sessionAffinity: None  # Stateless - no session affinity needed
+  ports:
+  - name: http
+    port: 8001
+    targetPort: 8001
+    protocol: TCP
+  selector:
+    app: datapulse
+    component: backend
+---
+# Headless Service for direct pod access (if needed for debugging)
+apiVersion: v1
+kind: Service
+metadata:
+  name: datapulse-backend-headless
+  namespace: datapulse
+  labels:
+    app: datapulse
+    component: backend
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: http
+    port: 8001
+    targetPort: 8001
+  selector:
+    app: datapulse
+    component: backend
