@@ -130,8 +130,14 @@ User requested to build a full-featured SaaS application called DataPulse with:
 ├── pricing_routes.py       # Pricing API endpoints
 └── webhook_routes.py       # Stripe webhook handler
 
+/app/frontend/src/components/pricing/
+├── index.js                # Clean exports
+├── PricingConfig.js        # Customizable pricing data
+├── PricingComponents.jsx   # Core UI components
+└── PricingExamples.jsx     # 7 ready-to-use examples
+
 /app/frontend/src/pages/
-└── PricingPage.jsx         # Pricing page UI
+└── PricingPage.jsx         # Pricing page using components
 ```
 
 ## Key API Endpoints (Pricing)
