@@ -39,6 +39,3 @@ export {
   ComponentsDemo,
   CustomStyledPricing,
 } from './PricingExamples';
-
-// Default export for convenience
-export { default as PricingSection } from './PricingComponents';
