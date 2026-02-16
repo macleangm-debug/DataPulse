@@ -41,6 +41,7 @@ import DashboardBuilderPage from './pages/DashboardBuilderPage';
 import DataTransformPage from './pages/DataTransformPage';
 import HelpCenterPage from './pages/HelpCenterPage';
 import InteractiveDemoPage from './pages/InteractiveDemoPage';
+import PricingPage from './pages/PricingPage';
 import { PWAInstallPrompt, NetworkStatus } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import '@/App.css';
@@ -109,6 +110,10 @@ function App() {
           
           {/* Interactive Demo - No login required */}
           <Route path="/demo" element={<InteractiveDemoPage />} />
+          
+          {/* Pricing Page - Accessible to all, but checkout requires auth */}
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/pricing/success" element={<PricingPage />} />
 
           {/* Protected Routes */}
           <Route path="/dashboard" element={
