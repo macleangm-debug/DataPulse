@@ -351,6 +351,25 @@ export function DashboardBuilderPage() {
     setWidgets(updatedWidgets);
   };
 
+  // Handle widget resize from preset buttons
+  const handleWidgetResize = (widgetId, newSize) => {
+    const updatedWidgets = widgets.map(widget => {
+      if (widget.id === widgetId) {
+        return {
+          ...widget,
+          position: {
+            ...widget.position,
+            w: newSize.w,
+            h: newSize.h
+          }
+        };
+      }
+      return widget;
+    });
+    setWidgets(updatedWidgets);
+    toast.success(`Resized to ${newSize.w === 12 ? '100%' : newSize.w === 9 ? '75%' : newSize.w === 6 ? '50%' : '25%'} width`);
+  };
+
   const saveLayout = async () => {
     setSaving(true);
     try {
