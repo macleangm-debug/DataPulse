@@ -202,6 +202,22 @@ export function HelpCenterPage({ isDark = true }) {
             <div className={cn(bgSecondary, borderColor, "border rounded-xl p-6")}>
               <h1 className={cn("text-2xl font-bold mb-4", textPrimary)}>{article.title}</h1>
               {article.summary && <p className={cn("text-sm mb-4", textSecondary)}>{article.summary}</p>}
+              
+              {/* Screenshot Display */}
+              {article.screenshot_url && (
+                <div className="mb-6">
+                  <p className={cn("text-xs mb-2 font-medium", textMuted)}>Screenshot Reference:</p>
+                  <div className={cn("rounded-lg overflow-hidden border", borderColor)}>
+                    <img 
+                      src={article.screenshot_url} 
+                      alt={`${article.title} screenshot`}
+                      className="w-full h-auto"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              )}
+              
               <div className={cn("whitespace-pre-wrap leading-relaxed", textSecondary)}>{article.content}</div>
             </div>
             <div className={cn(bgSecondary, borderColor, "border rounded-xl p-4")}>
