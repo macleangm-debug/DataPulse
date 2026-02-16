@@ -1,0 +1,53 @@
+# DataPulse Backend - Production Dockerfile
+# Multi-stage build for minimal image size
+
+# Stage 1: Build
+FROM python:3.11-slim as builder
+
+WORKDIR /build
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libffi-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
+
+# Stage 2: Production
+FROM python:3.11-slim
+
+# Security: Run as non-root user
+RUN groupadd -r datapulse && useradd -r -g datapulse datapulse
+
+WORKDIR /app
+
+# Copy Python packages from builder
+COPY --from=builder /root/.local /home/datapulse/.local
+ENV PATH=/home/datapulse/.local/bin:$PATH
+
+# Copy application code
+COPY --chown=datapulse:datapulse . .
+
+# Remove unnecessary files
+RUN rm -rf tests/ __pycache__/ *.pyc .git/
+
+# Switch to non-root user
+USER datapulse
+
+# Environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PORT=8001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8001/api/health')" || exit 1
+
+# Expose port
+EXPOSE 8001
+
+# Run with uvicorn
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8001", "--workers", "4", "--loop", "uvloop", "--http", "httptools"]
