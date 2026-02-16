@@ -331,6 +331,11 @@ async def startup_db_client():
         await db.device_activity_logs.create_index([("device_id", 1), ("timestamp", -1)])
         await db.device_activity_logs.create_index([("org_id", 1), ("timestamp", -1)])
         
+        # Chat Sessions (Help Assistant)
+        await db.chat_sessions.create_index("session_id", unique=True)
+        await db.chat_sessions.create_index([("user_id", 1), ("created_at", -1)])
+        await db.chat_sessions.create_index([("updated_at", -1)])
+        
         logger.info("Database indexes created successfully")
     except Exception as e:
         logger.error(f"Error creating indexes: {e}")
