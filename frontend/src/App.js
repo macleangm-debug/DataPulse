@@ -40,6 +40,7 @@ import DashboardsPage from './pages/DashboardsPage';
 import DashboardBuilderPage from './pages/DashboardBuilderPage';
 import DataTransformPage from './pages/DataTransformPage';
 import HelpCenterPage from './pages/HelpCenterPage';
+import InteractiveDemoPage from './pages/InteractiveDemoPage';
 import { PWAInstallPrompt, NetworkStatus } from './components/PWAComponents';
 import { NetworkStatusBanner, SyncStatusPanel } from './components/OfflineSync';
 import '@/App.css';
