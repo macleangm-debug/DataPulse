@@ -409,6 +409,22 @@ async def startup_db_client():
         await db.submissions.create_index([("batch_id", 1)])  # For bulk operations
         await db.submissions.create_index([("submitted_by", 1), ("submitted_at", -1)])
         
+        # Payment Transactions
+        await db.payment_transactions.create_index("id", unique=True)
+        await db.payment_transactions.create_index("session_id", unique=True)
+        await db.payment_transactions.create_index([("user_email", 1), ("created_at", -1)])
+        await db.payment_transactions.create_index([("status", 1)])
+        
+        # Subscriptions
+        await db.subscriptions.create_index("id", unique=True)
+        await db.subscriptions.create_index([("user_email", 1), ("status", 1)])
+        await db.subscriptions.create_index([("org_id", 1), ("status", 1)])
+        await db.subscriptions.create_index([("tier_id", 1), ("status", 1)])
+        
+        # Webhook Logs
+        await db.webhook_logs.create_index("event_id", unique=True)
+        await db.webhook_logs.create_index([("event_type", 1), ("received_at", -1)])
+        
         logger.info("Database indexes created successfully")
         
         # Initialize Redis connection (non-blocking)
