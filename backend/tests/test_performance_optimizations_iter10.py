@@ -167,7 +167,7 @@ class TestBulkSubmissionEndpoint:
             "password": "Test123!"
         })
         if response.status_code == 200:
-            return response.json().get("token")
+            return response.json().get("access_token")
         pytest.skip("Authentication failed - skipping authenticated tests")
     
     def test_bulk_submissions_endpoint_exists(self, auth_token):
@@ -296,7 +296,7 @@ class TestBulkDeleteEndpoint:
             "password": "Test123!"
         })
         if response.status_code == 200:
-            return response.json().get("token")
+            return response.json().get("access_token")
         pytest.skip("Authentication failed - skipping authenticated tests")
     
     def test_bulk_delete_endpoint_exists(self, auth_token):
@@ -373,7 +373,7 @@ class TestBulkUpdateEndpoint:
             "password": "Test123!"
         })
         if response.status_code == 200:
-            return response.json().get("token")
+            return response.json().get("access_token")
         pytest.skip("Authentication failed - skipping authenticated tests")
     
     def test_bulk_update_endpoint_exists(self, auth_token):
@@ -410,7 +410,7 @@ class TestBulkStatusEndpoint:
             "password": "Test123!"
         })
         if response.status_code == 200:
-            return response.json().get("token")
+            return response.json().get("access_token")
         pytest.skip("Authentication failed - skipping authenticated tests")
     
     def test_bulk_status_endpoint_returns_404_for_unknown_batch(self, auth_token):
@@ -441,7 +441,7 @@ class TestCacheStatsAuthentication:
             "password": "Test123!"
         })
         if response.status_code == 200:
-            return response.json().get("token")
+            return response.json().get("access_token")
         pytest.skip("Authentication failed - skipping authenticated tests")
     
     def test_cache_stats_requires_auth(self):
@@ -482,7 +482,7 @@ class TestPreviousFeaturesStillWork:
             "password": "Test123!"
         })
         if response.status_code == 200:
-            return response.json().get("token")
+            return response.json().get("access_token")
         pytest.skip("Authentication failed - skipping authenticated tests")
     
     def test_chat_persistence_still_works(self, auth_token):
