@@ -135,7 +135,7 @@ Push → Lint → Test → Build → Staging → Production
 - [ ] Subscription upgrade/downgrade flow
 
 ### P3 (Future)
-- [ ] CI/CD pipeline (GitHub Actions)
+- [x] ~~CI/CD pipeline (GitHub Actions)~~ - DONE
 - [ ] Terraform for cloud infrastructure
 - [ ] Service mesh (Istio)
 - [ ] Distributed tracing (Jaeger)
@@ -148,6 +148,15 @@ Push → Lint → Test → Build → Staging → Production
 
 ## Files Created in This Session
 ```
+/.github/
+├── workflows/
+│   ├── ci-cd.yml          # Main CI/CD pipeline
+│   ├── pr-checks.yml      # Pull request checks
+│   ├── security.yml       # Weekly security scans
+│   └── rollback.yml       # Manual rollback workflow
+├── dependabot.yml         # Automated dependency updates
+└── README.md              # CI/CD documentation
+
 /app/backend/routes/
 ├── pricing_routes.py       # Pricing API endpoints
 └── webhook_routes.py       # Stripe webhook handler
