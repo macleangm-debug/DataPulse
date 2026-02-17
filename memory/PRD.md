@@ -14,7 +14,8 @@ User requested to build a full-featured SaaS application called DataPulse with:
 10. Performance optimizations for high-concurrency handling
 11. Infrastructure configuration for 500K users scale
 12. Resizable widget functionality for dashboards and data visualization
-13. **NEW: Pricing & Billing System with 4 tiers and Stripe integration**
+13. Pricing & Billing System with 4 tiers and Stripe integration
+14. **NEW: CI/CD Pipeline with GitHub Actions**
 
 ## Architecture Overview
 
@@ -35,9 +36,29 @@ User requested to build a full-featured SaaS application called DataPulse with:
          (6 nodes)       (9 nodes)         (optional)
 ```
 
+## CI/CD Pipeline (Feb 16, 2026)
+
+**Pipeline Flow:**
+```
+Push → Lint → Test → Build → Staging → Production
+```
+
+**Workflow Files (`/.github/workflows/`):**
+| File | Purpose |
+|------|---------|
+| `ci-cd.yml` | Full pipeline: Build → Test → Deploy |
+| `pr-checks.yml` | Fast PR validation |
+| `security.yml` | Weekly vulnerability scans |
+| `rollback.yml` | Manual rollback workflow |
+
+**Triggers:**
+- `main` branch → Production deployment
+- `develop` branch → Staging deployment
+- Pull requests → Tests only
+
 ## What's Been Implemented
 
-### Session 13 - Pricing & Billing System (Feb 16, 2026)
+### Session 14 - CI/CD Pipeline (Feb 16, 2026)
 
 **1. Pricing Configuration (`/app/backend/config/pricing.py`)**
 - 4 pricing tiers: Free, Starter ($29/mo), Professional ($79/mo), Enterprise ($249/mo)
