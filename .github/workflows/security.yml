@@ -1,0 +1,76 @@
+# Scheduled Security & Dependency Checks
+# Runs weekly to catch vulnerabilities in dependencies
+
+name: Security & Dependencies
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
+  workflow_dispatch:
+
+jobs:
+  # Dependency vulnerability scan
+  dependency-scan:
+    name: Dependency Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Scan Python dependencies
+        run: |
+          pip install safety
+          safety check -r backend/requirements.txt --output json || true
+      
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Scan Node dependencies
+        run: |
+          cd frontend
+          yarn install --frozen-lockfile
+          yarn audit --level high || true
+
+  # Container image scan
+  image-scan:
+    name: Container Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build Backend Image
+        run: |
+          docker build -t datapulse-backend:scan -f backend/Dockerfile.prod backend/
+      
+      - name: Scan Backend Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'datapulse-backend:scan'
+          format: 'sarif'
+          output: 'backend-trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+      
+      - name: Upload scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'backend-trivy-results.sarif'
+
+  # Create dependency update PRs
+  dependabot-check:
+    name: Check Dependabot Config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check Dependabot config exists
+        run: |
+          if [[ ! -f ".github/dependabot.yml" ]]; then
+            echo "::warning::Dependabot not configured. Consider adding .github/dependabot.yml"
+          fi

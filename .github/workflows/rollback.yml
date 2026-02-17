@@ -1,0 +1,90 @@
+# Manual Rollback Workflow
+# Use this to quickly rollback to a previous version
+
+name: Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to rollback'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      revision:
+        description: 'Helm revision to rollback to (leave empty for previous)'
+        required: false
+        type: string
+      confirm:
+        description: 'Type "ROLLBACK" to confirm'
+        required: true
+        type: string
+
+jobs:
+  rollback:
+    name: Rollback ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    if: inputs.confirm == 'ROLLBACK'
+    environment: ${{ inputs.environment }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: '3.13.0'
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Configure kubectl
+        run: |
+          mkdir -p ~/.kube
+          if [[ "${{ inputs.environment }}" == "production" ]]; then
+            echo "${{ secrets.KUBE_CONFIG_PRODUCTION }}" | base64 -d > ~/.kube/config
+          else
+            echo "${{ secrets.KUBE_CONFIG_STAGING }}" | base64 -d > ~/.kube/config
+          fi
+          chmod 600 ~/.kube/config
+
+      - name: Get current status
+        run: |
+          NAMESPACE="datapulse"
+          [[ "${{ inputs.environment }}" == "staging" ]] && NAMESPACE="datapulse-staging"
+          
+          echo "Current Helm releases:"
+          helm list -n $NAMESPACE
+          
+          echo ""
+          echo "Release history:"
+          helm history datapulse -n $NAMESPACE
+
+      - name: Rollback
+        run: |
+          NAMESPACE="datapulse"
+          [[ "${{ inputs.environment }}" == "staging" ]] && NAMESPACE="datapulse-staging"
+          
+          if [[ -n "${{ inputs.revision }}" ]]; then
+            echo "Rolling back to revision ${{ inputs.revision }}..."
+            helm rollback datapulse ${{ inputs.revision }} -n $NAMESPACE --wait
+          else
+            echo "Rolling back to previous revision..."
+            helm rollback datapulse -n $NAMESPACE --wait
+          fi
+
+      - name: Verify rollback
+        run: |
+          NAMESPACE="datapulse"
+          [[ "${{ inputs.environment }}" == "staging" ]] && NAMESPACE="datapulse-staging"
+          
+          kubectl rollout status deployment/datapulse-backend -n $NAMESPACE --timeout=300s
+          kubectl rollout status deployment/datapulse-frontend -n $NAMESPACE --timeout=300s
+          
+          echo "Rollback completed successfully!"
+          echo ""
+          echo "Current status:"
+          helm list -n $NAMESPACE
